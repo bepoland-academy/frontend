@@ -5,36 +5,38 @@ import { TestRequest } from './login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  styles: ['.hidden {display: none}'],
 })
 export class LoginComponent {
-  dataReceived: any;
   username: string;
   password: string;
   loginDisabled = 'true';
+  isSubmitted = false;
+  isSuccess = false;
+  isFail = false;
 
-  getJsonData() {
-    this.testRequest.getJSON()
-    .subscribe(data => this.dataReceived = data)
+  sendUserAuthSata() {
+    this.isSubmitted = true;
+    this.testRequest.postData()
+    .subscribe(data => 
+      {console.log("Request is successful", data);
+      this.isSubmitted = false;
+      this.isSuccess = true;
+    },
+    error => {
+      console.log("Error", error);
+      this.isSubmitted = false;
+      this.isFail = true;
+    })
   }
-
 
   constructor(private testRequest: TestRequest) {
-    this.getJsonData();
   }
 
-  // activate() {
-  //   if(this.username.length === 0 && this.password.length === 0)
-  //   this.loginDisabled = 'false';
-  // }
-
-// ngOnInit() {
-//   this.activate();
-// }
-
-
   login() {
-    console.log(this.dataReceived, this.username, this.password);
+    console.log('hey');
+    this.sendUserAuthSata();
   }
 
 }

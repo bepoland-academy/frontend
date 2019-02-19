@@ -18,3 +18,7 @@ padding-bottom: 30px;
     padding: 0;
     margin-bottom: 30px;
   }
+
+  .mat-spinner {
+    margin: auto;
+  }

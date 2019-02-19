@@ -5,16 +5,20 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class TestRequest {
 
-    testJSON = 'assets/test.json';
+    testJSON = 'http://localhost:3000/users/';
+    newUser = {
+      name: "GET",
+      surname: "Syl",
+      role: "administrator",
+      isActive: true,
+      department: "banking"
+    }
 
   constructor(private http: HttpClient) {
    }
 
-   getJSON(): Observable<Object> {
-    return this.http.get(this.testJSON);
+  postData(): Observable<Object> {
+    return this.http.post(this.testJSON, this.newUser);
 }
  
-// sendAuthData(): Observable<Response> {
-//   return this.http.post(this.testJSON, authData, options)
-// }
 }
