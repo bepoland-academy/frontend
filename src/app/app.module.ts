@@ -3,22 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {CustomMaterialModule} from './material/material.module';
-import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http'; 
-import { TestRequest } from './login/login.service';
-import { LoginComponent } from './login/login.component';
+import {LoginModule} from './login/login.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
   ],
   imports: [
-    BrowserModule, CustomMaterialModule, FormsModule, BrowserAnimationsModule, FlexLayoutModule, HttpClientModule 
+    BrowserModule, CustomMaterialModule, BrowserAnimationsModule, LoginModule 
   ],
-  providers: [TestRequest],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
