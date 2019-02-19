@@ -1,0 +1,25 @@
+{
+    "users": [
+      {
+        "name": "Sylwia",
+        "surname": "Syl",
+        "role": "administrator",
+        "isActive": true,
+        "department": "banking"
+      },
+      {
+        "name": "Grzegorz",
+        "surname": "Grzes",
+        "role": "manager",
+        "isActive": true,
+        "department": "salesforce"
+      },
+      {
+        "name": "Adam",
+        "surname": "Mada",
+        "role": "consultant",
+        "isActive": false,
+        "department": "digital"
+      }
+    ] 
+  }
