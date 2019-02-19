@@ -1,0 +1,20 @@
+.welcome-page {
+    height: 70vh;
+}
+
+.mat-card {
+padding-bottom: 30px;
+}
+
+.mat-card-content{
+    margin-bottom: 0;
+  }
+
+  .mat-form-field {
+    width: 300px;
+  }
+
+  .mat-card-actions {
+    padding: 0;
+    margin-bottom: 30px;
+  }
