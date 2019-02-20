@@ -15,17 +15,20 @@ export class LoginComponent {
   isSubmitted = false;
   isSuccess = false;
   isFail = false;
+  loginData: object;
 
   sendUserAuthSata() {
+    this.loginData = {
+     username: this.username,
+     password: this.password
+    }
     this.isSubmitted = true;
-    this.testRequest.postData()
-    .subscribe(data => 
-      {console.log("Request is successful", data);
+    this.testRequest.postData(this.loginData)
+    .subscribe(data => {
       this.isSubmitted = false;
       this.isSuccess = true;
     },
     error => {
-      console.log("Error", error);
       this.isSubmitted = false;
       this.isFail = true;
     })
@@ -35,7 +38,6 @@ export class LoginComponent {
   }
 
   login() {
-    console.log('hey');
     this.sendUserAuthSata();
   }
 

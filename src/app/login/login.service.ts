@@ -6,19 +6,13 @@ import { Observable } from 'rxjs';
 export class TestRequest {
 
     testJSON = 'http://localhost:3000/users/';
-    newUser = {
-      name: "GET",
-      surname: "Syl",
-      role: "administrator",
-      isActive: true,
-      department: "banking"
-    }
+
 
   constructor(private http: HttpClient) {
    }
 
-  postData(): Observable<Object> {
-    return this.http.post(this.testJSON, this.newUser);
+  postData(loginData): Observable<Object> {
+    return this.http.post(this.testJSON, loginData);
 }
  
 }
