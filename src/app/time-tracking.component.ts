@@ -14,7 +14,6 @@ export class TimeTrackingComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(';montuje mnie');
   }
 
 }

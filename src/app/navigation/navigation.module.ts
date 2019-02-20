@@ -4,7 +4,6 @@ import { NavigationComponent } from './navigation.component';
 import { CustomMaterialModule } from '../material/material.module';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { NavigationService } from './navigation.service';
 
 @NgModule({
   declarations: [NavigationComponent ],
@@ -17,8 +16,6 @@ import { NavigationService } from './navigation.service';
   exports: [
     NavigationComponent,
   ],
-  providers: [
-    NavigationService
-  ]
+  providers: [ ]
 })
 export class NavigationModule { }

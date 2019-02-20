@@ -1,5 +1,5 @@
 <nav mat-tab-nav-bar>
-  <div  class="navigation__logo" mat-tab-link>
+  <div  class="navigation__logo" mat-tab-link disabled>
     <img src="assets/logo.png" />
   </div>
   <a
@@ -8,6 +8,6 @@
     [routerLink]="link.path"
     [active]="currentUrl == link.path"
   >
-    {{link.name}}
+    {{link.data.name}}
   </a>
 </nav>

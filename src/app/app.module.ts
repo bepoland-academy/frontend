@@ -14,6 +14,7 @@ import { HistoricalDataComponent } from './historical-data.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { ProjectManagmentComponent } from './project-managment.component';
 import { UserManagmentComponent } from './user-managment.component';
+import { RoleAuthService } from './roleAuth.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { UserManagmentComponent } from './user-managment.component';
     NavigationModule,
     rootModule
   ],
-  providers: [],
+  providers: [RoleAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

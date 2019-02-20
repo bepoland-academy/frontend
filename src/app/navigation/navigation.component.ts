@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Routes } from '@angular/router';
 
-import { NavigationService, NavigationTab } from './navigation.service';
+import { RoleAuthService } from '../roleAuth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -10,16 +10,17 @@ import { NavigationService, NavigationTab } from './navigation.service';
 })
 export class NavigationComponent implements OnInit {
   currentUrl: string;
-  links: Array<NavigationTab>;
+  links: Routes;
   constructor(
     private router: Router,
-    private navigationService: NavigationService
+    private roleAuthService: RoleAuthService
     ) { }
 
-ngOnInit(): void {
+  ngOnInit(): void {
+    this.links = this.roleAuthService.getLinks();
     this.router.events.subscribe(() => {
-      this.currentUrl = this.router.url.substr(1);
-    });
-  }
+        this.currentUrl = this.router.url.substr(1);
+      });
+    }
 
 }
