@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
-import {CustomMaterialModule} from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {LoginModule} from './login/login.module';
+import {UserManagementModule} from './user-management/user-management.module';
+
 
 
 @NgModule({
@@ -12,7 +12,7 @@ import {LoginModule} from './login/login.module';
     AppComponent,
   ],
   imports: [
-    BrowserModule, CustomMaterialModule, BrowserAnimationsModule, LoginModule 
+    BrowserModule, BrowserAnimationsModule, LoginModule, UserManagementModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,62 +1,53 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="welcome-page">
-    <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
-        <mat-card-header fxLayoutAlign="center">
-          <mat-card-title>Login</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <form>
-            <p>{{someText}}</p>
-            <table class="example-full-width" cellspacing="0">
-              <tr>
-                <td>
-                  <mat-form-field appearance="outline" class="login-form-input">
-                  <mat-label>Username(email)</mat-label>
-                  <input 
-                  matInput 
-                  [(ngModel)]="username"
-                  name="name" 
-                  required
-                  #name="ngModel">
-                  </mat-form-field>
-                </td>
-              </tr>
-              <tr>
-              <td>
-                <mat-form-field 
-                appearance="outline" 
-                class="login-form-input">
-                <mat-label>Password</mat-label>
-                <input 
-                matInput 
-                [(ngModel)]="password" 
-                type="password" 
-                name="password"
-                #pass="ngModel" 
-                required>
-              </mat-form-field></td>
-            </tr></table>
-            <mat-card-actions fxLayoutAlign="center start" class="login-form-button">
-                <button
-                type="submit" 
-                mat-raised-button 
-                color="primary"
-                (click)="login()"
-                [disabled]="name.invalid || pass.invalid">
-                Login
+  <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
+     <mat-card-header fxLayoutAlign="center">
+        <mat-card-title>Login</mat-card-title>
+     </mat-card-header>
+     <mat-card-content>
+        <form fxLayout="column">
+           <mat-form-field appearance="outline" class="login-form-input">
+              <mat-label>Username(email)</mat-label>
+              <input 
+              matInput 
+              [(ngModel)]="username"
+              name="name" 
+              required
+              #name="ngModel">
+           </mat-form-field>
+           <mat-form-field 
+              appearance="outline" 
+              class="login-form-input">
+              <mat-label>Password</mat-label>
+              <input 
+              matInput 
+              [(ngModel)]="password" 
+              type="password" 
+              name="password"
+              #pass="ngModel" 
+              required>
+           </mat-form-field>
+           <mat-card-actions fxLayoutAlign="center start" class="login-form-button">
+              <button
+              type="submit" 
+              mat-raised-button 
+              color="primary"
+              (click)="login()"
+              [disabled]="name.invalid || pass.invalid">
+              Login
               </button>
-              </mat-card-actions>
-          </form>
-          <mat-spinner [ngClass]="{hidden: isSubmitted !== true}"></mat-spinner>
-        </mat-card-content>
-      </mat-card>
-      <mat-card [ngClass]="{hidden: isSuccess !== true}">
-          <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
-              <mat-card-title style="color: green">Success!</mat-card-title>
-            </mat-card-header>
-      </mat-card>
-      <mat-card [ngClass]="{hidden: isFail !== true}">
-          <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
-              <mat-card-title style="color: red">Wrong User Data!</mat-card-title>
-            </mat-card-header>
-      </mat-card>
+           </mat-card-actions>
+        </form>
+        <mat-spinner [ngClass]="{hidden: isSubmitted !== true}"></mat-spinner>
+     </mat-card-content>
+  </mat-card>
+  <mat-card [ngClass]="{hidden: isSuccess !== true}">
+     <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
+        <mat-card-title style="color: green">Success!</mat-card-title>
+     </mat-card-header>
+  </mat-card>
+  <mat-card [ngClass]="{hidden: isFail !== true}">
+     <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
+        <mat-card-title style="color: red">Wrong User Data!</mat-card-title>
+     </mat-card-header>
+  </mat-card>
 </div>

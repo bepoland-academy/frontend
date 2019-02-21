@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TestRequest } from './login.service';
+import { LoginService } from './login.service';
 
 
 @Component({
@@ -17,28 +17,29 @@ export class LoginComponent {
   isFail = false;
   loginData: object;
 
-  sendUserAuthSata() {
+  sendUserAuthData() {
     this.loginData = {
      username: this.username,
      password: this.password
     }
     this.isSubmitted = true;
-    this.testRequest.postData(this.loginData)
-    .subscribe(data => {
+    this.loginService.postData(this.loginData)
+    .subscribe(
+      () => {
       this.isSubmitted = false;
       this.isSuccess = true;
     },
-    error => {
+      () => {
       this.isSubmitted = false;
       this.isFail = true;
-    })
+    });
   }
 
-  constructor(private testRequest: TestRequest) {
+  constructor(private loginService: LoginService) {
   }
 
   login() {
-    this.sendUserAuthSata();
+    this.sendUserAuthData();
   }
 
 }

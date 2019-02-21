@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class LoginService {
+export class UserRegistrationService {
 
     testJSON = 'http://localhost:3000/users/';
 
@@ -11,8 +11,8 @@ export class LoginService {
   constructor(private http: HttpClient) {
    }
 
-  postData(loginData): Observable<Object> {
-    console.log(loginData);
-    return this.http.post(this.testJSON, loginData);
+  postData(userRegistrationData): Observable<Object> {
+    console.log(userRegistrationData);
+    return this.http.post(this.testJSON, userRegistrationData);
 }
 }
