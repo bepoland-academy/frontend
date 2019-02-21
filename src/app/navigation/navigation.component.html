@@ -1,0 +1,13 @@
+<nav mat-tab-nav-bar>
+  <div  class="navigation__logo" mat-tab-link disabled>
+    <img src="assets/logo.png" />
+  </div>
+  <a
+    mat-tab-link 
+    *ngFor="let link of links; let i = index" 
+    [routerLink]="link.path"
+    [active]="currentUrl == link.path"
+  >
+    {{link.data.name}}
+  </a>
+</nav>
