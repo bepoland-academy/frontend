@@ -7,7 +7,7 @@ import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { ProjectManagmentComponent } from './project-managment.component';
-import { UserManagmentComponent } from './user-managment.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 import { LoginComponent } from './login/login.component';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class RoleAuthService {
       { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['manager', 'administrator'] } },
       { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['manager', 'administrator'] } },
       { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['manager'] } },
-      { path: 'users', component: UserManagmentComponent, data: { name: 'User management', forRole: ['administrator']} }
+      { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['administrator']} }
 
     ] },
    ];

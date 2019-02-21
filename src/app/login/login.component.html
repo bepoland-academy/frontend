@@ -8,7 +8,7 @@
            <mat-form-field appearance="outline" class="login-form-input">
               <mat-label>Username(email)</mat-label>
               <input 
-              matInput 
+              matInput
               [(ngModel)]="username"
               name="name" 
               required
@@ -42,12 +42,12 @@
   </mat-card>
   <mat-card [ngClass]="{hidden: isSuccess !== true}">
      <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
-        <mat-card-title style="color: green">Success!</mat-card-title>
+        <mat-card-title style="color: green; text-align: center">{{errorMessage}}</mat-card-title>
      </mat-card-header>
   </mat-card>
   <mat-card [ngClass]="{hidden: isFail !== true}">
      <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
-        <mat-card-title style="color: red">Wrong User Data!</mat-card-title>
+        <mat-card-title style="color: red; text-align: center">{{errorMessage}}</mat-card-title>
      </mat-card-header>
   </mat-card>
 </div>

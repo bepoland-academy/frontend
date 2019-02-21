@@ -16,12 +16,13 @@ export class LoginComponent {
   isSuccess = false;
   isFail = false;
   loginData: object;
+  errorMessage = '';
 
   sendUserAuthData() {
     this.loginData = {
      username: this.username,
      password: this.password
-    }
+    };
     this.isSubmitted = true;
     this.loginService.postData(this.loginData)
     .subscribe(
@@ -29,9 +30,15 @@ export class LoginComponent {
       this.isSubmitted = false;
       this.isSuccess = true;
     },
-      () => {
-      this.isSubmitted = false;
-      this.isFail = true;
+      (error) => {
+        console.log(error.status);
+        if (error.status === 0) {
+          this.errorMessage = 'There were problems with the Server connection';
+        } else if (error.status === 401) {
+          this.errorMessage = 'Please check you login data!';
+        }
+        this.isSubmitted = false;
+        this.isFail = true;
     });
   }
 
