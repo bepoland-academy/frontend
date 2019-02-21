@@ -8,37 +8,32 @@ import {UserManagementModule} from './user-management/user-management.module';
 
 import { CustomMaterialModule } from './material/material.module';
 import { AppComponent } from './app.component';
-import { NavigationModule } from './navigation/navigation.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import { rootModule } from './app.routing';
-import { TimeTrackingComponent } from './time-tracking.component';
-import { ReportsComponent } from './reports.component';
-import { HistoricalDataComponent } from './historical-data.component';
-import { TimeApprovalComponent } from './time-approval.component';
-import { ProjectManagmentComponent } from './project-managment.component';
-import { UserManagmentComponent } from './user-managment.component';
-import { RoleAuthService } from './roleAuth.service';
+import { RoleAuthService } from './dashboard/roleAuth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TimeTrackingComponent,
-    ReportsComponent,
-    HistoricalDataComponent,
-    TimeApprovalComponent,
-    ProjectManagmentComponent,
-    UserManagmentComponent
   ],
   imports: [
-    LoginModule, UserManagementModule,
+    LoginModule,
+    UserManagementModule,
     BrowserModule,
     CustomMaterialModule,
     FormsModule,
     BrowserAnimationsModule,
-
-    NavigationModule,
-    rootModule
+    DashboardModule,
+    rootModule,
   ],
-  providers: [RoleAuthService],
-  bootstrap: [AppComponent]
+  providers: [
+    RoleAuthService,
+    AuthGuard,
+    AuthService
+  ],
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }

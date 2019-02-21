@@ -8,21 +8,18 @@ import { ReportsComponent } from './reports.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { ProjectManagmentComponent } from './project-managment.component';
 import { UserManagmentComponent } from './user-managment.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from '../login/login.component';
 
 @Injectable()
 export class RoleAuthService {
   role = ['consultant', 'manager', 'administrator'];
   routes: Routes = [
-    { path: '', component: LoginComponent, children: [
       { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['consultant', 'manager', 'administrator'] } },
       { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['consultant', 'manager', 'administrator'] } },
       { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['manager', 'administrator'] } },
       { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['manager', 'administrator'] } },
       { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['manager'] } },
       { path: 'users', component: UserManagmentComponent, data: { name: 'User management', forRole: ['administrator']} }
-
-    ] },
    ];
 
   accessedRoutes: Routes;
@@ -31,7 +28,7 @@ export class RoleAuthService {
     this.filterRoutes(this.role);
   }
   filterRoutes(roles) {
-    const routes = this.routes[0].children.filter(item => this.setRoutesForRole(item.data.forRole, roles));
+    const routes = this.routes.filter(item => this.setRoutesForRole(item.data.forRole, roles));
     const routesWithRedirect = this.addRedirectPage(routes, roles);
 
     this.accessedRoutes = routesWithRedirect;

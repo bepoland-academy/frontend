@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { LoginService } from './login.service';
+import { Component, OnInit } from '@angular/core';
 
+import { LoginService } from './login.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +10,7 @@ import { LoginService } from './login.service';
   styleUrls: ['./login.component.css'],
   styles: ['.hidden {display: none}'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username: string;
   password: string;
   loginDisabled = 'true';
@@ -21,7 +23,7 @@ export class LoginComponent {
     this.loginData = {
      username: this.username,
      password: this.password
-    }
+    };
     this.isSubmitted = true;
     this.loginService.postData(this.loginData)
     .subscribe(
@@ -35,11 +37,24 @@ export class LoginComponent {
     });
   }
 
-  constructor(private loginService: LoginService) {
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private authService: AuthService
+    ) {
+  }
+
+  ngOnInit(): void {
+    console.log(this.authService.loggedIn.getValue());
+    if (this.authService.loggedIn.getValue()) {
+      this.router.navigate(['/']);
+    }
   }
 
   login() {
     this.sendUserAuthData();
+    this.authService.login();
+    this.router.navigate(['/']);
   }
 
 }
