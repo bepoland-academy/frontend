@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { LoginService } from './login.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.authService.loggedIn.getValue());
     if (this.authService.loggedIn.getValue()) {
       this.router.navigate(['/']);
     }

@@ -5,9 +5,13 @@ import { UserManagementComponent } from './user-management.component';
 import { UserRegistrationModule } from './user-registration/user-registration.module';
 
 @NgModule({
-  declarations: [UserManagementComponent],
+  declarations: [
+    UserManagementComponent
+  ],
   imports: [
-    CommonModule, UserRegistrationModule, FlexLayoutModule
+    CommonModule,
+    UserRegistrationModule,
+    FlexLayoutModule,
   ],
   exports: [UserManagementComponent]
 })

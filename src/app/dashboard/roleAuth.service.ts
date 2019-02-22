@@ -1,63 +1,66 @@
 import { Injectable } from '@angular/core';
-import { Routes, Route } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Routes, Route, Router } from '@angular/router';
 
 import { TimeTrackingComponent } from './time-tracking.component';
 import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { ProjectManagmentComponent } from './project-managment.component';
-import { UserManagmentComponent } from './user-managment.component';
-import { LoginComponent } from '../login/login.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 @Injectable()
 export class RoleAuthService {
-  role = ['consultant', 'manager', 'administrator'];
+  role = ['consultant', 'administrator'];
   routes: Routes = [
-      { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['consultant', 'manager', 'administrator'] } },
-      { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['consultant', 'manager', 'administrator'] } },
-      { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['manager', 'administrator'] } },
-      { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['manager', 'administrator'] } },
-      { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['manager'] } },
-      { path: 'users', component: UserManagmentComponent, data: { name: 'User management', forRole: ['administrator']} }
-   ];
 
-  accessedRoutes: Routes;
 
-  constructor() {
+    { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['consultant', 'manager', 'administrator'] } },
+    { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['consultant', 'manager', 'administrator'] } },
+    { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['manager', 'administrator'] } },
+    { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['manager', 'administrator'] } },
+    { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['manager'] } },
+    { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['administrator'] } }
+
+  ];
+
+  links: Routes;
+
+  constructor(private router: Router) {
     this.filterRoutes(this.role);
   }
   filterRoutes(roles) {
     const routes = this.routes.filter(item => this.setRoutesForRole(item.data.forRole, roles));
-    const routesWithRedirect = this.addRedirectPage(routes, roles);
+    const redirectPage = this.addRedirectPage(roles);
 
-    this.accessedRoutes = routesWithRedirect;
+    // setting links for allowed routes
+    this.links = routes;
+
+    // getting index of dashboard in routerConfig and adding children depends on current role
+    const routerConfig = this.router.config;
+    const dashboardIndex = routerConfig.findIndex(el => el.path === '');
+    routerConfig[dashboardIndex].children = [...routes, redirectPage];
+    this.router.resetConfig(routerConfig);
+    this.router.navigate([redirectPage.redirectTo]);
   }
 
-  addRedirectPage(routes: Routes, roles): Routes {
-    let path: string;
+  addRedirectPage(roles): Route {
+    let pathToRedirect: string;
     if (roles.includes('manager')) {
-      path = '/approval';
+      pathToRedirect = '/approval';
     } else if (roles.includes('administrator')) {
-      path = '/reports';
+      pathToRedirect = '/reports';
     } else {
-      path = '/track';
+      pathToRedirect = '/track';
     }
-    const redirectPage: Route = {path: '**', redirectTo: path};
-
-    return [...routes, redirectPage];
+    return {path: '**', redirectTo: pathToRedirect};
   }
 
   setRoutesForRole(arr1, arr2): boolean {
     return arr1.some(r => arr2.includes(r));
   }
 
-  getAccessedRoutes(): Routes {
-    return this.accessedRoutes;
-  }
-
   getLinks(): Routes {
-    return this.accessedRoutes.slice(0, -1);
+    return this.links;
   }
 
 }
