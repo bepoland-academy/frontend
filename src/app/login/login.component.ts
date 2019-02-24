@@ -21,27 +21,27 @@ export class LoginComponent implements OnInit {
 
   sendUserAuthData() {
     this.loginData = {
-     username: this.username,
-     password: this.password
+      username: this.username,
+      password: this.password
     };
     this.isSubmitted = true;
-    this.loginService.postData(this.loginData)
-    .subscribe(
-      () => {
-      this.isSubmitted = false;
-      this.isSuccess = true;
-    },
-      () => {
-      this.isSubmitted = false;
-      this.isFail = true;
-    });
+    this.loginService.postData(this.username, this.password)
+    // .subscribe(
+    //   () => {
+    //   this.isSubmitted = false;
+    //   this.isSuccess = true;
+    // },
+    //   () => {
+    //   this.isSubmitted = false;
+    //   this.isFail = true;
+    // });
   }
 
   constructor(
     private loginService: LoginService,
     private router: Router,
     private authService: AuthService
-    ) {
+  ) {
   }
 
   ngOnInit(): void {

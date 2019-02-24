@@ -26,7 +26,7 @@ export class RoleAuthService {
   links: Routes;
 
   constructor(private router: Router) {
-    this.filterRoutes(this.role);
+    //this.filterRoutes(this.role);
   }
   filterRoutes(roles) {
     const routes = this.routes.filter(item => this.setRoutesForRole(item.data.forRole, roles));
@@ -41,6 +41,7 @@ export class RoleAuthService {
     routerConfig[dashboardIndex].children = [...routes, redirectPage];
     this.router.resetConfig(routerConfig);
     this.router.navigate([redirectPage.redirectTo]);
+    console.log(this.router)
   }
 
   addRedirectPage(roles): Route {
@@ -52,7 +53,7 @@ export class RoleAuthService {
     } else {
       pathToRedirect = '/track';
     }
-    return {path: '**', redirectTo: pathToRedirect};
+    return { path: '**', redirectTo: pathToRedirect };
   }
 
   setRoutesForRole(arr1, arr2): boolean {
