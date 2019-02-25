@@ -36,6 +36,8 @@ export class LoginComponent {
           this.errorMessage = 'There were problems with the Server connection';
         } else if (error.status === 401) {
           this.errorMessage = 'Please check you login data!';
+        } else {
+          this.errorMessage = 'Something went wrong :(';
         }
         this.isSubmitted = false;
         this.isFail = true;

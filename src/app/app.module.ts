@@ -26,17 +26,18 @@ import { RoleAuthService } from './roleAuth.service';
     HistoricalDataComponent,
     TimeApprovalComponent,
     ProjectManagmentComponent,
-    UserManagmentComponent
+    UserManagmentComponent,
   ],
   imports: [
-    LoginModule, UserManagementModule,
+    LoginModule,
+    UserManagementModule,
     BrowserModule,
     CustomMaterialModule,
     FormsModule,
     BrowserAnimationsModule,
 
     NavigationModule,
-    rootModule
+    rootModule,
   ],
   providers: [RoleAuthService],
   bootstrap: [AppComponent]
