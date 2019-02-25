@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { UserManagementComponent } from './user-management.component';
 import { UserRegistrationModule } from './user-registration/user-registration.module';
+import { UsersReportModule } from './users-report/users-report.module';
+import { UserManagementService } from './user-management.service';
 
 @NgModule({
   declarations: [
@@ -11,8 +13,10 @@ import { UserRegistrationModule } from './user-registration/user-registration.mo
   imports: [
     CommonModule,
     UserRegistrationModule,
-    FlexLayoutModule,
+    UsersReportModule,
+    FlexLayoutModule
   ],
-  exports: [UserManagementComponent]
+  exports: [UserManagementComponent],
+  providers: [UserManagementService]
 })
 export class UserManagementModule { }

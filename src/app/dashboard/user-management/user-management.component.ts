@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {UserRegistrationComponent} from './user-registration/user-registration.component';
 
 @Component({
   selector: 'app-user-management',
@@ -9,7 +10,5 @@ export class UserManagementComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

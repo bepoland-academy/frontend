@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginModule } from './login/login.module';
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 import { CustomMaterialModule } from './material/material.module';
 import { AppComponent } from './app.component';
@@ -20,6 +20,7 @@ import { environment } from '../environments/environment';
     AppComponent,
   ],
   imports: [
+    LoginModule,
     BrowserModule,
     FormsModule,
     CustomMaterialModule,

@@ -4,7 +4,7 @@ import { UserRegistrationComponent } from './user-registration.component';
 import {CustomMaterialModule} from '../../../material/material.module';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { UserRegistrationService } from './user-registration.service';
+import { UserManagementService } from '../user-management.service';
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import { UserRegistrationService } from './user-registration.service';
     UserRegistrationComponent
   ],
   providers: [
-    UserRegistrationService
+    UserManagementService
   ]
 })
 export class UserRegistrationModule { }
