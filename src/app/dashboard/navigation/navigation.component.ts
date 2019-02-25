@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, Routes, ActivatedRoute } from '@angular/router';
+import { Router, Routes } from '@angular/router';
 
 import { RoleAuthService } from '../roleAuth.service';
 
@@ -14,14 +14,11 @@ export class NavigationComponent implements OnInit {
   constructor(
     private router: Router,
     private roleAuthService: RoleAuthService,
-    private route: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.links = this.roleAuthService.getLinks();
-    console.log('jest')
     this.currentUrl = this.router.url.substr(1);
-
+    this.roleAuthService.getLinks().subscribe(links => this.links = links);
     this.router.events.subscribe(() => {
       this.currentUrl = this.router.url.substr(1);
     });

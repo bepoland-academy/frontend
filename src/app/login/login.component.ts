@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 
-import { LoginService } from './login.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
@@ -25,35 +24,28 @@ export class LoginComponent implements OnInit {
       password: this.password
     };
     this.isSubmitted = true;
-    this.loginService.postData(this.username, this.password)
-    // .subscribe(
-    //   () => {
-    //   this.isSubmitted = false;
-    //   this.isSuccess = true;
-    // },
-    //   () => {
-    //   this.isSubmitted = false;
-    //   this.isFail = true;
-    // });
+    this.authService.login(this.username, this.password);
   }
 
   constructor(
-    private loginService: LoginService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private ngZone: NgZone
   ) {
   }
 
   ngOnInit(): void {
-    if (this.authService.loggedIn.getValue()) {
-      this.router.navigate(['/']);
-    }
+    this.authService.loggedIn.subscribe(value => {
+      if (value) {
+        this.ngZone.run(() => {
+          this.router.navigate(['/']);
+        });
+      }
+    });
   }
 
   login() {
     this.sendUserAuthData();
-    this.authService.login();
-    this.router.navigate(['/']);
   }
 
 }
