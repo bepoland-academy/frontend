@@ -35,14 +35,14 @@ export class UsersReportComponent implements OnInit {
   }
 
   checkRole(user, roleChanged) {
-    const result = user.role.some(e => e === roleChanged);
+    const result = user.roles.some(e => e === roleChanged);
     return result;
   }
 
   updateRole(event: any, user, roleChanged) {
    const isAdded = event.checked;
-   const id = user.id;
-   const roles = user.role;
+   const id = user.userId;
+   const roles = user.roles;
    const present = roles.some(e => e === roleChanged);
 
    if (isAdded) {
@@ -72,7 +72,7 @@ export class UsersReportComponent implements OnInit {
     this.userManagementService.updateUsers(user, id)
     .subscribe(data => {
       // console.log(data);
-      this.ngOnInit();
+      this.getUsersData();
     },
     error => {
      console.log(error);
@@ -87,7 +87,7 @@ export class UsersReportComponent implements OnInit {
   console.log(this.reloadPage);
   }
 
-  ngDoCheck() {
+  ngDoCheck(): void {
     if (this.reloadPage !== 'false') {
       this.ngOnInit();
     }

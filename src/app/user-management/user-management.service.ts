@@ -24,7 +24,7 @@ export class UserManagementService {
 }
 
   getUsers() {
-    return this.http.get(this.testJSON);
+     return this.http.get(this.testJSON);
 }
 
 updateUsers(user, id): Observable<object> {

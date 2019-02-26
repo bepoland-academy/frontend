@@ -9,7 +9,10 @@ import { UserManagementService } from './user-management.service';
 @NgModule({
   declarations: [UserManagementComponent],
   imports: [
-    CommonModule, UserRegistrationModule, UsersReportModule, FlexLayoutModule
+    CommonModule,
+    UserRegistrationModule,
+    UsersReportModule,
+    FlexLayoutModule
   ],
   exports: [UserManagementComponent],
   providers: [UserManagementService]

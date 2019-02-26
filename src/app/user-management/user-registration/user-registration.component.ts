@@ -8,16 +8,16 @@ import { UserManagementService } from '../user-management.service';
   styleUrls: ['./user-registration.component.css'],
   styles: ['.hidden {display: none}']
 })
-export class UserRegistrationComponent implements OnInit{
+export class UserRegistrationComponent implements OnInit {
   @ViewChild('myForm')
   myForm: ElementRef;
   reloadPage: string;
 
 
-  name: string;
-  surname: string;
-  email: string;
-  role: any;
+  firstName: string;
+  lastName: string;
+  emailLogin: string;
+  roles: any;
   department: string;
   active = 'YES';
   registerDisabled = 'true';
@@ -29,10 +29,10 @@ export class UserRegistrationComponent implements OnInit{
 
   sendUserRegData() {
     this.userRegistrationData = {
-     name: this.name,
-     surname: this.surname,
-     email: this.email,
-     role: this.role,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      emailLogin: this.emailLogin,
+     roles: this.roles,
      department: this.department,
      active: this.active
     };
@@ -63,8 +63,4 @@ export class UserRegistrationComponent implements OnInit{
     this.userManagementService.notTriggerReload.subscribe(message => this.reloadPage = message);
     console.log(this.reloadPage);
   }
-
-  //   ngDoCheck() {
-  //   console.log(this.message);
-  // }
 }
