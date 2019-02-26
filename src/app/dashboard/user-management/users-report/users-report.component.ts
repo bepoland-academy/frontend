@@ -50,49 +50,47 @@ export class UsersReportComponent implements OnInit {
   }
 
   checkRole(user, roleChanged) {
-    const result = user.role.some(e => e === roleChanged);
+    const result = user.roles.some(e => e === roleChanged);
     return result;
   }
 
   updateRole(event: any, user, roleChanged) {
-   const isAdded = event.checked;
+    const isAdded = event.checked;
+    const id = user.userId;
+    const roles = user.roles;
+    const present = roles.some(e => e === roleChanged);
+ 
+    if (isAdded) {
+       roles.push(roleChanged);
+    } else if (roles.length === 1) {
+      return;
+    } else {
+     for ( let i = 0; i < roles.length; i++) {
+       if ( roles[i] === roleChanged) {
+         roles.splice(i, 1);
+       }
+    }
+    }
+ 
+    user.roles = roles;
 
-   const id = user.id;
-   this.users.find(el => el.id === id)
-   const roles = user.role;
-   const present = roles.some(e => e === roleChanged);
-
-   if (isAdded) {
-      roles.push(roleChanged);
-   } else if (roles.length === 1) {
-     return;
-   } else {
-    for ( let i = 0; i < roles.length; i++) {
-      if ( roles[i] === roleChanged) {
-        roles.splice(i, 1);
-      }
-   }
-   }
-
-   user.role = roles;
-
-   this.changeUserData(user, id);
+   this.changeUserData(user);
   }
 
-  updateActive(event, user) {
+  updateActive(user: any) {
     user.active = !user.active;
     console.log(user.active);
-    this.changeUserData(user, user.id);
+    this.changeUserData(user);
   }
 
-  changeUserData(user, id) {
-    this.userManagementService.updateUsers(user, id)
+  changeUserData(user) {
+    this.userManagementService.updateUsers(user, user.userId)
     .subscribe(data => {
-      // console.log(data);
-      this.getUsersData();
+      console.log(data);
+      this.ngOnInit();
     },
     error => {
-     console.log(error);
+     console.log(error, user);
     });
   }
   

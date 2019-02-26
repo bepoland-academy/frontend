@@ -4,23 +4,23 @@
       <mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="employee">
           <mat-header-cell *matHeaderCellDef>Employee</mat-header-cell>
-          <mat-cell *matCellDef="let user">{{user.name}} {{user.surname}}</mat-cell>
+          <mat-cell *matCellDef="let user">{{user.firstName}} {{user.lastName}}</mat-cell>
         </ng-container>
       
         <ng-container matColumnDef="role">
           <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
           <mat-cell *matCellDef="let user">
               <mat-checkbox 
-              [checked]="checkRole(user, 'consultant')"
-              (change)="updateRole($event, user, 'consultant')"
+              [checked]="checkRole(user, 'CONSULTANT')"
+              (change)="updateRole($event, user, 'CONSULTANT')"
               >Consultant</mat-checkbox>
               <mat-checkbox 
-              [checked]="checkRole(user, 'administrator')"
-              (change)="updateRole($event, user, 'administrator')"
+              [checked]="checkRole(user, 'ADMINISTRATION')"
+              (change)="updateRole($event, user, 'ADMINISTRATION')"
               >Administration</mat-checkbox>
               <mat-checkbox 
-              [checked]="checkRole(user, 'manager')"
-              (change)="updateRole($event, user, 'manager')"
+              [checked]="checkRole(user, 'MANAGER')"
+              (change)="updateRole($event, user, 'MANAGER')"
               >Manager</mat-checkbox>
           </mat-cell>
         </ng-container>
@@ -35,13 +35,14 @@
           <mat-cell *matCellDef="let user">
             <mat-radio-group>
                 <mat-radio-button
-                value="Hey" 
-                [checked]="user.active"
-                (change)="updateActive($event, user)"
+                value="true"
+                [checked]="user.active === true"
+                (change)="updateActive(user)"
                 >Yes</mat-radio-button>
-                <mat-radio-button 
-                [checked]="!user.active"
-                (change)="updateActive($event, user)"
+                <mat-radio-button
+                value="false" 
+                [checked]="user.active === false"
+                (change)="updateActive(user)"
                 >No</mat-radio-button>
             </mat-radio-group>
           </mat-cell>

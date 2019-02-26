@@ -12,6 +12,7 @@ import { RoleAuthService } from './dashboard/roleAuth.service';
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
 import { HttpClientModule } from '@angular/common/http';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [
     RoleAuthService,
     AuthService,
-    HttpService
+    HttpService,
+    { provide: APP_BASE_HREF, useValue: '/' }
   ],
   bootstrap: [AppComponent],
 

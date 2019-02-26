@@ -19,7 +19,7 @@ export class UserRegistrationComponent implements OnInit {
   emailLogin: string;
   roles: any;
   department: string;
-  active = 'YES';
+  active = true;
   registerDisabled = 'true';
   isSubmitted = false;
   isSuccess = false;
@@ -28,16 +28,16 @@ export class UserRegistrationComponent implements OnInit {
   userRegistered = 'true';
 
   sendUserRegData() {
-    this.userRegistrationData = {
+    
+    this.isSubmitted = true;
+    this.userManagementService.postData({
       firstName: this.firstName,
       lastName: this.lastName,
       emailLogin: this.emailLogin,
       roles: this.roles,
       department: this.department,
       active: this.active
-    };
-    this.isSubmitted = true;
-    this.userManagementService.postData(this.userRegistrationData)
+    })
     .subscribe(data => {
       this.isSubmitted = false;
       this.isSuccess = true;

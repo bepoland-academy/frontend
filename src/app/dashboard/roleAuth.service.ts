@@ -12,12 +12,12 @@ import { UserManagementComponent } from './user-management/user-management.compo
 @Injectable()
 export class RoleAuthService {
   routes: Routes = [
-    { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATOR'] } },
-    { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATOR'] } },
-    { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['MANAGER', 'ADMINISTRATOR'] } },
-    { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATOR'] } },
+    { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] } },
+    { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] } },
+    { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['MANAGER', 'ADMINISTRATION'] } },
+    { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATION'] } },
     { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['MANAGER'] } },
-    { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['ADMINISTRATOR'] } }
+    { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['ADMINISTRATION'] } }
   ];
 
   links: BehaviorSubject<Routes> = new BehaviorSubject([]);
@@ -45,12 +45,12 @@ export class RoleAuthService {
     let pathToRedirect: string;
     if (roles.includes('MANAGER')) {
       pathToRedirect = '/approval';
-    } else if (roles.includes('ADMINISTRATOR')) {
+    } else if (roles.includes('ADMINISTRATION')) {
       pathToRedirect = '/reports';
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full'  };
+    return { path: '**', redirectTo: pathToRedirect };
   }
 
   setRoutesForRole(arr1, arr2): boolean {

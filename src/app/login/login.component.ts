@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
           this.isLoading = false;
           const regExp = new RegExp(/^[4]/g);
           if (regExp.test(err.status)) {
-            this.errorMessage = err.error.message;
+            this.errorMessage = "Bad credentials login or password is wrong.";
           } else {
             this.errorMessage = "Some problems occurs in the server, please contact administrator";
           }

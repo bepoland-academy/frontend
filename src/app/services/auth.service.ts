@@ -9,12 +9,14 @@ import { HttpService } from "./http.service";
 export class AuthService {
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   constructor(
     private roleAuthService: RoleAuthService,
     private http: HttpService,
   ) {
     this.getUser();
   }
+
   public login(credentials) {
     return this.http.post("users/login", credentials).pipe(
       tap((user) => {
@@ -24,14 +26,22 @@ export class AuthService {
       }),
     );
   }
+
+  public logout() {
+    localStorage.clear()
+    this.loggedIn.next(false)
+  }
+
   public getLogStatus() {
     return this.loggedIn.asObservable();
   }
-  public getUser() {
+
+  private getUser() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       this.loggedIn.next(true);
       this.roleAuthService.filterRoutes(user.roles);
     }
   }
+
 }

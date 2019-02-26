@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 
 import { RoleAuthService } from '../roleAuth.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -14,7 +15,14 @@ export class NavigationComponent implements OnInit {
   constructor(
     private router: Router,
     private roleAuthService: RoleAuthService,
+    private authService: AuthService,
+    private ngZone: NgZone
   ) {}
+
+  public logout() {
+    this.authService.logout();
+    this.ngZone.run(() => this.router.navigate(['/login']))
+  }
 
   ngOnInit(): void {
     this.currentUrl = this.router.url.substr(1);

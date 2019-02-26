@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 @Injectable()
 export class UserManagementService {
 
-  public testJSON = "http://localhost:3000/users/";
+  public testJSON = "http://192.168.20.30:8080/users/";
 
   private reloadStatus = new BehaviorSubject("false");
   
@@ -28,6 +28,6 @@ export class UserManagementService {
 
   public updateUsers(user, id): Observable<object> {
     console.log(user);
-    return this.http.put(`http://localhost:3000/users/${id}`, user);
+    return this.http.put(`http://192.168.20.30:8080/users/${id}`, user);
 }
 }

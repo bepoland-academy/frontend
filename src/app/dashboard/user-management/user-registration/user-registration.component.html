@@ -12,8 +12,8 @@
                <mat-label>First Name</mat-label>
                <input 
                matInput 
-               [(ngModel)]="name"
-               name="name"
+               [(ngModel)]="firstName"
+               name="firstName"
                #nameInput="ngModel" 
                required
                >
@@ -24,8 +24,8 @@
                <mat-label>Surname</mat-label>
                <input 
                matInput 
-               [(ngModel)]="surname" 
-               name="surname"
+               [(ngModel)]="lastName" 
+               name="lastName"
                #surnameInput="ngModel" 
                required>
             </mat-form-field>
@@ -36,8 +36,8 @@
                <input 
                matInput 
                type="email" 
-               name="password"
-               [(ngModel)]="email" 
+               name="emailLogin"
+               [(ngModel)]="emailLogin" 
                #emailInput="ngModel"
                required>
             </mat-form-field>
@@ -45,16 +45,16 @@
                <mat-select 
                matNativeControl 
                placeholder="Role"
-               [(ngModel)]="role"
+               [(ngModel)]="roles"
                #roleInput="ngModel" 
-               name="role"
+               name="roles"
                multiple
                required>
-               <mat-option value="consultant">Consultant
+               <mat-option value="CONSULTANT">Consultant
                </mat-option>
-               <mat-option value="administration">Administration
+               <mat-option value="ADMINISTRATION">Administration
                </mat-option>
-               <mat-option value="manager">Manager
+               <mat-option value="MANAGER">Manager
                </mat-option>
                </mat-select>
             </mat-form-field>
@@ -67,11 +67,11 @@
                #departmentInput="ngModel"
                required 
                >
-               <mat-option value="digital">Digital
+               <mat-option value="DIGITAL">Digital
                </mat-option>
-               <mat-option value="salesforce">Salesforce
+               <mat-option value="SALESFORCE">Salesforce
                </mat-option>
-               <mat-option value="banking">Banking
+               <mat-option value="BANKING">Banking
                </mat-option>
                </mat-select>
             </mat-form-field>
