@@ -9,3 +9,7 @@
 .mat-spinner {
   margin: auto;
 }
+
+.hidden {
+  display: none;
+}

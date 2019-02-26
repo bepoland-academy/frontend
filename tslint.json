@@ -1,8 +1,5 @@
 {
-  "extends": ["tslint:latest"],
-  "rulesDirectory": [
-    "node_modules/tslint-eslint-rules/dist/rules"
-  ],
+  "extends": ["tslint-eslint-rules", "tslint:latest"],
   "rules": {
     "no-submodule-imports": [
       true,

@@ -32,9 +32,9 @@ export class UserRegistrationComponent implements OnInit {
       firstName: this.firstName,
       lastName: this.lastName,
       emailLogin: this.emailLogin,
-     roles: this.roles,
-     department: this.department,
-     active: this.active
+      roles: this.roles,
+      department: this.department,
+      active: this.active
     };
     this.isSubmitted = true;
     this.userManagementService.postData(this.userRegistrationData)

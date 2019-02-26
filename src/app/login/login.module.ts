@@ -7,7 +7,6 @@ import { AuthGuard } from "../guards/auth.guard";
 import {CustomMaterialModule} from "../material/material.module";
 import { LoginComponent } from "./login.component";
 import { rootModule } from "./login.routing";
-import { LoginService } from "./login.service";
 
 @NgModule({
   declarations: [
@@ -22,7 +21,6 @@ import { LoginService } from "./login.service";
     rootModule,
   ],
   providers: [
-    LoginService,
     AuthGuard,
   ],
   exports: [

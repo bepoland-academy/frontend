@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from "@angular/core";
 
 import { Router } from "@angular/router";
 import { AuthService } from "../services/auth.service";
@@ -7,15 +7,12 @@ import { AuthService } from "../services/auth.service";
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"],
-  styles: [".hidden {display: none}"],
 })
 export class LoginComponent implements OnInit {
   public username: string;
   public password: string;
   public loginDisabled = "true";
-  public isSubmitted = false;
-  public isSuccess = false;
-  public isFail = false;
+  public isLoading = false;
   public errorMessage = "";
 
   constructor(
@@ -24,13 +21,21 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone,
   ) {}
 
-  public sendUserAuthData() {
-    this.isSubmitted = true;
-    this.authService.login({emailLogin: this.username, password: this.password});
-  }
-
   public login() {
-    this.sendUserAuthData();
+    this.isLoading = true;
+    this.authService.login({ emailLogin: this.username, password: this.password })
+      .subscribe(
+        () => this.isLoading = false,
+        (err) => {
+          this.isLoading = false;
+          const regExp = new RegExp(/^[4]/g);
+          if (regExp.test(err.status)) {
+            this.errorMessage = err.error.message;
+          } else {
+            this.errorMessage = "Some problems occurs in the server, please contact administrator";
+          }
+        },
+      );
   }
 
   public ngOnInit(): void {

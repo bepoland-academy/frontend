@@ -1,5 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="welcome-page">
-  <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
+  <mat-card>
+   <mat-error *ngIf="errorMessage.length">{{errorMessage}}</mat-error>
      <mat-card-header fxLayoutAlign="center">
         <mat-card-title>Login</mat-card-title>
      </mat-card-header>
@@ -15,16 +16,16 @@
               #name="ngModel">
            </mat-form-field>
            <mat-form-field 
-              appearance="outline" 
-              class="login-form-input">
+            appearance="outline" 
+            class="login-form-input">
               <mat-label>Password</mat-label>
               <input 
-              matInput 
-              [(ngModel)]="password" 
-              type="password" 
-              name="password"
-              #pass="ngModel" 
-              required>
+               matInput 
+               [(ngModel)]="password" 
+               type="password" 
+               name="password"
+               #pass="ngModel" 
+               required>
            </mat-form-field>
            <mat-card-actions fxLayoutAlign="center start" class="login-form-button">
               <button
@@ -37,7 +38,7 @@
               </button>
            </mat-card-actions>
         </form>
-        <mat-spinner [ngClass]="{hidden: isSubmitted !== true}"></mat-spinner>
+        <mat-spinner [ngClass]="{hidden: isLoading !== true}"></mat-spinner> 
      </mat-card-content>
   </mat-card>
 </div>
