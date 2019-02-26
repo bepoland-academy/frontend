@@ -13,14 +13,15 @@ export class NavigationComponent implements OnInit {
   links: Routes;
   constructor(
     private router: Router,
-    private roleAuthService: RoleAuthService
-    ) { }
+    private roleAuthService: RoleAuthService,
+  ) {}
 
   ngOnInit(): void {
-    this.links = this.roleAuthService.getLinks();
+    this.currentUrl = this.router.url.substr(1);
+    this.roleAuthService.getLinks().subscribe(links => this.links = links);
     this.router.events.subscribe(() => {
-        this.currentUrl = this.router.url.substr(1);
-      });
-    }
+      this.currentUrl = this.router.url.substr(1);
+    });
+  }
 
 }

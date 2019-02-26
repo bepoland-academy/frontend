@@ -17,12 +17,27 @@ export class UsersReportComponent implements OnInit {
   isResponse = false;
   serverError = false;
 
+  constructor(private userManagementService: UserManagementService) { }
+
+  ngOnInit() {
+    this.getUsersData();
+    this.userManagementService.notTriggerReload.subscribe(message => this.reloadPage = message);
+    console.log(this.reloadPage);
+  }
+
+  ngDoCheck() {
+    if (this.reloadPage !== 'false') {
+      this.ngOnInit();
+    }
+    console.log(this.reloadPage);
+  }
+
   getUsersData() {
     this.userManagementService.getUsers()
     .subscribe(data => {
       this.users = data;
       this.dataSource = new MatTableDataSource(this.users);
-      // console.log(this.dataSource);
+      //console.log(this.dataSource);
       this.isResponse = true;
       this.isDataAvailable = true;
     },
@@ -41,8 +56,10 @@ export class UsersReportComponent implements OnInit {
 
   updateRole(event: any, user, roleChanged) {
    const isAdded = event.checked;
-   const id = user.userId;
-   const roles = user.roles;
+
+   const id = user.id;
+   this.users.find(el => el.id === id)
+   const roles = user.role;
    const present = roles.some(e => e === roleChanged);
 
    if (isAdded) {
@@ -78,21 +95,9 @@ export class UsersReportComponent implements OnInit {
      console.log(error);
     });
   }
-  constructor(private userManagementService: UserManagementService) {
-  }
+  
 
-  ngOnInit() {
-  this.getUsersData();
-  this.userManagementService.notTriggerReload.subscribe(message => this.reloadPage = message);
-  console.log(this.reloadPage);
-  }
-
-  ngDoCheck(): void {
-    if (this.reloadPage !== 'false') {
-      this.ngOnInit();
-    }
-    console.log(this.reloadPage);
-  }
+  
 }
 
 export interface User {

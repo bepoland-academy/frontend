@@ -1,54 +1,46 @@
-import { Component } from '@angular/core';
-import { LoginService } from './login.service';
+import { Component, NgZone, OnInit } from '@angular/core';
 
+import { Router } from "@angular/router";
+import { AuthService } from "../services/auth.service";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  styles: ['.hidden {display: none}'],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
+  styles: [".hidden {display: none}"],
 })
-export class LoginComponent {
-  username: string;
-  password: string;
-  loginDisabled = 'true';
-  isSubmitted = false;
-  isSuccess = false;
-  isFail = false;
-  loginData: object;
-  errorMessage = '';
+export class LoginComponent implements OnInit {
+  public username: string;
+  public password: string;
+  public loginDisabled = "true";
+  public isSubmitted = false;
+  public isSuccess = false;
+  public isFail = false;
+  public errorMessage = "";
 
-  sendUserAuthData() {
-    this.loginData = {
-     username: this.username,
-     password: this.password
-    };
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private ngZone: NgZone,
+  ) {}
+
+  public sendUserAuthData() {
     this.isSubmitted = true;
-    this.loginService.postData(this.loginData)
-    .subscribe(
-      () => {
-      this.isSubmitted = false;
-      this.isSuccess = true;
-    },
-      (error) => {
-        console.log(error.status);
-        if (error.status === 0) {
-          this.errorMessage = 'There were problems with the Server connection';
-        } else if (error.status === 401) {
-          this.errorMessage = 'Please check you login data!';
-        } else {
-          this.errorMessage = 'Something went wrong :(';
-        }
-        this.isSubmitted = false;
-        this.isFail = true;
-    });
+    this.authService.login({emailLogin: this.username, password: this.password});
   }
 
-  constructor(private loginService: LoginService) {
-  }
-
-  login() {
+  public login() {
     this.sendUserAuthData();
+  }
+
+  public ngOnInit(): void {
+    this.authService.loggedIn.subscribe((value) => {
+      if (value) {
+        this.ngZone.run(() => {
+          this.router.navigate(["/"]);
+        });
+      }
+    });
   }
 
 }

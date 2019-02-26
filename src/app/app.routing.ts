@@ -1,10 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import {RoleAuthService} from './roleAuth.service';
-
-const roleAuthService: RoleAuthService = new RoleAuthService();
-
-const routes: Routes = roleAuthService.getAccessedRoutes();
+const routes: Routes = [];
 
 
 

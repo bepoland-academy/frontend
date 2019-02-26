@@ -5,9 +5,9 @@
   <a
     mat-tab-link 
     *ngFor="let link of links; let i = index" 
-    [routerLink]="link.path"
+    [routerLink]="['/', link.path]"
     [active]="currentUrl == link.path"
   >
-    {{link.data.name}}
+    {{link.path}}
   </a>
 </nav>

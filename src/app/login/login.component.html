@@ -40,14 +40,4 @@
         <mat-spinner [ngClass]="{hidden: isSubmitted !== true}"></mat-spinner>
      </mat-card-content>
   </mat-card>
-  <mat-card [ngClass]="{hidden: isSuccess !== true}">
-     <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
-        <mat-card-title style="color: green; text-align: center">Success!</mat-card-title>
-     </mat-card-header>
-  </mat-card>
-  <mat-card [ngClass]="{hidden: isFail !== true}">
-     <mat-card-header fxLayoutAlign="center center" style="height:200px; width:300px">
-        <mat-card-title style="color: red; text-align: center">{{errorMessage}}</mat-card-title>
-     </mat-card-header>
-  </mat-card>
 </div>
