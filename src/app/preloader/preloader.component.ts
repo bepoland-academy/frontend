@@ -2,9 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-preloader',
-  templateUrl: './preloader.component.html',
-  styleUrls: ['./preloader.component.css'],
-  styles: ['.hidden {display: none}'],
+  template: `
+    <mat-spinner></mat-spinner>
+  `,
+  styles: [`
+    .mat-spinner {margin: auto}
+  `],
 })
 export class PreloaderComponent implements OnInit {
   @Input() isSuccess: string;

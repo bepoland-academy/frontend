@@ -12,12 +12,12 @@ import { UserManagementComponent } from './user-management/user-management.compo
 @Injectable()
 export class RoleAuthService {
   routes: Routes = [
-    { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['consultant', 'manager', 'administrator'] } },
-    { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['consultant', 'manager', 'administrator'] } },
-    { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['manager', 'administrator'] } },
-    { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['manager', 'administrator'] } },
-    { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['manager'] } },
-    { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['administrator'] } }
+    { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATOR'] } },
+    { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATOR'] } },
+    { path: 'reports', component: ReportsComponent, data: { name: 'Reports', forRole: ['MANAGER', 'ADMINISTRATOR'] } },
+    { path: 'projects', component: ProjectManagmentComponent, data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATOR'] } },
+    { path: 'approval', component: TimeApprovalComponent, data: { name: 'Time approval', forRole: ['MANAGER'] } },
+    { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['ADMINISTRATOR'] } }
   ];
 
   links: BehaviorSubject<Routes> = new BehaviorSubject([]);
@@ -43,9 +43,9 @@ export class RoleAuthService {
 
   addRedirectPage(roles): Route {
     let pathToRedirect: string;
-    if (roles.includes('manager')) {
+    if (roles.includes('MANAGER')) {
       pathToRedirect = '/approval';
-    } else if (roles.includes('administrator')) {
+    } else if (roles.includes('ADMINISTRATOR')) {
       pathToRedirect = '/reports';
     } else {
       pathToRedirect = '/track';

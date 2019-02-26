@@ -1,20 +1,17 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login.component';
-import { HttpClientModule } from '@angular/common/http';
-import { LoginService } from './login.service';
-import {CustomMaterialModule} from '../material/material.module';
-import { FormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { rootModule } from './login.routing';
-import { AuthGuard } from '../guards/auth.guard';
-
-
-
+import { CommonModule } from "@angular/common";
+import { HttpClientModule } from "@angular/common/http";
+import { NgModule } from "@angular/core";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { FormsModule } from "@angular/forms";
+import { AuthGuard } from "../guards/auth.guard";
+import {CustomMaterialModule} from "../material/material.module";
+import { LoginComponent } from "./login.component";
+import { rootModule } from "./login.routing";
+import { LoginService } from "./login.service";
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     CommonModule,
@@ -22,12 +19,14 @@ import { AuthGuard } from '../guards/auth.guard';
     CustomMaterialModule,
     FormsModule,
     FlexLayoutModule,
-    rootModule
+    rootModule,
   ],
   providers: [
     LoginService,
-    AuthGuard
+    AuthGuard,
   ],
-  exports: [LoginComponent]
+  exports: [
+    LoginComponent
+  ],
 })
 export class LoginModule { }

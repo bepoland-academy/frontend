@@ -1,33 +1,32 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable()
 export class UserManagementService {
 
+  public testJSON = "http://localhost:3000/users/";
 
-  constructor(private http: HttpClient) {
-   }
+  private reloadStatus = new BehaviorSubject("false");
+  
+  public notTriggerReload = this.reloadStatus.asObservable();
 
-    private reloadStatus = new BehaviorSubject('false');
-    notTriggerReload = this.reloadStatus.asObservable();
+  constructor(private http: HttpClient) {}
 
-    testJSON = 'http://localhost:3000/users/';
+  public triggerReload(message: string) {
+    this.reloadStatus.next(message);
+  }
 
-    triggerReload(message: string) {
-      this.reloadStatus.next(message);
-    }
-
-  postData(userRegistrationData) {
+  public postData(userRegistrationData) {
     console.log(userRegistrationData);
     return this.http.post(this.testJSON, userRegistrationData);
 }
 
-  getUsers() {
+  public getUsers() {
     return this.http.get(this.testJSON);
 }
 
-updateUsers(user, id): Observable<object> {
+  public updateUsers(user, id): Observable<object> {
     console.log(user);
     return this.http.put(`http://localhost:3000/users/${id}`, user);
 }

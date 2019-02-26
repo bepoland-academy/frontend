@@ -6,7 +6,9 @@ import { UserManagementService } from '../user-management.service';
 
 
 @NgModule({
-  declarations: [UsersReportComponent],
+  declarations: [
+    UsersReportComponent
+  ],
   imports: [
     CommonModule,
     CustomMaterialModule,

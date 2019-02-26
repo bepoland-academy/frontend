@@ -3,15 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  firebase: {
-    apiKey: "AIzaSyAzQY4qa578XnyNN9AETCsvZwS4zKQB4TE",
-    authDomain: "beontime-c783e.firebaseapp.com",
-    databaseURL: "https://beontime-c783e.firebaseio.com",
-    projectId: "beontime-c783e",
-    storageBucket: "beontime-c783e.appspot.com",
-    messagingSenderId: "194315261131"
-  }
+  production: false
 };
 
 /*
