@@ -19,7 +19,7 @@ export class NavigationComponent implements OnInit {
     private ngZone: NgZone
   ) {}
 
-  public logout() {
+  public logout(): void {
     this.authService.logout();
     this.ngZone.run(() => this.router.navigate(['/login']))
   }
@@ -31,5 +31,4 @@ export class NavigationComponent implements OnInit {
       this.currentUrl = this.router.url.substr(1);
     });
   }
-
 }

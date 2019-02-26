@@ -11,9 +11,8 @@ import { AuthService } from "../services/auth.service";
 export class LoginComponent implements OnInit {
   public username: string;
   public password: string;
-  public loginDisabled = "true";
   public isLoading = false;
-  public errorMessage = "";
+  public errorMessage: string;
 
   constructor(
     private router: Router,
@@ -21,7 +20,7 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone,
   ) {}
 
-  public login() {
+  public login(): void {
     this.isLoading = true;
     this.authService.login({ emailLogin: this.username, password: this.password })
       .subscribe(

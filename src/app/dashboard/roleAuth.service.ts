@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Routes, Route, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 
 import { TimeTrackingComponent } from './time-tracking.component';
 import { HistoricalDataComponent } from './historical-data.component';
@@ -20,10 +20,10 @@ export class RoleAuthService {
     { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['ADMINISTRATION'] } }
   ];
 
-  links: BehaviorSubject<Routes> = new BehaviorSubject([]);
+  links: Subject<Routes> = new Subject();
 
   constructor(private router: Router, private ngZone: NgZone) {}
-  filterRoutes(roles) {
+  filterRoutes(roles: Array<string>) {
     const routes = this.routes.filter(item => this.setRoutesForRole(item.data.forRole, roles));
     const redirectPage = this.addRedirectPage(roles);
 
@@ -41,7 +41,7 @@ export class RoleAuthService {
 
   }
 
-  addRedirectPage(roles): Route {
+  addRedirectPage(roles: Array<string>): Route {
     let pathToRedirect: string;
     if (roles.includes('MANAGER')) {
       pathToRedirect = '/approval';
@@ -53,12 +53,12 @@ export class RoleAuthService {
     return { path: '**', redirectTo: pathToRedirect };
   }
 
-  setRoutesForRole(arr1, arr2): boolean {
+  setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {
     return arr1.some(r => arr2.includes(r));
   }
 
-  getLinks(): BehaviorSubject<Routes> {
-    return this.links;
+  getLinks(): Observable<Routes> {
+    return this.links.asObservable();
   }
 
 }
