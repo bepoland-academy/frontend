@@ -8,19 +8,19 @@ import { UsersReportModule } from "./users-report/users-report.module";
 
 @NgModule({
   declarations: [
-    UserManagementComponent,
+   UserManagementComponent,
   ],
   imports: [
-    CommonModule,
-    UserRegistrationModule,
-    UsersReportModule,
-    FlexLayoutModule,
+   CommonModule,
+   UserRegistrationModule,
+   UsersReportModule,
+   FlexLayoutModule,
   ],
   exports: [
-    UserManagementComponent
+   UserManagementComponent
   ],
   providers: [
-    UserManagementService
+   UserManagementService
   ],
-})
-export class UserManagementModule { }
+ })
+ export class UserManagementModule {}

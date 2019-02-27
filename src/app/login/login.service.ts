@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class LoginService {
 
-    testJSON = 'http://localhost:3000/users/';
+    testJSON = 'http://192.168.20.30:8080/users/login';
     newUser = {
       name: 'GET',
       surname: 'Syl',

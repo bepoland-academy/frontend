@@ -10,41 +10,41 @@ import { Observable } from 'rxjs';
 
 describe('UsersReportComponent', () => {
   let component: UsersReportComponent;
-  let fixture: ComponentFixture<UsersReportComponent>;
+  let fixture: ComponentFixture < UsersReportComponent > ;
   let UserManagementTest;
   let getUsersDataSpy;
-
-
-  beforeEach(async(() => {
-    // UserManagementTest = jasmine.createSpyObj('UserManagementService', ['getUsers']);
-    TestBed.configureTestingModule({
-      declarations: [ UsersReportComponent ],
-      imports: [
-        CustomMaterialModule,
-        HttpClientModule
-      ],
-      providers: [
-        UserManagementService
-        // {provide: UserManagementService, useValue: UserManagementTest}
-      ]
+ 
+ 
+  beforeEach(async (() => {
+   // UserManagementTest = jasmine.createSpyObj('UserManagementService', ['getUsers']);
+   TestBed.configureTestingModule({
+     declarations: [UsersReportComponent],
+     imports: [
+      CustomMaterialModule,
+      HttpClientModule
+     ],
+     providers: [
+      UserManagementService
+      // {provide: UserManagementService, useValue: UserManagementTest}
+     ]
     })
     .compileComponents();
   }));
-
+ 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UsersReportComponent);
-    component = fixture.componentInstance;
-    // getUsersDataSpy = UserManagementTest.getUsers.and.returnValue(new Observable());
-    fixture.detectChanges();
+   fixture = TestBed.createComponent(UsersReportComponent);
+   component = fixture.componentInstance;
+   // getUsersDataSpy = UserManagementTest.getUsers.and.returnValue(new Observable());
+   fixture.detectChanges();
   });
-
+ 
   it('should be defined', () => {
-    expect(component).toBeTruthy();
+   expect(component).toBeTruthy();
   });
-
+ 
   it('should call getUsersData on ngOnInit', () => {
-    spyOn(component, 'getUsersData');
-    fixture.detectChanges();
-    expect(component.getUsersData).toHaveBeenCalled();
+   spyOn(component, 'getUsersData');
+   fixture.detectChanges();
+   expect(component.getUsersData).toHaveBeenCalled();
   });
-});
+ });

@@ -1,5 +1,5 @@
 .welcome-page {
-    height: 70vh;
+  height: 70vh;
 }
 
 .mat-form-field {
@@ -9,3 +9,8 @@
 .mat-spinner {
   margin: auto;
 }
+
+.hidden {
+  display: none;
+}
+

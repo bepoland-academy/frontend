@@ -1,66 +1,68 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 
 
 @Component({
   selector: 'app-user-registration',
   templateUrl: './user-registration.component.html',
-  styleUrls: ['./user-registration.component.css'],
-  styles: ['.hidden {display: none}']
-})
-export class UserRegistrationComponent implements OnInit {
+  styles: [`
+   .hidden {display: none}
+   .mat-card {width: 250px}
+   .mat-spinner {margin: auto}
+   `]
+ })
+ export class UserRegistrationComponent {
   @ViewChild('myForm')
   myForm: ElementRef;
-  reloadPage: string;
-
-
+ 
+ 
   firstName: string;
   lastName: string;
   emailLogin: string;
   roles: any;
   department: string;
-  active = 'YES';
-  registerDisabled = 'true';
+  active = true;
   isSubmitted = false;
   isSuccess = false;
   isFail = false;
   userRegistrationData: object;
-  userRegistered = 'true';
+  errorMessage: string;
+ 
+  constructor(private userManagementService: UserManagementService,
+    private changeDetectorRefs: ChangeDetectorRef) {}
 
   sendUserRegData() {
-    this.userRegistrationData = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      emailLogin: this.emailLogin,
-     roles: this.roles,
-     department: this.department,
-     active: this.active
-    };
-    this.isSubmitted = true;
-    this.userManagementService.postData(this.userRegistrationData)
+   this.userRegistrationData = {
+    firstName: this.firstName,
+    lastName: this.lastName,
+    emailLogin: this.emailLogin,
+    roles: this.roles,
+    department: this.department,
+    active: this.active
+   };
+   this.isSubmitted = true;
+   this.userManagementService.postData(this.userRegistrationData)
     .subscribe(data => {
       this.isSubmitted = false;
       this.isSuccess = true;
       setTimeout(() => {
-        this.isSuccess = false;
+       this.isSuccess = false;
+       this.changeDetectorRefs.detectChanges();
       }, 3000);
       this.myForm.nativeElement.reset();
-      this.userManagementService.triggerReload('true');
-    },
-    error => {
+      this.userManagementService.changeReloadStatus();
+     },
+     error => {
+      console.log(error);
       this.isSubmitted = false;
       this.isFail = true;
+      this.errorMessage = error.error.message;
       setTimeout(() => {
-        this.isFail = false;
+       this.isFail = false;
+       this.changeDetectorRefs.detectChanges();
       }, 3000);
-    });
+      this.changeDetectorRefs.detectChanges();
+     });
   }
-
-  constructor(private userManagementService: UserManagementService) {
-  }
-
-  ngOnInit() {
-    this.userManagementService.notTriggerReload.subscribe(message => this.reloadPage = message);
-    console.log(this.reloadPage);
-  }
-}
+ 
+ }
