@@ -5,8 +5,7 @@ import { NavigationService } from '../dashboard/navigation/navigation.service';
 import { Observable } from 'rxjs';
 import { HttpService } from './http.service';
 
-const navigationServiceMock: NavigationService = jasmine.createSpyObj({ filterRoutes() {},})
-const httpServiceMock: HttpService = jasmine.createSpyObj({post() {new Observable()}})
+
 const user:user = {
   userId: 1,
   active: true,
@@ -17,20 +16,46 @@ const user:user = {
   roles: ['testRole']
 }
 
+const credentials: credentials = {
+  emailLogin: 'test@email.pl',
+  password: 'qwe123!'
+}
+
+let navigationSpy;
+let httpSpy;
+
 
 
 
 fdescribe('AuthService', () => {
   let service: AuthService;
-  beforeEach(() => {TestBed.configureTestingModule({
-    providers: [
-      AuthService,
-      { provide: NavigationService, useValue: navigationServiceMock },
-      { provide: HttpService, useValue: httpServiceMock }
-    ]
-  });
-  service = TestBed.get(AuthService)
-  
+  let httpServiceSpy: jasmine.SpyObj<HttpService>;
+  let navigationServiceSpy: jasmine.SpyObj<NavigationService>;
+  beforeEach(() => {
+    navigationSpy = jasmine.createSpyObj({ filterRoutes() { }, })
+    httpSpy = jasmine.createSpyObj('HttpService', ['post']).and.returnValue(new Observable())
+    TestBed.configureTestingModule({
+      providers: [
+        AuthService,
+        { provide: NavigationService, useValue: navigationSpy },
+        { provide: HttpService, useValue: httpSpy }
+      ]
+    });
+    service = TestBed.get(AuthService)
+    httpServiceSpy = TestBed.get(HttpService)
+    navigationServiceSpy = TestBed.get(NavigationService)
+
+    let store = {};
+
+    spyOn(localStorage, 'getItem').and.callFake(function (key) {
+      return store[key];
+    });
+    spyOn(localStorage, 'setItem').and.callFake(function (key, value) {
+      return store[key] = value + '';
+    });
+    spyOn(localStorage, 'clear').and.callFake(function () {
+      store = {};
+    });
   });
 
   it('should be created', () => {
@@ -38,8 +63,9 @@ fdescribe('AuthService', () => {
   });
 
   it('Test', () => {
-    //const credentials = 
-    //service.login()
+    httpServiceSpy.post.and.returnValue(Observable)
+    service.login(credentials)
+    
   });
   
   
