@@ -15,9 +15,9 @@ export class LoginComponent implements OnInit {
   public errorMessage = '';
 
   constructor(
-    private router: Router,
-    private authService: AuthService,
-    private ngZone: NgZone,
+   private router: Router,
+   private authService: AuthService,
+   private ngZone: NgZone,
   ) {}
 
   public login(): void {
@@ -37,15 +37,15 @@ export class LoginComponent implements OnInit {
         },
       );
   }
-
+ 
   public ngOnInit(): void {
-    this.authService.loggedIn.subscribe((value) => {
-      if (value) {
-        this.ngZone.run(() => {
-          this.router.navigate(["/"]);
-        });
-      }
-    });
+   this.authService.loggedIn.subscribe((value) => {
+    if (value) {
+     this.ngZone.run(() => {
+      this.router.navigate(["/"]);
+     });
+    }
+   });
   }
-
-}
+ 
+ }

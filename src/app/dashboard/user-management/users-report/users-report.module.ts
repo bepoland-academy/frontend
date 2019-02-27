@@ -7,17 +7,17 @@ import { UserManagementService } from '../user-management.service';
 
 @NgModule({
   declarations: [
-    UsersReportComponent
+   UsersReportComponent
   ],
   imports: [
-    CommonModule,
-    CustomMaterialModule,
+   CommonModule,
+   CustomMaterialModule,
   ],
   exports: [
-    UsersReportComponent
+   UsersReportComponent
   ],
   providers: [
-    UserManagementService
+   UserManagementService
   ]
-})
-export class UsersReportModule { }
+ })
+ export class UsersReportModule {}

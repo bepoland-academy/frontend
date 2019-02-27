@@ -1,5 +1,5 @@
 .welcome-page {
-    height: 70vh;
+  height: 70vh;
 }
 
 .mat-form-field {
@@ -14,6 +14,9 @@
   display: none;
 }
 
+<<<<<<< HEAD
 .mat-error {
   max-width: 300px;
 }
+=======
+>>>>>>> BOT-4
