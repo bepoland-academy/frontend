@@ -8,7 +8,7 @@ import { CustomMaterialModule } from './material/material.module';
 import { AppComponent } from './app.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { rootModule } from './app.routing';
-import { RoleAuthService } from './dashboard/roleAuth.service';
+import { NavigationService } from './dashboard/navigation/navigation.service';
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,7 +30,7 @@ import { APP_BASE_HREF } from '@angular/common';
     HttpClientModule
   ],
   providers: [
-    RoleAuthService,
+    NavigationService,
     AuthService,
     HttpService,
     { provide: APP_BASE_HREF, useValue: '/' }

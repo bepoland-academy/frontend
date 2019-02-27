@@ -1,16 +1,16 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Routes, Route, Router } from '@angular/router';
-import { Subject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-import { TimeTrackingComponent } from './time-tracking.component';
-import { HistoricalDataComponent } from './historical-data.component';
-import { ReportsComponent } from './reports.component';
-import { TimeApprovalComponent } from './time-approval.component';
-import { ProjectManagmentComponent } from './project-managment.component';
-import { UserManagementComponent } from './user-management/user-management.component';
+import { TimeTrackingComponent } from '../time-tracking.component';
+import { HistoricalDataComponent } from '../historical-data.component';
+import { ReportsComponent } from '../reports.component';
+import { TimeApprovalComponent } from '../time-approval.component';
+import { ProjectManagmentComponent } from '../project-managment.component';
+import { UserManagementComponent } from '../user-management/user-management.component';
 
 @Injectable()
-export class RoleAuthService {
+export class NavigationService {
   routes: Routes = [
     { path: 'track', component: TimeTrackingComponent, data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] } },
     { path: 'history', component: HistoricalDataComponent, data: { name: 'Historical data', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] } },
@@ -20,10 +20,10 @@ export class RoleAuthService {
     { path: 'users', component: UserManagementComponent, data: { name: 'User management', forRole: ['ADMINISTRATION'] } }
   ];
 
-  links: Subject<Routes> = new Subject();
+  links: BehaviorSubject<Routes> = new BehaviorSubject([]);
 
   constructor(private router: Router, private ngZone: NgZone) {}
-  filterRoutes(roles: Array<string>) {
+  filterRoutes(roles) {
     const routes = this.routes.filter(item => this.setRoutesForRole(item.data.forRole, roles));
     const redirectPage = this.addRedirectPage(roles);
 
@@ -41,7 +41,7 @@ export class RoleAuthService {
 
   }
 
-  addRedirectPage(roles: Array<string>): Route {
+  addRedirectPage(roles): Route {
     let pathToRedirect: string;
     if (roles.includes('MANAGER')) {
       pathToRedirect = '/approval';
@@ -50,15 +50,15 @@ export class RoleAuthService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: pathToRedirect };
+    return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full'  };
   }
 
-  setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {
+  setRoutesForRole(arr1, arr2): boolean {
     return arr1.some(r => arr2.includes(r));
   }
 
-  getLinks(): Observable<Routes> {
-    return this.links.asObservable();
+  getLinks(): BehaviorSubject<Routes> {
+    return this.links;
   }
 
 }

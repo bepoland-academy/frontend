@@ -7,7 +7,7 @@ import { ReportsComponent } from './reports.component';
 import { ProjectManagmentComponent } from './project-managment.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { UserManagementComponent } from './user-management/user-management.component';
-import { RoleAuthService } from './roleAuth.service';
+import { NavigationService } from './navigation/navigation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,11 +30,11 @@ import { RoleAuthService } from './roleAuth.service';
 export class DashboardComponent implements OnInit {
   links = [];
   constructor(
-    private roleAuthService: RoleAuthService
+    private navigationService: NavigationService
     ) {}
 
   ngOnInit() {
-    this.roleAuthService.getLinks().subscribe(links => {
+    this.navigationService.getLinks().subscribe(links => {
       this.links = links;
     });
   }

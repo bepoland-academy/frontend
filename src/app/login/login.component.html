@@ -1,44 +1,26 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="welcome-page">
-  <mat-card>
-   <mat-error *ngIf="errorMessage.length">{{errorMessage}}</mat-error>
-     <mat-card-header fxLayoutAlign="center">
-        <mat-card-title>Login</mat-card-title>
-     </mat-card-header>
-     <mat-card-content>
-        <form fxLayout="column">
-           <mat-form-field appearance="outline" class="login-form-input">
-              <mat-label>Username(email)</mat-label>
-              <input 
-              matInput
-              [(ngModel)]="username"
-              name="name" 
-              required
-              #name="ngModel">
-           </mat-form-field>
-           <mat-form-field 
-            appearance="outline" 
-            class="login-form-input">
-              <mat-label>Password</mat-label>
-              <input 
-               matInput 
-               [(ngModel)]="password" 
-               type="password" 
-               name="password"
-               #pass="ngModel" 
-               required>
-           </mat-form-field>
-           <mat-card-actions fxLayoutAlign="center start" class="login-form-button">
-              <button
-              type="submit" 
-              mat-raised-button 
-              color="primary"
-              (click)="login()"
-              [disabled]="name.invalid || pass.invalid">
-              Login
-              </button>
-           </mat-card-actions>
-        </form>
-        <mat-spinner [ngClass]="{hidden: isLoading !== true}"></mat-spinner> 
-     </mat-card-content>
-  </mat-card>
+   <mat-card>
+      <mat-error *ngIf="errorMessage.length">{{errorMessage}}</mat-error>
+      <mat-card-header fxLayoutAlign="center">
+         <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+         <form fxLayout="column">
+            <mat-form-field appearance="outline" class="login-form-input">
+               <mat-label>Username(email)</mat-label>
+               <input matInput [(ngModel)]="username" name="name" required #name="ngModel" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="login-form-input">
+               <mat-label>Password</mat-label>
+               <input matInput [(ngModel)]="password" type="password" name="password" #pass="ngModel" required>
+            </mat-form-field>
+            <mat-card-actions fxLayoutAlign="center start" class="login-form-button">
+               <button type="submit" mat-raised-button color="primary" (click)="login()" [disabled]="name.invalid || pass.invalid">
+                  Login
+               </button>
+            </mat-card-actions>
+         </form>
+         <mat-spinner [ngClass]="{hidden: isLoading !== true}"></mat-spinner>
+      </mat-card-content>
+   </mat-card>
 </div>

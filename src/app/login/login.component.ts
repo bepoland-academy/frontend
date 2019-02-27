@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   public username: string;
   public password: string;
   public isLoading = false;
-  public errorMessage: string;
+  public errorMessage = '';
 
   constructor(
     private router: Router,
@@ -27,11 +27,12 @@ export class LoginComponent implements OnInit {
         () => this.isLoading = false,
         (err) => {
           this.isLoading = false;
-          const regExp = new RegExp(/^[4]/g);
-          if (regExp.test(err.status)) {
+          if ((/^[4]/g).test(err.status)) {
             this.errorMessage = "Bad credentials login or password is wrong.";
+          } else if ((/^[5]/g).test(err.status)) {
+            this.errorMessage = "Some problems occur in the server, please contact administrator";
           } else {
-            this.errorMessage = "Some problems occurs in the server, please contact administrator";
+            this.errorMessage = "Check your internet connection"
           }
         },
       );
