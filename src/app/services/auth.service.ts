@@ -26,7 +26,7 @@ export class AuthService {
 
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  public user: BehaviorSubject<user> = new BehaviorSubject({})
+  public user = new BehaviorSubject({})
 
   constructor(
     public navigationService: NavigationService,
