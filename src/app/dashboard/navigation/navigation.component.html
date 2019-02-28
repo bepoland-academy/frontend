@@ -8,7 +8,12 @@
     [routerLink]="['/', link.path]"
     [active]="currentUrl == link.path"
   >
-    {{link.path}}
+    {{link.data.name}}
   </a>
-  <a mat-tab-link active="false" (click)="logout()">Logout</a>
+  <!-- <a  active="false" (click)="logout()">Logout</a> -->
+  <button mat-tab-link mat-button [matMenuTriggerFor]="menu">{{user.firstName}} {{user.lastName}}</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Your profile</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
 </nav>

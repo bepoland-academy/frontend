@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 
 import { AuthService, user, credentials } from './auth.service';
 import { NavigationService } from '../dashboard/navigation/navigation.service';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { HttpService } from './http.service';
 
 
@@ -27,38 +27,47 @@ let httpSpy;
 
 
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   let service: AuthService;
-  let httpServiceSpy: jasmine.SpyObj<HttpService>;
-  let navigationServiceSpy: jasmine.SpyObj<NavigationService>;
+  let httpService: HttpService;
+  let navigationService: NavigationService;
+  let localStorageMock = {};
   beforeEach(async(() => {
-    navigationSpy = jasmine.createSpyObj({ filterRoutes() { }, })
-    httpSpy = jasmine.createSpyObj('HttpService', ['post'])
+    navigationSpy = jasmine.createSpyObj('NavigationService', {
+      filterRoutes() {}
+    })
+    httpSpy = jasmine.createSpyObj('HttpService', {
+      post: of(user),
+    })
     TestBed.configureTestingModule({
       providers: [
         AuthService,
         { provide: NavigationService, useValue: navigationSpy },
         { provide: HttpService, useValue: httpSpy }
       ]
-    }).compileComponents();
+    })
 
 
-    // let store = {};
+    
 
-    // spyOn(localStorage, 'getItem').and.callFake(function (key) {
-    //   return store[key];
-    // });
-    // spyOn(localStorage, 'setItem').and.callFake(function (key, value) {
-    //   return store[key] = value + '';
-    // });
-    // spyOn(localStorage, 'clear').and.callFake(function () {
-    //   store = {};
-    // });
+    spyOn(localStorage, 'getItem').and.callFake((key: string): String => {
+      return localStorageMock[key] || null;
+    });
+    spyOn(localStorage, 'removeItem').and.callFake((key: string): void => {
+      delete localStorageMock[key];
+    });
+    spyOn(localStorage, 'setItem').and.callFake((key: string, value: string): string => {
+      return localStorageMock[key] = <string>value;
+    });
+    spyOn(localStorage, 'clear').and.callFake(() => {
+      localStorageMock = {};
+    });
   }));
   beforeEach(() => {
     service = TestBed.get(AuthService)
-    httpServiceSpy = httpSpy.post.and.returnValue(new Observable())
-    navigationServiceSpy = TestBed.get(NavigationService)
+    // httpServiceSpy = httpSpy.post.and.returnValue(of(user))
+    httpService = TestBed.get(HttpService)
+    navigationService = TestBed.get(NavigationService)
   });
 
 
@@ -66,13 +75,32 @@ fdescribe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('Test', () => {
-
-    service.login(credentials)
-    //console.log(service)
-    expect(httpServiceSpy).toHaveBeenCalled()
+  it('calling login method', () => {
+    service.login(credentials).subscribe(
+      (mockedUser: user) => {
+        expect(mockedUser).toBe(user)
+        expect(navigationService.filterRoutes).toHaveBeenCalledWith(mockedUser.roles)
+        expect(service.loggedIn.getValue()).toBeTruthy()
+        expect(localStorage.setItem).toHaveBeenCalled()
+      }
+    )
+    expect(httpService.post).toHaveBeenCalledWith('users/login', credentials);
   });
 
+  it('should get user from localStorage ', () => {
+    localStorage.setItem('user', JSON.stringify(user));
+    service.getUser()
+    expect(navigationService.filterRoutes).toHaveBeenCalledWith(user.roles)
+    expect(service.loggedIn.getValue()).toBeTruthy()
+  });
+
+  it('calling logout method', () => {
+    service.logout()
+    expect(localStorage.clear).toHaveBeenCalled();
+    expect(service.loggedIn.getValue()).toBeFalsy();
+  });
+  
+  
 
 });
 

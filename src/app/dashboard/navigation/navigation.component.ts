@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NavigationComponent implements OnInit {
   currentUrl: string;
   links: Routes;
+  user;
   constructor(
     private router: Router,
     private navigationService: NavigationService,
@@ -25,8 +26,14 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getUserStream().subscribe(user => {
+      this.user = user
+      console.log(user)
+    })
     this.currentUrl = this.router.url.substr(1);
-    this.navigationService.getLinks().subscribe(links => this.links = links);
+    this.navigationService.getLinks().subscribe(links => {
+      this.links = links;
+    });
     this.router.events.subscribe(() => {
       this.currentUrl = this.router.url.substr(1);
     });
