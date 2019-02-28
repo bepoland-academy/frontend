@@ -27,14 +27,14 @@ export class AuthService {
   public loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private navigationService: NavigationService,
-    private http: HttpService,
+    public navigationService: NavigationService,
+    public http: HttpService,
   ) {
     this.getUser();
   }
 
   public login(credentials: credentials): Observable<user> {
-    console.log(this.http);
+    console.log(credentials);
     return this.http.post("users/login", credentials).pipe(
       tap((user: user) => {
         localStorage.setItem("user", JSON.stringify(user));
