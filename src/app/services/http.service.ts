@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class HttpService {
-  url = 'http://192.168.20.30:8080/'
+  // url = 'http://192.168.20.30:8080/'
+  url = 'http://localhost:3000/users/'
+
   constructor(private http: HttpClient) {}
 
   post(endpoint: string, body: any): Observable<any> {

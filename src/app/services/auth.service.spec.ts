@@ -20,7 +20,7 @@ const user:user = {
 
 
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   let service: AuthService;
   beforeEach(() => {TestBed.configureTestingModule({
     providers: [

@@ -40,23 +40,20 @@ import { MatTableDataSource } from '@angular/material';
     });
   }
   
-  checkRole(user, roleChanged) {
-   const result = user.roles.some(e => e === roleChanged);
+  checkRole(user: any, roleChanged: string) {
+   const result = user.roles.some((e: string) => e === roleChanged);
    return result;
   }
  
-  updateRole(event: any, user, roleChanged) {
+  updateRole(event: any, user: any, roleChanged: string) {
+    console.log(event, user, roleChanged);
    const isAdded = event.checked;
-   const roles = user.roles;
+   let roles = user.roles;
  
    if (isAdded) {
     roles.push(roleChanged);
    } else {
-    for (let i = 0; i < roles.length; i++) {
-     if (roles[i] === roleChanged) {
-      roles.splice(i, 1);
-     }
-    }
+     roles = roles.filter(el => el !== roleChanged)
    }
  
    user.roles = roles;
@@ -68,7 +65,7 @@ import { MatTableDataSource } from '@angular/material';
    this.changeUserData(user);
   }
  
-  changeUserData(user) {
+  changeUserData(user: any) {
    this.userManagementService.updateUsers(user, user.userId)
     .subscribe(data => {
       this.ngOnInit();
@@ -81,9 +78,9 @@ import { MatTableDataSource } from '@angular/material';
  
  export interface User {
   employee: string;
-  role: Array < string > ;
+  role: Array<string> ;
   department: string;
-  active: string;
+  active: boolean;
  }
 
 

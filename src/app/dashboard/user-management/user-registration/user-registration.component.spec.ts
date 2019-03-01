@@ -5,18 +5,15 @@ import { CustomMaterialModule } from 'src/app/material/material.module';
 import { FormsModule } from '@angular/forms';
 import { UserManagementService } from '../user-management.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { UserManagementModule } from '../user-management.module';
 
 describe('UserRegistrationComponent', () => {
   let component: UserRegistrationComponent;
   let fixture: ComponentFixture < UserRegistrationComponent > ;
-  // let UserRegistrationTest;
-  // let userManagementServiceSpy;
+  let service: UserManagementService;
  
   beforeEach(async (() => {
-   // UserRegistrationTest = jasmine.createSpyObj('UserManagementService', ['postData']);
    TestBed.configureTestingModule({
      declarations: [UserRegistrationComponent],
      imports: [
@@ -24,12 +21,12 @@ describe('UserRegistrationComponent', () => {
       FormsModule,
       HttpClientModule,
       BrowserAnimationsModule,
-      UserManagementModule
      ],
      providers: [
-      UserManagementService
-      // {provide: UserManagementService,
-      //  useValue: UserRegistrationTest}
+      { 
+        provide: UserManagementService,
+        useValue: {postData: () => of(), changeReloadStatus() {}}
+      }
      ]
     })
     .compileComponents();
@@ -38,23 +35,27 @@ describe('UserRegistrationComponent', () => {
   beforeEach(() => {
    fixture = TestBed.createComponent(UserRegistrationComponent);
    component = fixture.componentInstance;
-   // userManagementServiceSpy = UserRegistrationTest.postData.and.returnValue(new Observable());
+   service = TestBed.get(UserManagementService);
    fixture.detectChanges();
   });
+
  
   it('should be defined', () => {
    expect(component).toBeDefined();
   });
- 
-  // it('should call UserRegistrationTest', () => {
-  //   component.sendUserRegData();
-  //   expect(userManagementServiceSpy).toHaveBeenCalled();
-  // });
- 
-  it('should call sendUserAuthData when clicked on button', () => {
-   const button = fixture.debugElement.query(By.css('button'));
-   spyOn(component, 'sendUserRegData');
-   button.triggerEventHandler('click', null);
-   expect(component.sendUserRegData).toHaveBeenCalled();
+
+  it('should call sendUserAuthData when clicked on "Register" button', () => {
+    const button = fixture.debugElement.query(By.css('button'));
+    spyOn(component, 'sendUserRegData');
+    button.triggerEventHandler('click', null);
+    expect(component.sendUserRegData).toHaveBeenCalled();
   });
+
+  it('should call postData from UserManagementService when sendUserAuthData is called', () => {
+    spyOn(service, 'postData').and.returnValue(of());
+    component.sendUserRegData();
+    console.log(service);
+    expect(service.postData).toHaveBeenCalled();
+   });
+
  });

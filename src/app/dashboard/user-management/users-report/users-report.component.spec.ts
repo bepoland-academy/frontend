@@ -4,28 +4,28 @@ import { UsersReportComponent } from './users-report.component';
 import { CustomMaterialModule } from 'src/app/material/material.module';
 import { UserManagementService } from '../user-management.service';
 import { HttpClientModule } from '@angular/common/http';
-import { By } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 
-describe('UsersReportComponent', () => {
+fdescribe('UsersReportComponent', () => {
   let component: UsersReportComponent;
   let fixture: ComponentFixture < UsersReportComponent > ;
-  let UserManagementTest;
-  let getUsersDataSpy;
- 
- 
+  let service: UserManagementService;
+
   beforeEach(async (() => {
-   // UserManagementTest = jasmine.createSpyObj('UserManagementService', ['getUsers']);
-   TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
      declarations: [UsersReportComponent],
      imports: [
       CustomMaterialModule,
       HttpClientModule
      ],
      providers: [
-      UserManagementService
-      // {provide: UserManagementService, useValue: UserManagementTest}
+      { 
+        provide: UserManagementService,
+        useValue: {
+          getReloadStatus: () => of()
+        }
+      }
      ]
     })
     .compileComponents();
@@ -34,17 +34,19 @@ describe('UsersReportComponent', () => {
   beforeEach(() => {
    fixture = TestBed.createComponent(UsersReportComponent);
    component = fixture.componentInstance;
-   // getUsersDataSpy = UserManagementTest.getUsers.and.returnValue(new Observable());
+   service = TestBed.get(UserManagementService);
    fixture.detectChanges();
   });
- 
+
+
   it('should be defined', () => {
-   expect(component).toBeTruthy();
-  });
+    expect(component).toBeDefined();
+   });
+
+  it('should call postData from UserManagementService when sendUserAuthData is called', () => {
+    spyOn(service, 'getReloadStatus').and.returnValue(of());
+    component.ngOnInit();
+    expect(service.getReloadStatus).toHaveBeenCalled();
+   });
  
-  it('should call getUsersData on ngOnInit', () => {
-   spyOn(component, 'getUsersData');
-   fixture.detectChanges();
-   expect(component.getUsersData).toHaveBeenCalled();
-  });
  });

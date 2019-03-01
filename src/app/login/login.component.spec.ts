@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { CustomMaterialModule } from '../material/material.module';
 import { FormsModule } from '@angular/forms';
-import { LoginService } from './login.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs';
@@ -25,10 +24,7 @@ describe('LoginComponent', () => {
       HttpClientModule,
       BrowserAnimationsModule
      ],
-     providers: [{
-      provide: LoginService,
-      useValue: UserLoginTest
-     }]
+     providers: []
     })
     .compileComponents();
   }));

@@ -1,71 +1,102 @@
 <div fxLayout="row" fxLayoutAlign="center center">
    <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
-      <mat-card-header fxLayoutAlign="center">
-         <mat-card-title>New User Registration</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-         <form #myForm fxLayout="column">
-            <mat-form-field appearance="outline" class="login-form-input">
-               <mat-label>First Name</mat-label>
-               <input matInput [(ngModel)]="firstName" name="firstName" #nameInput="ngModel" required>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="login-form-input">
-               <mat-label>Surname</mat-label>
-               <input matInput [(ngModel)]="lastName" name="lastName" #surnameInput="ngModel" required>
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="login-form-input">
-               <mat-label>Email</mat-label>
-               <input matInput type="email" name="emailLogin" [(ngModel)]="emailLogin" #emailInput="ngModel" required>
-            </mat-form-field>
-            <mat-form-field>
-               <mat-select matNativeControl placeholder="Role" [(ngModel)]="roles" #roleInput="ngModel" name="roles"
-                  multiple required>
-                  <mat-option value="CONSULTANT">Consultant</mat-option>
-                  <mat-option value="ADMINISTRATION">Administration</mat-option>
-                  <mat-option value="MANAGER">Manager</mat-option>
-               </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-               <mat-select
-                  matNativeControl 
-                  placeholder="Department" 
-                  name="department" 
-                  [(ngModel)]="department"
-                  #departmentInput="ngModel" 
-                  required
-               >
-                  <mat-option value="DIGITAL">Digital</mat-option>
-                  <mat-option value="SALESFORCE">Salesforce</mat-option>
-                  <mat-option value="BANKING">Banking</mat-option>
-               </mat-select>
-            </mat-form-field>
-            <mat-card-actions fxLayoutAlign="center start" class="login-form-button">
-               <button 
-                  type="submit" 
-                  mat-raised-button 
-                  color="primary" 
-                  (click)="sendUserRegData()" 
-                  [disabled]="nameInput.invalid || surnameInput.invalid || emailInput.invalid || roleInput.invalid || departmentInput.invalid"
-               >
-                  Register
-               </button>
-            </mat-card-actions>
-         </form>
-         <mat-spinner [ngClass]="{hidden: isSubmitted !== true}"></mat-spinner>
-      </mat-card-content>
+       <mat-card-header fxLayoutAlign="center">
+           <mat-card-title>New User Registration</mat-card-title>
+       </mat-card-header>
+       <mat-card-content>
+           <form #myForm fxLayout="column">
+               <mat-form-field appearance="outline" class="login-form-input">
+                  <mat-label>First Name</mat-label>
+                  <input 
+                     matInput [(ngModel)]="firstName" 
+                     name="firstName" 
+                     #nameInput="ngModel" 
+                     required
+                  >
+               </mat-form-field>
+               <mat-form-field appearance="outline">
+                  <mat-label>Surname</mat-label>
+                  <input 
+                     matInput 
+                     [(ngModel)]="lastName" 
+                     name="lastName" 
+                     #surnameInput="ngModel" 
+                     required
+                  >
+               </mat-form-field>
+               <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input 
+                     matInput 
+                     type="email" 
+                     name="emailLogin" 
+                     [(ngModel)]="emailLogin" 
+                     #emailInput="ngModel" 
+                     required
+                  >
+               </mat-form-field>
+               <mat-form-field>
+                  <mat-select 
+                     matNativeControl 
+                     placeholder="Role" 
+                     [(ngModel)]="roles" 
+                     #roleInput="ngModel" 
+                     name="roles" 
+                     multiple required
+                  >
+                     <mat-option value="CONSULTANT">Consultant</mat-option>
+                     <mat-option value="ADMINISTRATION">Administration</mat-option>
+                     <mat-option value="MANAGER">Manager</mat-option>
+                   </mat-select>
+               </mat-form-field>
+               <mat-form-field>
+                  <mat-select
+                     matNativeControl
+                     placeholder="Department"
+                     name="department"
+                     [(ngModel)]="department"
+                     #departmentInput="ngModel"
+                     required
+                  >
+                     <mat-option value="DIGITAL">Digital</mat-option>
+                     <mat-option value="SALESFORCE">Salesforce</mat-option>
+                     <mat-option value="BANKING">Banking</mat-option>
+                   </mat-select>
+               </mat-form-field>
+               <mat-card-actions fxLayoutAlign="center start">
+                  <button 
+                     type="submit"
+                     mat-raised-button 
+                     color="primary" 
+                     (click)="sendUserRegData()" 
+                     [disabled]="nameInput.invalid || surnameInput.invalid
+                     || emailInput.invalid || roleInput.invalid || departmentInput.invalid"
+                  >
+                     Register
+                  </button>
+               </mat-card-actions>
+           </form>
+           <mat-spinner [ngClass]="{hidden: isSubmitted !== true}"></mat-spinner>
+       </mat-card-content>
    </mat-card>
    <mat-card [ngClass]="{hidden: isSuccess !== true}">
-      <mat-card-header fxLayoutAlign="center center" style="height:400px; text-align: center;">
-         <mat-card-title style="color: green">
+       <mat-card-header
+         class="successMessage" 
+         fxLayoutAlign="center center" 
+       >
+         <mat-card-title>
             New User has been registered
          </mat-card-title>
-      </mat-card-header>
+       </mat-card-header>
    </mat-card>
    <mat-card [ngClass]="{hidden: isFail !== true}">
-      <mat-card-header fxLayoutAlign="center center" style="height:400px; text-align: center;">
-         <mat-card-title style="color: red">
+       <mat-card-header
+         class="failMessage" 
+         fxLayoutAlign="center center" 
+       >
+         <mat-card-title>
             {{errorMessage}}
          </mat-card-title>
-      </mat-card-header>
+       </mat-card-header>
    </mat-card>
 </div>

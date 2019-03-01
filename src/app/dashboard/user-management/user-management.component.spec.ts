@@ -34,35 +34,8 @@ describe('UserManagementComponent', () => {
    fixture.detectChanges();
   });
  
-  it('should create', () => {
+  it('should be defined', () => {
    expect(component).toBeTruthy();
-  });
- 
-  it('should get user"s data', () => {
-   const userData = [{
-    id: 1,
-    name: 'Lexie',
-    surname: 'Syl',
-    role: [
-     'manager',
-     'consultant',
-     'administrator'
-    ],
-    active: false,
-    department: 'banking'
-   }];
- 
-   const userManagementService = TestBed.get(UserManagementService);
-   const http = TestBed.get(HttpTestingController);
-   let dataReceived;
- 
-   userManagementService.getUsers('http://localhost:3000/users/3').subscribe((response) => {
-    dataReceived = response;
-   });
- 
-   http.expectOne('http://localhost:3000/users/3').flush(userData);
-   expect(dataReceived).toEqual(userData);
-   console.log('response' + dataReceived[0].name + 'start' + userData[0].surname);
   });
  
  });
