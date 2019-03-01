@@ -8,6 +8,7 @@
 
 .mat-tab-link {
   min-width: unset;
+  overflow: hidden;
 }
 
 .avatar {
@@ -16,7 +17,7 @@
   display: inline;
 }
 
-.menuWrapper {
+.profile-info {
   display: flex;
   align-items: center;
 }
@@ -29,4 +30,12 @@ img {
   object-fit: contain;
   max-width: 100%;
   max-height: 100%;
+}
+
+.account {
+  margin-left: auto;
+}
+
+.material-menu {
+  width: 500px;
 }

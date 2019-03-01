@@ -6,21 +6,20 @@
     mat-tab-link 
     *ngFor="let link of links; let i = index" 
     [routerLink]="['/', link.path]"
-    [active]="currentUrl == link.path"
+    [active]="currentUrl == link.path && currentUrl.length"
+    [disabled]="!currentUrl.length"
   >
     {{link.data.name}}
   </a>
-  <!-- <a  active="false" (click)="logout()">Logout</a> -->
-  <button mat-tab-link mat-button [matMenuTriggerFor]="menu">
-    <div class="menuWrapper">
+  <button mat-tab-link mat-button [matMenuTriggerFor]="menu" class="account">
+    <div class="profile-info">
       <div class="avatar">
         <img class="avatar" src="assets/avatar.png"/>
       </div>
       <span class="user">{{user.firstName}} {{user.lastName}}</span>
     </div>
-    
   </button>
-  <mat-menu #menu="matMenu">
+  <mat-menu class="material-menu" #menu="matMenu" xPosition="before">
     <button mat-menu-item>Your profile</button>
     <button mat-menu-item (click)="logout()">Logout</button>
   </mat-menu>

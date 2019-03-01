@@ -8,13 +8,13 @@ import { ProjectManagmentComponent } from './project-managment.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { NavigationService } from './navigation/navigation.service';
+import { NoRoleComponent } from "./no-role.component";
 
 @Component({
   selector: 'app-dashboard',
   template: `
       <app-navigation></app-navigation>
       <router-outlet></router-outlet>
-
   `,
   styles: [],
   entryComponents: [
@@ -23,7 +23,8 @@ import { NavigationService } from './navigation/navigation.service';
     ReportsComponent,
     ProjectManagmentComponent,
     TimeApprovalComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    NoRoleComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

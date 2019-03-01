@@ -10,7 +10,7 @@ import { AuthService } from "../services/auth.service";
 })
 export class LoginComponent implements OnInit {
   public username: string;
-  public password: string;
+  public password = '';
   public isLoading = false;
   public errorMessage = '';
   

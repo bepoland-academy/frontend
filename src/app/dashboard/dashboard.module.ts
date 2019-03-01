@@ -11,6 +11,7 @@ import { ReportsComponent } from './reports.component';
 import { ProjectManagmentComponent } from './project-managment.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { UserManagementModule } from './user-management/user-management.module';
+import { NoRoleComponent } from './no-role.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { UserManagementModule } from './user-management/user-management.module';
     ReportsComponent,
     ProjectManagmentComponent,
     TimeApprovalComponent,
+    NoRoleComponent
   ],
   imports: [
     CommonModule,

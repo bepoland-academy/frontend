@@ -8,6 +8,7 @@ import { ReportsComponent } from '../reports.component';
 import { TimeApprovalComponent } from '../time-approval.component';
 import { ProjectManagmentComponent } from '../project-managment.component';
 import { UserManagementComponent } from '../user-management/user-management.component';
+import { NoRoleComponent } from "../no-role.component";
 
 @Injectable()
 export class NavigationService {
@@ -24,6 +25,9 @@ export class NavigationService {
 
   constructor(private router: Router, private ngZone: NgZone) {}
   filterRoutes(roles) {
+    if(!roles.length) {
+      return this.noRolesProvided()
+    }
     const routes = this.routes.filter(item => this.setRoutesForRole(item.data.forRole, roles));
     const redirectPage = this.addRedirectPage(roles);
 
@@ -38,7 +42,23 @@ export class NavigationService {
       this.router.resetConfig(routerConfig);
       this.router.navigate([redirectPage.redirectTo]);
     });
+  }
 
+  noRolesProvided() {
+    const routes: Routes = [
+      {path: '', component: NoRoleComponent, data: { }},
+    ];
+    this.links.next(routes);
+    const redirectPage: Route = {path: '**', redirectTo: ''}
+    const routerConfig = this.router.config;
+    const dashboardIndex = routerConfig.findIndex(el => el.path === '');
+    routerConfig[dashboardIndex].children = [...routes, redirectPage];
+    this.ngZone.run(() => {
+      this.router.resetConfig(routerConfig);
+      this.router.navigate(['']);
+      
+    });
+    
   }
 
   addRedirectPage(roles): Route {
