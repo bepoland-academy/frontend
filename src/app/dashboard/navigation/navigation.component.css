@@ -12,8 +12,8 @@
 }
 
 .avatar {
-  max-height: 48px;
-  max-width: 48px;
+  max-height: 40px;
+  max-width: 40px;
   display: inline;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .user {
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 img {
