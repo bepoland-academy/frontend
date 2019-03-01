@@ -1,0 +1,24 @@
+.hidden {
+    display: none;
+}
+
+.mat-card {
+    width: 250px;
+}
+
+.mat-spinner {
+    margin: auto;
+}
+   
+.successMessage, .failMessage {
+    height: 400px; 
+    text-align: center;
+}
+   
+.successMessage mat-card-title {
+    color: green;
+}
+
+.failMessage mat-card-title {
+    color: red;
+}

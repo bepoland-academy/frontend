@@ -12,15 +12,23 @@
             <ng-container matColumnDef="role">
                 <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
                 <mat-cell *matCellDef="let user">
-                    <mat-checkbox [checked]="checkRole(user, 'CONSULTANT')"
-                        (change)="updateRole($event, user, 'CONSULTANT')">
+                    <mat-checkbox
+                    id="checkbox" 
+                        [checked]="checkRole(user, 'CONSULTANT')"
+                        (change)="updateRole($event, user, 'CONSULTANT')"
+                    >
                         Consultant
                     </mat-checkbox>
-                    <mat-checkbox [checked]="checkRole(user, 'ADMINISTRATION')"
-                        (change)="updateRole($event, user, 'ADMINISTRATION')">
+                    <mat-checkbox 
+                        [checked]="checkRole(user, 'ADMINISTRATION')"
+                        (change)="updateRole($event, user, 'ADMINISTRATION')"
+                    >
                         Administration
                     </mat-checkbox>
-                    <mat-checkbox [checked]="checkRole(user, 'MANAGER')" (change)="updateRole($event, user, 'MANAGER')">
+                    <mat-checkbox 
+                        [checked]="checkRole(user, 'MANAGER')" 
+                        (change)="updateRole($event, user, 'MANAGER')"
+                    >
                         Manager
                     </mat-checkbox>
                 </mat-cell>
@@ -35,10 +43,18 @@
                 <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
                 <mat-cell *matCellDef="let user">
                     <mat-radio-group>
-                        <mat-radio-button value="true" [checked]="user.active" (click)="updateActive(user)">
+                        <mat-radio-button 
+                            value="true" 
+                            [checked]="user.active" 
+                            (click)="updateActive(user)"
+                        >
                             Yes
                         </mat-radio-button>
-                        <mat-radio-button value="false" [checked]="!user.active" (click)="updateActive(user)">
+                        <mat-radio-button 
+                            value="false" 
+                            [checked]="!user.active" 
+                            (click)="updateActive(user)"
+                        >
                             No
                         </mat-radio-button>
                     </mat-radio-group>
