@@ -1,87 +1,76 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { MatTableDataSource } from '@angular/material';
+import { user } from '../../../models';
 
 @Component({
   selector: 'app-users-report',
   templateUrl: './users-report.component.html',
-  styleUrls: ['./users-report.component.css'],
+  styleUrls: ['./users-report.component.css']
  })
  export class UsersReportComponent implements OnInit {
-  users: any;
-  dataSource: any;
+  users: Array<user>;
+  dataSource: MatTableDataSource<user>;
   displayedColumns = ['employee', 'role', 'department', 'active'];
   isDataAvailable = false;
   isResponse = false;
   serverError = false;
- 
-  constructor(private userManagementService: UserManagementService,
-    private changeDetectorRefs: ChangeDetectorRef) {}
- 
-  ngOnInit() {
-   this.userManagementService.getReloadStatus().subscribe(newData => {
-    this.getUsersData();
+
+  constructor(
+    private userManagementService: UserManagementService,
+    private changeDetectorRefs: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.userManagementService.getReloadStatus().subscribe(() => {
+      this.getUsersData();
     });
   }
- 
-  getUsersData() {
+
+  getUsersData(): void {
     this.userManagementService.getUsers()
-    .subscribe(data => {
-      this.users = data;
-      this.dataSource = new MatTableDataSource(this.users);
-      this.isResponse = true;
-      this.isDataAvailable = true;
-      this.changeDetectorRefs.detectChanges();
-    },
-    error => {
-      this.serverError = true;
-      this.isResponse = true;
-      console.log(error);
-    });
+    .subscribe(
+      (data: Array<user>) => {
+        this.users = data;
+        this.dataSource = new MatTableDataSource(this.users);
+        this.isResponse = true;
+        this.isDataAvailable = true;
+        this.changeDetectorRefs.detectChanges();
+      },
+      () => {
+        this.serverError = true;
+        this.isResponse = true;
+      });
   }
-  
-  checkRole(user: any, roleChanged: string) {
-   const result = user.roles.some((e: string) => e === roleChanged);
-   return result;
+
+  checkRole(user: user, role: string): boolean {
+    let { roles } = user;
+    if (roles == null) {
+      roles = [];
+    }
+    return roles.some((e: string) => e === role);
   }
- 
-  updateRole(event: any, user: any, roleChanged: string) {
-    console.log(event, user, roleChanged);
-   const isAdded = event.checked;
-   let roles = user.roles;
- 
-   if (isAdded) {
-    roles.push(roleChanged);
-   } else {
-     roles = roles.filter(el => el !== roleChanged)
-   }
- 
-   user.roles = roles;
-   this.changeUserData(user);
+
+  updateRole(user: user, roleChanged: string) {
+    const isUserHasRole: boolean = user.roles.some((role: string) => role === roleChanged);
+    if (isUserHasRole) {
+      user.roles = user.roles.filter((role: string) => role !== roleChanged);
+    } else {
+      user.roles = [...user.roles, roleChanged];
+    }
+    this.updateUserData(user);
+
   }
- 
-  updateActive(user: any) {
-   user.active = !user.active;
-   this.changeUserData(user);
+
+  updateActive(user: user): void {
+    user.active = !user.active;
+    this.updateUserData(user);
   }
- 
-  changeUserData(user: any) {
-   this.userManagementService.updateUsers(user, user.userId)
-    .subscribe(data => {
-      this.ngOnInit();
-     },
-     error => {
-      console.log(error, user);
-     });
+
+  updateUserData(user: user): void {
+    this.userManagementService.updateUsers(user)
+      .subscribe(() => {
+        this.userManagementService.changeReloadStatus();
+      });
   }
  }
- 
- export interface User {
-  employee: string;
-  role: Array<string> ;
-  department: string;
-  active: boolean;
- }
-
-
-

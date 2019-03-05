@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { UserManagementService } from '../user-management.service';
 
-
 @NgModule({
   declarations: [
    UserRegistrationComponent

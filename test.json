@@ -1,19 +1,81 @@
 {
-  "posts": [
+  "users": [
     {
       "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
+      "emailLogin": "t1.email@be-tse.com",
+      "firstName": "Name_1",
+      "lastName": "Lastname_1",
+      "isActive": true,
+      "department": "BANKING",
+      "roles": [
+        "CONSULTANT",
+        "ADMINISTRATION"
+      ],
+      "active": true
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id": 2,
+      "emailLogin": "t2.email@be-tse.com",
+      "firstName": "Name_2",
+      "lastName": "Lastname_2",
+      "isActive": true,
+      "department": "DIGITAL",
+      "roles": [
+        "CONSULTANT",
+        "ADMINISTRATION"
+      ],
+      "active": true
+    },
+    {
+      "id": 3,
+      "emailLogin": "t3.email@be-tse.com",
+      "firstName": "Name_3",
+      "lastName": "Lastname_3",
+      "isActive": false,
+      "department": "SALESFORCE",
+      "roles": [
+        "CONSULTANT"
+      ],
+      "active": false
+    },
+    {
+      "id": 4,
+      "emailLogin": "t4.email@be-tse.com",
+      "firstName": "Name_4",
+      "lastName": "Lastname_4",
+      "isActive": false,
+      "department": "DIGITAL",
+      "roles": [
+        "CONSULTANT",
+        "ADMINISTRATION",
+        "MANAGER"
+      ],
+      "active": false
+    },
+    {
+      "id": 5,
+      "emailLogin": "t5.email@be-tse.com",
+      "firstName": "Name_5",
+      "lastName": "Lastname_5",
+      "isActive": false,
+      "department": "SALESFORCE",
+      "roles": [
+        "MANAGER"
+      ],
+      "active": false
+    },
+    {
+      "first": "asdasdasd",
+      "lastName": "qwdwegt5r6htr",
+      "emailLogin": "aaa@aa",
+      "roles": [
+        "CONSULTANT",
+        "ADMINISTRATION",
+        "MANAGER"
+      ],
+      "department": "BANKING",
+      "active": true,
+      "id": 6
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }

@@ -8,12 +8,12 @@ import { Component, OnInit } from '@angular/core';
        <app-user-registration></app-user-registration>
      </div>
    `,
-  styles: ['.user-management {padding: 30px 0 0}'],
+  styles: ['.user-management {padding: 30px 0 0}']
  })
 
  export class UserManagementComponent implements OnInit {
- 
+
   constructor() {}
- 
+
   ngOnInit() {}
  }

@@ -20,7 +20,7 @@ describe('UsersReportComponent', () => {
       HttpClientModule
      ],
      providers: [
-      { 
+      {
         provide: UserManagementService,
         useValue: {
           getReloadStatus: () => of()
@@ -30,7 +30,7 @@ describe('UsersReportComponent', () => {
     })
     .compileComponents();
   }));
- 
+
   beforeEach(() => {
    fixture = TestBed.createComponent(UsersReportComponent);
    component = fixture.componentInstance;
@@ -48,5 +48,5 @@ describe('UsersReportComponent', () => {
     component.ngOnInit();
     expect(service.getReloadStatus).toHaveBeenCalled();
    });
- 
+
  });

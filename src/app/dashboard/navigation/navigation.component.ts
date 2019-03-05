@@ -3,6 +3,7 @@ import { Router, Routes } from '@angular/router';
 
 import { NavigationService } from './navigation.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { user } from '../../models';
 
 @Component({
   selector: 'app-navigation',
@@ -13,7 +14,7 @@ export class NavigationComponent implements OnInit {
 
   currentUrl: string;
   links: Routes;
-  user;
+  user = {} as user;
 
   constructor(
     private router: Router,
@@ -22,30 +23,31 @@ export class NavigationComponent implements OnInit {
     private ngZone: NgZone
   ) {}
 
-  
   ngOnInit(): void {
-    //taking user information
-    this.authService.getUserStream().subscribe(user => {
-      this.user = user
-    })
-    
-    //gettin links and setting active url link, also calling event resize because material with active link class is bugged
-    this.navigationService.getLinks().subscribe(links => {
-      this.links = links;
-      this.currentUrl = this.router.url.substr(1);
-      setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-      }, 200)
-      
+    // taking user information
+    this.authService.getUserStream().subscribe((user: user) => {
+      this.user = user;
     });
 
-    //setting current url to changed url from router
+    // gettin links and setting active url link, also calling event resize because material with active link class is bugged
+    this.navigationService.getLinks().subscribe((links: Routes) => {
+      this.links = links;
+      this.currentUrl = this.router.url.substr(1);
+
+      // dispatching new event to set underline to matched url
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      },         350);
+
+    });
+
+    // setting current url to changed url from router
     this.router.events.subscribe(() => {
       this.currentUrl = this.router.url.substr(1);
     });
   }
-  public logout(): void {
+  logout(): void {
     this.authService.logout();
-    this.ngZone.run(() => this.router.navigate(['/login']))
+    this.ngZone.run(() => this.router.navigate(['/login']));
   }
 }

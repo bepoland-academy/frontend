@@ -12,7 +12,7 @@ describe('UserRegistrationComponent', () => {
   let component: UserRegistrationComponent;
   let fixture: ComponentFixture < UserRegistrationComponent > ;
   let service: UserManagementService;
- 
+
   beforeEach(async (() => {
    TestBed.configureTestingModule({
      declarations: [UserRegistrationComponent],
@@ -23,7 +23,7 @@ describe('UserRegistrationComponent', () => {
       BrowserAnimationsModule,
      ],
      providers: [
-      { 
+      {
         provide: UserManagementService,
         useValue: {postData: () => of(), changeReloadStatus() {}}
       }
@@ -31,7 +31,7 @@ describe('UserRegistrationComponent', () => {
     })
     .compileComponents();
   }));
- 
+
   beforeEach(() => {
    fixture = TestBed.createComponent(UserRegistrationComponent);
    component = fixture.componentInstance;
@@ -39,21 +39,21 @@ describe('UserRegistrationComponent', () => {
    fixture.detectChanges();
   });
 
- 
+
   it('should be defined', () => {
    expect(component).toBeDefined();
   });
 
   it('should call sendUserAuthData when clicked on "Register" button', () => {
     const button = fixture.debugElement.query(By.css('button'));
-    spyOn(component, 'sendUserRegData');
+    spyOn(component, 'onSubmit');
     button.triggerEventHandler('click', null);
-    expect(component.sendUserRegData).toHaveBeenCalled();
+    expect(component.onSubmit).toHaveBeenCalled();
   });
 
   it('should call postData from UserManagementService when sendUserAuthData is called', () => {
     spyOn(service, 'postData').and.returnValue(of());
-    component.sendUserRegData();
+    component.onSubmit();
     console.log(service);
     expect(service.postData).toHaveBeenCalled();
    });

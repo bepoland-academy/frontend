@@ -16,7 +16,7 @@ import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     LoginModule,
@@ -35,7 +35,7 @@ import { APP_BASE_HREF } from '@angular/common';
     HttpService,
     { provide: APP_BASE_HREF, useValue: '/' }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 
 })
 export class AppModule { }

@@ -1,14 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
-
 import { TimeTrackingComponent } from './time-tracking.component';
 import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
 import { ProjectManagmentComponent } from './project-managment.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { UserManagementComponent } from './user-management/user-management.component';
-import { NavigationService } from './navigation/navigation.service';
-import { NoRoleComponent } from "./no-role.component";
+import { NoRoleComponent } from './no-role.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,15 +26,6 @@ import { NoRoleComponent } from "./no-role.component";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements OnInit {
-  links = [];
-  constructor(
-    private navigationService: NavigationService
-    ) {}
-
-  ngOnInit() {
-    this.navigationService.getLinks().subscribe(links => {
-      this.links = links;
-    });
-  }
+export class DashboardComponent {
+  constructor() {}
 }

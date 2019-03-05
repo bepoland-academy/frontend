@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('UserManagementComponent', () => {
   let component: UserManagementComponent;
   let fixture: ComponentFixture < UserManagementComponent > ;
- 
+
   beforeEach(async (() => {
    TestBed.configureTestingModule({
      declarations: [UserManagementComponent],
@@ -27,15 +27,15 @@ describe('UserManagementComponent', () => {
     })
     .compileComponents();
   }));
- 
+
   beforeEach(() => {
    fixture = TestBed.createComponent(UserManagementComponent);
    component = fixture.componentInstance;
    fixture.detectChanges();
   });
- 
+
   it('should be defined', () => {
    expect(component).toBeTruthy();
   });
- 
+
  });

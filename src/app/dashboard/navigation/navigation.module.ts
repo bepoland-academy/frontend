@@ -17,7 +17,7 @@ import { CustomMaterialModule } from '../../material/material.module';
     RouterModule
   ],
   exports: [
-    NavigationComponent,
+    NavigationComponent
   ],
   providers: []
 })

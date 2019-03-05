@@ -1,38 +1,35 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+import { HttpService } from '../../services/http.service';
+import { user } from '../../models';
 
 @Injectable()
 export class UserManagementService {
 
- public testJSON = "http://192.168.20.30:8080/users/";
-//  public testJSON = "http://localhost:3000/users/";
+  endpoint = 'users/';
 
- private reloadStatus = new BehaviorSubject <boolean> (false);
+  private reloadStatus = new BehaviorSubject<boolean>(null);
 
- constructor(private http: HttpClient) {}
+  constructor(private httpService: HttpService) { }
 
- public changeReloadStatus() {
-  this.reloadStatus.next(true);
- }
+  changeReloadStatus() {
+    this.reloadStatus.next(null);
+  }
 
- public getReloadStatus(): Observable<boolean> {
-  return this.reloadStatus.asObservable();
- }
+  getReloadStatus(): Observable<boolean> {
+    return this.reloadStatus.asObservable();
+  }
 
- public postData(userRegistrationData: object): Observable<any> {
-  return this.http.post(this.testJSON, userRegistrationData);
- }
+  postData(userRegistrationData: user): Observable<any> {
+    return this.httpService.post(this.endpoint, userRegistrationData);
+  }
 
- public getUsers(): Observable<any> {
-  return this.http.get(this.testJSON);
- }
+  getUsers(): Observable< Array<user> > {
+    return this.httpService.get(this.endpoint);
+  }
 
-   public updateUsers(user: object, id: number): Observable<any> {
-     return this.http.put(`http://192.168.20.30:8080/users/${id}`, user);
- }
-
-//  public updateUsers(user: object, id: number): Observable <object> {
-//   return this.http.put(`http://localhost:3000/users/${id}`, user);
-//  }
+  updateUsers(user: any): Observable<any> {
+    return this.httpService.put(this.endpoint + user.id, user);
+  }
 }
