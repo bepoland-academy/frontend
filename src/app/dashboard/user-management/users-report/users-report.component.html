@@ -13,7 +13,6 @@
                 <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
                 <mat-cell *matCellDef="let user">
                     <mat-checkbox
-                    id="checkbox" 
                         [checked]="checkRole(user, 'CONSULTANT')"
                         (change)="updateRole($event, user, 'CONSULTANT')"
                     >

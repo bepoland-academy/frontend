@@ -5,8 +5,8 @@ import { BehaviorSubject, Observable } from "rxjs";
 @Injectable()
 export class UserManagementService {
 
- public testJSON = "http://192.168.20.30:8080/users/";
-//  public testJSON = "http://localhost:3000/users/";
+//  public testJSON = "http://192.168.20.30:8080/users/";
+ public testJSON = "http://localhost:3000/users/";
 
  private reloadStatus = new BehaviorSubject <boolean> (false);
 
@@ -28,11 +28,11 @@ export class UserManagementService {
   return this.http.get(this.testJSON);
  }
 
-   public updateUsers(user: object, id: number): Observable<any> {
-     return this.http.put(`http://192.168.20.30:8080/users/${id}`, user);
- }
-
-//  public updateUsers(user: object, id: number): Observable <object> {
-//   return this.http.put(`http://localhost:3000/users/${id}`, user);
+//    public updateUsers(user: object, id: number): Observable<any> {
+//      return this.http.put(`http://192.168.20.30:8080/users/${id}`, user);
 //  }
+
+ public updateUsers(user: object, id: number): Observable <object> {
+  return this.http.put(`http://localhost:3000/users/${id}`, user);
+ }
 }
