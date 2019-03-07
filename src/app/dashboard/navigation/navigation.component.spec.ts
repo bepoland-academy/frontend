@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Routes } from '@angular/router';
+import { Component } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 
 import { NavigationComponent } from './navigation.component';
@@ -9,34 +10,36 @@ import { rootModule } from '../../app.routing';
 import { NavigationService } from './navigation.service';
 import { AuthService } from '../../services/auth.service';
 import { HttpService } from '../../services/http.service';
-import { user } from '../../models';
+import { User } from '../../models';
 
 
-let firstComponent;
-let secondComponent;
+@Component({}) class EmptyComponent {}
 
-const user: user = {
+const firstComponent = EmptyComponent;
+const secondComponent = EmptyComponent;
+
+const user: User = {
   userId: 1,
   active: true,
   department: 'bank',
   emailLogin: 'test@test.com',
   firstName: 'Testname',
   lastName: 'Testlastname',
-  roles: ['testRole']
+  roles: ['testRole'],
 };
 
 const routes: Routes = [
   { path: 'first', component: firstComponent, data: {name: 'First Tab'}},
-  { path: 'second', component: secondComponent, data: { name: 'Second Tab' }}
+  { path: 'second', component: secondComponent, data: { name: 'Second Tab' }},
 ];
 
 const navigationServiceMock = {
-  getLinks: () => new BehaviorSubject(routes)
+  getLinks: () => new BehaviorSubject(routes),
 };
 
 const authServiceMock = {
   logout() {},
-  getUserStream() {return of(user); }
+  getUserStream() {return of(user); },
 };
 
 describe('NavigationComponent', () => {
@@ -46,18 +49,18 @@ describe('NavigationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        NavigationComponent
+        NavigationComponent,
       ],
       imports: [
         CustomMaterialModule,
         rootModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
       ],
       providers: [
         { provide: NavigationService, useValue: navigationServiceMock},
         { provide: AuthService, useValue: authServiceMock},
-        HttpService
-      ]
+        HttpService,
+      ],
     })
     .compileComponents();
   }));

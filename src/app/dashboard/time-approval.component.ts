@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
       time-approval works!
     </p>
   `,
-  styles: []
+  styles: [],
 })
 export class TimeApprovalComponent implements OnInit {
 

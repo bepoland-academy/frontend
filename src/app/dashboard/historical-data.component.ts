@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
       historical-data works!
     </p>
   `,
-  styles: []
+  styles: [],
 })
 export class HistoricalDataComponent implements OnInit {
 

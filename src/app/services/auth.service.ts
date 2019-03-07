@@ -4,14 +4,14 @@ import { tap } from 'rxjs/operators';
 
 import { NavigationService } from '../dashboard/navigation/navigation.service';
 import { HttpService } from './http.service';
-import { user, credentials } from '../models/index';
+import { User, Credentials } from '../models/index';
 
 @Injectable()
 export class AuthService {
 
   loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  user: ReplaySubject<user> = new ReplaySubject(1);
+  user: ReplaySubject<User> = new ReplaySubject(1);
 
   constructor(
     private navigationService: NavigationService,
@@ -27,17 +27,17 @@ export class AuthService {
       roles: [
         'CONSULTANT',
         'ADMINISTRATION',
-        'MANAGER'
+        'MANAGER',
       ],
-      active: false
+      active: false,
     };
     localStorage.setItem('user', JSON.stringify(a));
     this.getUser();
   }
 
-  login(credentials: credentials): Observable<user> {
+  login(credentials: Credentials): Observable<User> {
     return this.http.post('users/login', credentials).pipe(
-      tap((user: user) => {
+      tap((user: User) => {
         localStorage.setItem('user', JSON.stringify(user));
         this.navigationService.filterRoutes(user.roles);
         this.loggedIn.next(true);
@@ -46,7 +46,7 @@ export class AuthService {
     );
   }
 
-  getUserStream(): ReplaySubject<user> {
+  getUserStream(): ReplaySubject<User> {
     return this.user;
   }
 

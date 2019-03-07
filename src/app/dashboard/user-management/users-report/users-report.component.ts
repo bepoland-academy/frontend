@@ -1,16 +1,16 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { MatTableDataSource } from '@angular/material';
-import { user } from '../../../models';
+import { User } from '../../../models';
 
 @Component({
   selector: 'app-users-report',
   templateUrl: './users-report.component.html',
-  styleUrls: ['./users-report.component.css']
+  styleUrls: ['./users-report.component.css'],
  })
  export class UsersReportComponent implements OnInit {
-  users: Array<user>;
-  dataSource: MatTableDataSource<user>;
+  users: Array<User>;
+  dataSource: MatTableDataSource<User>;
   displayedColumns = ['employee', 'role', 'department', 'active'];
   isDataAvailable = false;
   isResponse = false;
@@ -30,7 +30,7 @@ import { user } from '../../../models';
   getUsersData(): void {
     this.userManagementService.getUsers()
     .subscribe(
-      (data: Array<user>) => {
+      (data: Array<User>) => {
         this.users = data;
         this.dataSource = new MatTableDataSource(this.users);
         this.isResponse = true;
@@ -43,7 +43,7 @@ import { user } from '../../../models';
       });
   }
 
-  checkRole(user: user, role: string): boolean {
+  checkRole(user: User, role: string): boolean {
     let { roles } = user;
     if (roles == null) {
       roles = [];
@@ -51,7 +51,7 @@ import { user } from '../../../models';
     return roles.some((e: string) => e === role);
   }
 
-  updateRole(user: user, roleChanged: string) {
+  updateRole(user: User, roleChanged: string) {
     const isUserHasRole: boolean = user.roles.some((role: string) => role === roleChanged);
     if (isUserHasRole) {
       user.roles = user.roles.filter((role: string) => role !== roleChanged);
@@ -62,12 +62,12 @@ import { user } from '../../../models';
 
   }
 
-  updateActive(user: user): void {
+  updateActive(user: User): void {
     user.active = !user.active;
     this.updateUserData(user);
   }
 
-  updateUserData(user: user): void {
+  updateUserData(user: User): void {
     this.userManagementService.updateUsers(user)
       .subscribe(() => {
         this.userManagementService.changeReloadStatus();

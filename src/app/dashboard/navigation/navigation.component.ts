@@ -3,18 +3,18 @@ import { Router, Routes } from '@angular/router';
 
 import { NavigationService } from './navigation.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { user } from '../../models';
+import { User } from '../../models';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css']
+  styleUrls: ['./navigation.component.css'],
 })
 export class NavigationComponent implements OnInit {
 
   currentUrl: string;
   links: Routes;
-  user = {} as user;
+  user = {} as User;
 
   constructor(
     private router: Router,
@@ -25,11 +25,12 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit(): void {
     // taking user information
-    this.authService.getUserStream().subscribe((user: user) => {
+    this.authService.getUserStream().subscribe((user: User) => {
       this.user = user;
     });
 
-    // gettin links and setting active url link, also calling event resize because material with active link class is bugged
+    // gettin links and setting active url link, also calling event resize because material with active
+    // link class is bugged
     this.navigationService.getLinks().subscribe((links: Routes) => {
       this.links = links;
       this.currentUrl = this.router.url.substr(1);

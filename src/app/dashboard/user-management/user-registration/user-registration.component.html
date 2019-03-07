@@ -4,10 +4,10 @@
          <mat-card-title>New User Registration</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-         <form (ngSubmit)="onSubmit()" #myForm="ngForm" fxLayout="column">
+         <form class="registration-form" (ngSubmit)="onSubmit()" #myForm="ngForm" fxLayout="column">
             <mat-form-field appearance="outline" class="login-form-input">
                <mat-label>First Name</mat-label>
-               <input matInput name="first" ngModel>
+               <input matInput name="firstName" ngModel>
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Surname</mat-label>

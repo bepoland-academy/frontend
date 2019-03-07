@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { HttpService } from '../../services/http.service';
-import { user } from '../../models';
+import { User } from '../../models';
 
 @Injectable()
 export class UserManagementService {
 
   endpoint = 'users/';
 
-  private reloadStatus = new BehaviorSubject<boolean>(null);
+  private reloadStatus = new BehaviorSubject<null>(null);
 
   constructor(private httpService: HttpService) { }
 
@@ -17,15 +17,15 @@ export class UserManagementService {
     this.reloadStatus.next(null);
   }
 
-  getReloadStatus(): Observable<boolean> {
+  getReloadStatus(): Observable<null> {
     return this.reloadStatus.asObservable();
   }
 
-  postData(userRegistrationData: user): Observable<any> {
+  postData(userRegistrationData: User): Observable<any> {
     return this.httpService.post(this.endpoint, userRegistrationData);
   }
 
-  getUsers(): Observable< Array<user> > {
+  getUsers(): Observable< Array<User> > {
     return this.httpService.get(this.endpoint);
   }
 

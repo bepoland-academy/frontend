@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
       project-managment works!
     </p>
   `,
-  styles: []
+  styles: [],
 })
 export class ProjectManagmentComponent implements OnInit {
 

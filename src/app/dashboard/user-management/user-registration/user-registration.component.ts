@@ -1,15 +1,15 @@
-import { Component, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { NgForm } from '@angular/forms';
+import { User } from '../../../models';
 
 @Component({
   selector: 'app-user-registration',
   templateUrl: './user-registration.component.html',
-  styleUrls: ['./user-registration.component.css']
+  styleUrls: ['./user-registration.component.css'],
 })
 export class UserRegistrationComponent {
   @ViewChild('myForm') registrationForm: NgForm;
-  active = true;
   isLoading = false;
   isSuccess = false;
   isFail = false;
@@ -21,8 +21,11 @@ export class UserRegistrationComponent {
   ) { }
 
   onSubmit() {
+    if (!this.registrationForm.valid) {
+      return ;
+    }
     this.isLoading = true;
-    const { value }: NgForm['value'] = this.registrationForm;
+    const value: User = this.registrationForm.value;
     value.active = true;
     if (!Array.isArray(value.roles)) {
       value.roles = [];

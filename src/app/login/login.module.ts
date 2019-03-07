@@ -11,7 +11,7 @@ import { rootModule } from './login.routing';
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     CommonModule,
@@ -19,13 +19,13 @@ import { rootModule } from './login.routing';
     CustomMaterialModule,
     FormsModule,
     FlexLayoutModule,
-    rootModule
+    rootModule,
   ],
   providers: [
-    AuthGuard
+    AuthGuard,
   ],
   exports: [
-    LoginComponent
-  ]
+    LoginComponent,
+  ],
 })
 export class LoginModule { }

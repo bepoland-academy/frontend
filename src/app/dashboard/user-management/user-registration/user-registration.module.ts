@@ -8,19 +8,19 @@ import { UserManagementService } from '../user-management.service';
 
 @NgModule({
   declarations: [
-   UserRegistrationComponent
+   UserRegistrationComponent,
   ],
   imports: [
    CommonModule,
    CustomMaterialModule,
    FormsModule,
-   FlexLayoutModule
+   FlexLayoutModule,
   ],
   exports: [
-   UserRegistrationComponent
+   UserRegistrationComponent,
   ],
   providers: [
-   UserManagementService
-  ]
+   UserManagementService,
+  ],
  })
  export class UserRegistrationModule {}

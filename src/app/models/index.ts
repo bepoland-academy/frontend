@@ -1,7 +1,7 @@
-import { user } from './user.model';
-import { credentials } from './credentials.model';
+import { User } from './user.model';
+import { Credentials } from './credentials.model';
 
 export {
-  user,
-  credentials
+  User,
+  Credentials
 };

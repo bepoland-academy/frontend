@@ -18,7 +18,7 @@ describe('LoginComponent', () => {
   beforeEach(async (() => {
     const authServiceSpy = {
       login: () => {},
-      loggedIn: of(false)
+      loggedIn: of(false),
     };
     TestBed.configureTestingModule({
      declarations: [LoginComponent],
@@ -27,11 +27,11 @@ describe('LoginComponent', () => {
       FormsModule,
       HttpClientModule,
       BrowserAnimationsModule,
-      rootModule
+      rootModule,
      ],
      providers: [
-       {provide: AuthService, useValue: authServiceSpy}
-     ]
+       {provide: AuthService, useValue: authServiceSpy},
+     ],
     })
     .compileComponents();
   }));

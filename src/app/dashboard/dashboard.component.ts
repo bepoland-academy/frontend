@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { TimeTrackingComponent } from './time-tracking.component';
 import { HistoricalDataComponent } from './historical-data.component';
@@ -22,9 +22,8 @@ import { NoRoleComponent } from './no-role.component';
     ProjectManagmentComponent,
     TimeApprovalComponent,
     UserManagementComponent,
-    NoRoleComponent
+    NoRoleComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
   constructor() {}

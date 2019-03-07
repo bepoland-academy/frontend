@@ -8,17 +8,17 @@ import { CustomMaterialModule } from '../../material/material.module';
 
 @NgModule({
   declarations: [
-    NavigationComponent
+    NavigationComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     CustomMaterialModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
-    NavigationComponent
+    NavigationComponent,
   ],
-  providers: []
+  providers: [],
 })
 export class NavigationModule { }

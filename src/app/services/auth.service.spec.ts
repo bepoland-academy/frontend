@@ -4,22 +4,22 @@ import { AuthService } from './auth.service';
 import { NavigationService } from '../dashboard/navigation/navigation.service';
 import { of } from 'rxjs';
 import { HttpService } from './http.service';
-import { credentials, user } from '../models/index';
+import { Credentials, User } from '../models/index';
 
 
-const user: user = {
+const user: User = {
   userId: 1,
   active: true,
   department: 'bank',
   emailLogin: 'test@test.com',
   firstName: 'Testname',
   lastName: 'Testlastname',
-  roles: ['testRole']
+  roles: ['testRole'],
 };
 
-const credentials: credentials = {
+const credentials: Credentials = {
   emailLogin: 'test@email.pl',
-  password: 'qwe123!'
+  password: 'qwe123!',
 };
 
 let navigationSpy;
@@ -32,7 +32,7 @@ describe('AuthService', () => {
   let localStorageMock = {};
   beforeEach(async(() => {
     navigationSpy = jasmine.createSpyObj('NavigationService', {
-      filterRoutes() {}
+      filterRoutes() {},
     });
     httpSpy = jasmine.createSpyObj('HttpService', {
       post: of(user),
@@ -41,8 +41,8 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         { provide: NavigationService, useValue: navigationSpy },
-        { provide: HttpService, useValue: httpSpy }
-      ]
+        { provide: HttpService, useValue: httpSpy },
+      ],
     });
 
 
@@ -74,7 +74,7 @@ describe('AuthService', () => {
 
   it('calling login method', () => {
     service.login(credentials).subscribe(
-      (mockedUser: user) => {
+      (mockedUser: User) => {
         expect(mockedUser).toBe(user);
         expect(navigationService.filterRoutes).toHaveBeenCalledWith(mockedUser.roles);
         expect(service.loggedIn.getValue()).toBeTruthy();

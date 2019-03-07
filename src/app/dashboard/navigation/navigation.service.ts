@@ -16,34 +16,34 @@ export class NavigationService {
     {
       path: 'track',
       component: TimeTrackingComponent,
-      data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] }
+      data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] },
     },
     {
       path: 'history',
       component: HistoricalDataComponent,
-      data: { name: 'Historical data', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] }
+      data: { name: 'Historical data', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] },
     },
     {
       path: 'reports',
       component: ReportsComponent,
-      data: { name: 'Reports', forRole: ['MANAGER', 'ADMINISTRATION'] }
+      data: { name: 'Reports', forRole: ['MANAGER', 'ADMINISTRATION'] },
     },
     {
       path: 'projects',
       component: ProjectManagmentComponent,
-      data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATION'] }
+      data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATION'] },
     },
     {
       path: 'approval',
       component: TimeApprovalComponent,
-      data: { name: 'Time approval', forRole: ['MANAGER'] }
+      data: { name: 'Time approval', forRole: ['MANAGER'] },
     },
     {
       path: 'users',
       component: UserManagementComponent,
       data: { name: 'User management',
-      forRole: ['ADMINISTRATION'] }
-    }
+      forRole: ['ADMINISTRATION'] },
+    },
   ];
 
   links: BehaviorSubject<Routes> = new BehaviorSubject([]);
@@ -71,7 +71,7 @@ export class NavigationService {
 
   noRolesProvided(): void {
     const routes: Routes = [
-      {path: '', component: NoRoleComponent, data: { }}
+      {path: '', component: NoRoleComponent, data: { }},
     ];
     this.links.next(routes);
     const redirectPage: Route = {path: '**', redirectTo: ''};

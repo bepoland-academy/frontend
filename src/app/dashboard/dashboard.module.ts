@@ -21,16 +21,16 @@ import { NoRoleComponent } from './no-role.component';
     ReportsComponent,
     ProjectManagmentComponent,
     TimeApprovalComponent,
-    NoRoleComponent
+    NoRoleComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     routerModule,
     NavigationModule,
-    UserManagementModule
+    UserManagementModule,
   ], exports: [
-    DashboardComponent
-  ]
+    DashboardComponent,
+  ],
 })
 export class DashboardModule { }

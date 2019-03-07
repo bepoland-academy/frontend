@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
       time-tracking works!
     </p>
   `,
-  styles: []
+  styles: [],
 })
 export class TimeTrackingComponent implements OnInit {
 
