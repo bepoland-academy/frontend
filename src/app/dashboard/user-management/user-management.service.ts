@@ -16,7 +16,7 @@ export class UserManagementService {
   changeReloadStatus() {
     this.reloadStatus.next(null);
   }
-
+  fa() {}
   getReloadStatus(): Observable<null> {
     return this.reloadStatus.asObservable();
   }

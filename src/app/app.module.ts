@@ -13,6 +13,7 @@ import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
 import { HttpClientModule } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
+import { PasswordModule } from './password/password.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { APP_BASE_HREF } from '@angular/common';
     CustomMaterialModule,
     BrowserAnimationsModule,
     rootModule,
+    PasswordModule,
     LoginModule,
     DashboardModule,
     HttpClientModule,
