@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Tag Docker Image') {
       steps {
-        sh '''docker tag pl.betse.beontime/users-service:latest build-server:5000/pl.betse.beontime/frontend
+        sh '''docker tag pl.betse.beontime/frontend:latest build-server:5000/pl.betse.beontime/frontend
 '''
       }
     }
