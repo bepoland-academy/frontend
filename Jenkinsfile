@@ -11,5 +11,10 @@ pipeline {
         sh 'npm install'
       }
     }
+    stage('Ng Build') {
+      steps {
+        sh 'ng build'
+      }
+    }
   }
 }
