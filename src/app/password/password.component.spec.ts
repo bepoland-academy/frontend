@@ -1,10 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 
 import { PasswordComponent } from './password.component';
-import { NgForm } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
 import { CustomMaterialModule } from '../material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { rootModule } from './password.routing';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { By } from '@angular/platform-browser';
 
 
@@ -12,14 +14,22 @@ import { By } from '@angular/platform-browser';
 fdescribe('PasswordComponent', () => {
   let component: PasswordComponent;
   let fixture: ComponentFixture<PasswordComponent>;
+  const formBuilder: FormBuilder = new FormBuilder();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ PasswordComponent ],
       imports: [
-        FormsModule,
+        CommonModule,
+        rootModule,
+        FlexLayoutModule,
         CustomMaterialModule,
+        ReactiveFormsModule,
         BrowserAnimationsModule,
+      ],
+      providers: [
+        { provide: FormBuilder,
+          useValue: formBuilder },
       ],
     })
     .compileComponents();
@@ -28,56 +38,85 @@ fdescribe('PasswordComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PasswordComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.ngOnInit();
   });
 
-  it('should be defibed', () => {
-    expect(component).toBeTruthy();
+  it(': form invalid when empty', () => {
+    expect(component.setPasswordForm.valid).toBeFalsy();
   });
 
-  it('form should be invalid when the component is initialized', () => {
-    fixture.whenStable().then(() => {
-      expect(component.passForm.valid).toBe(false);
-   });
+  it(': input fields invalid when empty', () => {
+    const newPassword = component.setPasswordForm.controls.newPassword;
+    const confirmPassword = component.setPasswordForm.controls.confirmPassword;
+    expect(newPassword.valid).toBeFalsy();
+    expect(confirmPassword.valid).toBeFalsy();
+
+    newPassword.setValue('');
+    confirmPassword.setValue('123qW*');
+    expect(newPassword.valid).toBeFalsy();
+    expect(newPassword.errors.required).toBeTruthy();
+    expect(confirmPassword.valid).toBeTruthy();
+
+    newPassword.setValue('123qW');
+    expect(newPassword.errors.required).toBeFalsy();
+    component.setPasswordForm.controls.newPassword.markAsDirty();
   });
 
-  it(': input "keyup" should call checkPassword function', () => {
-    fixture.whenStable().then(() => {
-      const input = fixture.debugElement.query(By.css('input'));
-      spyOn(component, 'checkPassword');
-      input.triggerEventHandler('keyup', null);
-      expect(component.checkPassword).toHaveBeenCalled();
-   });
+  it(': "newPassword" input field Regex validity', () => {
+    expect(component.lowerCase).toBeFalsy();
+    expect(component.upperCase).toBeFalsy();
+    expect(component.digit).toBeFalsy();
+    expect(component.special).toBeFalsy();
+    expect(component.length).toBeFalsy();
+
+    let control = new FormControl('123qW');
+    const result = component.regexValidation(control);
+    control.markAsDirty();
+    expect(component.regexValidation(control)).toEqual({'doesn\'t meet Regex': true});
+    // console.log(result);
+    expect(component.lowerCase).toBeTruthy();
+    expect(component.upperCase).toBeTruthy();
+    expect(component.digit).toBeTruthy();
+    expect(component.special).toBeFalsy();
+    expect(component.length).toBeFalsy();
+
+    control = new FormControl('123qW!');
+    const newResult = component.regexValidation(new FormControl('123qW!'));
+    expect(component.regexValidation(control)).toBeNull();
+    // console.log(newResult);
   });
 
-  it(`form should be valid when both password inputs are not empty
-      and newPassword input meets Regex expression`, () => {
-   fixture.whenStable().then(() => {
-    component.passForm.setValue({
-      password1: '123qW$',
-      password2: '123qW!',
-    });
+  it(': passwords match validity', () => {
+    expect(component.isMatch).toBeTruthy();
+    console.log(component.isMatch);
 
-    expect(component.passForm.valid).toBe(true);
+    const newPassword = component.setPasswordForm.controls.newPassword;
+    const confirmPassword = component.setPasswordForm.controls.confirmPassword;
+    newPassword.setValue('');
+    confirmPassword.setValue('123qW*');
+    component.setPasswordForm.markAsDirty();
+    expect(component.passwordsMatch(component.setPasswordForm)).toEqual({'passwords do not match': true});
+    expect(component.isMatch).toBeFalsy();
+    console.log(component.isMatch);
 
-    // check if 'Confirm' button is disabled when passwors don't match
-    // component.checkPassword();
-    expect(component.confirmButton.nativeElement.disabled).toBe(false);
-    // expect(component.snackBar.open.call.count()).toEqual(1);
-    // console.log(component.snackBar.open.call(1));
-    // expect(component.snackBar.).toBe(true);
+    const result = component.passwordsMatch(component.setPasswordForm);
+    console.log(result);
 
-    console.log(2, component.passForm.value);
-    console.log(3, component.confirmButton.nativeElement.disabled);
 
-    // check if sendPassword function is called on ngSubmit
-    // const form = fixture.debugElement.query(By.css('form'));
-    // spyOn(component, 'sendPassword');
-    // form.triggerEventHandler('ngSubmit', null);
-    // expect(component.sendPassword).toHaveBeenCalled();
-    // console.log(form, component.passForm);
+    newPassword.setValue('123qW*');
+    expect(component.passwordsMatch(component.setPasswordForm)).toBeNull();
+    const newResult = component.passwordsMatch(component.setPasswordForm);
+    console.log(newResult);
   });
-   });
 
+  it(': "Confirm" button click sends new password grabbed from the setPasswordForm', () => {
+    expect(component.setPasswordForm.valid).toBeFalsy();
+    const testPassword = {newPassword: '123qW!', confirmPassword: '123qW!'};
+    component.setPasswordForm.controls.newPassword.setValue('123qW!');
+    component.setPasswordForm.controls.confirmPassword.setValue('123qW!');
 
-});
+    component.sendPassword();
+    expect(component.password).toEqual(testPassword);
+  });
+
+  });
