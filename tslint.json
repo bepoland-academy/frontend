@@ -116,6 +116,7 @@
       true,
       "spaces",
       2
-    ]
+    ],
+    "no-angle-bracket-type-assertion": false
   }
 }

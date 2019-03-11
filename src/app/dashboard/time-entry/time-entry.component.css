@@ -21,6 +21,7 @@
 
 .date-range {
   margin-left: 10px;
+  border-radius: 10px;
 }
 
 .mat-h3, .mat-h2 {
@@ -32,17 +33,6 @@
   text-align: center;
 }
 
-.mat-table {
-  width: 100%;
-}
-
-.input-day {
-  width: 60px;
-  border: 1px solid #808080;
-  height: 40px;
-  border-radius: 5px;
-  text-align: center;
-}
 
 input[type=number] { 
   -moz-appearance: textfield;
@@ -73,7 +63,7 @@ input[type=number]::-webkit-outer-spin-button {
   line-height: 34px;
   cursor: pointer;
 }
-.mat-card {
+.main-card {
   min-height: calc(100vh - 140px);
 }
 
@@ -87,14 +77,68 @@ button:focus {
   outline: none;
 }
 
-.mat-header-cell  {
-  text-align: center;
-}
-
-td {
-  text-align: center;
-}
-
 .add-entry {
   margin-left: auto;
+}
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+.quantity {
+  display: flex;
+  border: 1px solid #808080;
+  border-radius: 6px;
+  padding: 5px;
+  outline: none;
+}
+
+.quantity__nav {
+  margin: -5px;
+  border-left: 1px solid #808080;
+  width: 16px;
+}
+
+.quantity__button {
+  text-align: center;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.quantity__input {
+  border: none;
+  text-align: center;
+}
+
+.quantity__input:focus {
+  outline: none;
+}
+
+.quantity__down {
+  border-top: 1px solid #808080;
+}
+
+.day-off {
+  background: rgba(61, 58, 58, 0.466);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.footer__save {
+  margin-right: 25px;
 }

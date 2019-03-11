@@ -6,11 +6,13 @@ import { TimeEntryComponent } from './time-entry.component';
 import { CustomMaterialModule } from '../../material/material.module';
 import { AddEntryComponent } from './add-entry/add-entry.component';
 import { TimeEntryService } from './time-entry.service';
+import { NumberValidationDirective } from './number-validation.directive';
 
 @NgModule({
   declarations: [
     TimeEntryComponent,
     AddEntryComponent,
+    NumberValidationDirective,
   ],
   imports: [
     CommonModule,
@@ -24,4 +26,4 @@ import { TimeEntryService } from './time-entry.service';
     AddEntryComponent,
   ],
 })
-export class TimeEntryModule { }
+export class TimeEntryModule {}

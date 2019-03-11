@@ -11,10 +11,32 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./add-entry.component.css'],
 })
 export class AddEntryComponent {
+  clients = [
+    {
+      name: 'PZU',
+      projects: [
+      'Jeden',
+      'dwadziescia',
+      '44',
+      'Grupa inwalidzka do przeprowadzki',
+      'Praca w godzinach nadliczbowych',
+      ],
+    },
+    {
+      name: 'BePoland',
+      projects: [
+        'Akademia',
+        'Akademia dwa',
+        'Akademia',
+        'Przeprowadzki',
+        'Jazda na rowerze samochodem',
+      ],
+    },
+  ];
 
   constructor(
     public dialogRef: MatDialogRef<AddEntryComponent>,
-    @Inject(MAT_DIALOG_DATA) public data,
+    @Inject(MAT_DIALOG_DATA) public data
     // public dataService: DataService
   ) { }
 

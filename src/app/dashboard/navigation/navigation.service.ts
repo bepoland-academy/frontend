@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Routes, Route, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
-import { TimeTrackingComponent } from '../time-tracking.component';
+import { TimeEntryComponent } from '../time-entry/time-entry.component';
 import { HistoricalDataComponent } from '../historical-data.component';
 import { ReportsComponent } from '../reports.component';
 import { TimeApprovalComponent } from '../time-approval.component';
@@ -15,8 +15,8 @@ export class NavigationService {
   routes: Routes = [
     {
       path: 'track',
-      component: TimeTrackingComponent,
-      data: { name: 'Time tracking', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] },
+      component: TimeEntryComponent,
+      data: { name: 'Time entry', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] },
     },
     {
       path: 'history',
@@ -95,7 +95,7 @@ export class NavigationService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full'  };
+    return { path: '**', redirectTo: '/track', pathMatch: 'full'  };
   }
 
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {
