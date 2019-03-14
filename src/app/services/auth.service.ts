@@ -17,33 +17,20 @@ export class AuthService {
     private navigationService: NavigationService,
     private http: HttpService
   ) {
-    const a = {
-      userId: 4,
-      emailLogin: 't4.email@be-tse.com',
-      firstName: 'Name_4',
-      lastName: 'Lastname_4',
-      isActive: false,
-      userDepartment: 'DIGITAL',
-      roles: [
-        'CONSULTANT',
-        'ADMINISTRATION',
-        'MANAGER',
-      ],
-      active: false,
-    };
-    localStorage.setItem('user', JSON.stringify(a));
     this.getUser();
   }
 
   login(credentials: Credentials): Observable<User> {
-    return this.http.post('users/login', credentials).pipe(
-      tap((user: User) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        this.navigationService.filterRoutes(user.roles);
-        this.loggedIn.next(true);
-        this.user.next(user);
-      })
-    );
+    return this.http
+      .login('auth/login', credentials, { observe: 'response' as 'body' })
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('user', JSON.stringify(response.body));
+          this.navigationService.filterRoutes(response.body.roles);
+          this.loggedIn.next(true);
+          this.user.next(response.body);
+        })
+      );
   }
 
   getUserStream(): ReplaySubject<User> {

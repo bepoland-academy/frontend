@@ -40,8 +40,11 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatTreeModule
+  MatTreeModule,
+  DateAdapter
 } from '@angular/material';
+
+import { MyDateAdapter } from './my-date-adapter.service';
 
 @NgModule({
   exports: [
@@ -85,6 +88,9 @@ import {
     MatTooltipModule,
     MatTreeModule,
     ScrollingModule,
+  ],
+  providers: [
+    { provide: DateAdapter, useClass: MyDateAdapter },
   ],
 })
 export class CustomMaterialModule { }

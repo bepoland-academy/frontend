@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
    login(): void {
     this.isLoading = true;
-    this.authService.login({ emailLogin: this.username, password: this.password })
+    this.authService.login({ username: this.username, password: this.password })
       .subscribe(
         () => this.isLoading = false,
         (err) => {

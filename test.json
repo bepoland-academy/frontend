@@ -1,131 +1,158 @@
 {
   "tracks": {
     "week": "2018-32",
-    "entries": [
-      {
-        "clientName": "PZU",
-        "projects": [
-          {
-            "projectName": "Projekt1",
-            "monday": {
-              "date": "23-04-2018",
-              "hours": 5,
-              "approved": true
+      "entries": [
+        {
+          "clientName": "PZU",
+          "projects": [
+            {
+              "projectName": "Projekt1",
+              "weekDays": [
+                {
+                  "day": "monday", 
+                  "date": "23-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "tuesday",
+                  "date": "24-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day":"wednesday",
+                  "date": "25-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day":"thursday", 
+                  "date": "26-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day":"friday",
+                  "date": "27-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "saturday",
+                  "date": "28-04-2018",
+                  "hours": 8,
+                  "approved": true
+                },
+                {
+                  "day": "sunday",
+                  "date": "29-04-2018",
+                  "hours": 0,
+                  "approved": true
+                }
+              ]
             },
-            "tuesday": {
-              "date": "24-04-2018",
-              "hours": 5,
-              "approved": true
-            },
-            "wednesday": {
-              "date": "25-04-2018",
-              "hours": 5,
-              "approved": true
-            },
-            "thursday": {
-              "date": "26-04-2018",
-              "hours": 5,
-              "approved": true
-            },
-            "friday": {
-              "date": "27-04-2018",
-              "hours": 5,
-              "approved": true
-            },
-            "saturday": {
-              "date": "28-04-2018",
-              "hours": 8,
-              "approved": true
-            },
-            "sunday": {
-              "date": "29-04-2018",
-              "hours": 0,
-              "approved": true
+            {
+              "projectName": "Inny projekt",
+              "weekDays": [
+                {
+                  "day": "monday",
+                  "date": "23-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "tuesday",
+                  "date": "24-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "wednesday",
+                  "date": "25-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "thursday",
+                  "date": "26-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "friday",
+                  "date": "27-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "saturday",
+                  "date": "28-04-2018",
+                  "hours": 21,
+                  "approved": true
+                },
+                {
+                  "day": "sunday",
+                  "date": "29-04-2018",
+                  "hours": 0,
+                  "approved": true
+                }
+              ]
             }
-          },
-          {
-            "projectName": "Inny projekt",
-            "monday": {
-              "date": "23-04-2018",
-              "hours": 1,
-              "approved": true
-            },
-            "tuesday": {
-              "date": "24-04-2018",
-              "hours": 6,
-              "approved": true
-            },
-            "wednesday": {
-              "date": "25-04-2018",
-              "hours": 7,
-              "approved": true
-            },
-            "thursday": {
-              "date": "26-04-2018",
-              "hours": 2,
-              "approved": true
-            },
-            "friday": {
-              "date": "27-04-2018",
-              "hours": 5,
-              "approved": true
-            },
-            "saturday": {
-              "date": "28-04-2018",
-              "hours": 0,
-              "approved": true
-            },
-            "sunday": {
-              "date": "29-04-2018",
-              "hours": 0,
-              "approved": true
+          ]
+        },
+        {
+          "clientName": "Bardzo dobry klient",
+          "projects": [
+            {
+              "projectName": "Najlepszy projekt na swiecie",
+              "weekDays": [
+                {
+                  "day": "monday",
+                  "date": "23-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "tuesday",
+                  "date": "24-04-2018",
+                  "hours": 15,
+                  "approved": true
+                },
+                {
+                  "day": "wednesday",
+                  "date": "25-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "thursday",
+                  "date": "26-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "friday",
+                  "date": "27-04-2018",
+                  "hours": 1,
+                  "approved": true
+                },
+                {
+                  "day": "saturday",
+                  "date": "28-04-2018",
+                  "hours": 5,
+                  "approved": true
+                },
+                {
+                  "day": "sunday",
+                  "date": "29-04-2018",
+                  "hours": 0,
+                  "approved": true
+                }
+              ]
             }
-          }
-        ]
-      },
-      {
-        "clientName": "Bardzo dobry klient",
-        "projects": [
-          {
-            "projectName": "Najlepszy projekt na swiecie",
-            "monday": {
-              "date": "23-04-2018",
-              "hours": 5,
-              "approved": false
-            },
-            "tuesday": {
-              "date": "24-04-2018",
-              "hours": 5,
-              "approved": false
-            },
-            "wednesday": {
-              "date": "25-04-2018",
-              "hours": 5,
-              "approved": false
-            },
-            "thursday": {
-              "date": "26-04-2018",
-              "hours": 5,
-              "approved": false
-            },
-            "friday": {
-              "date": "27-04-2018",
-              "hours": 5,
-              "approved": false
-            },
-            "saturday": {
-              "date": "28-04-2018",
-              "hours": 8,
-              "approved": false
-            },
-            "sunday": {
-              "date": "29-04-2018",
-              "hours": 0,
-              "approved": false
-            }
-          }
-        ]
-      }
-    ]
+          ]
+        }
+      ]
   }
 }

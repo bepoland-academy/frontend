@@ -1,25 +1,22 @@
+import { Component, ViewChild, Input, Output, EventEmitter, Renderer2, OnChanges } from '@angular/core';
+import { TimeEntryService } from '../time-entry.service';
 
-
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Component, Inject } from '@angular/core';
-// import { DataService } from '../../services/data.service';
-import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-entry',
   templateUrl: './add-entry.component.html',
   styleUrls: ['./add-entry.component.css'],
 })
-export class AddEntryComponent {
+export class AddEntryComponent implements OnChanges {
   clients = [
     {
       name: 'PZU',
       projects: [
-      'Jeden',
-      'dwadziescia',
-      '44',
-      'Grupa inwalidzka do przeprowadzki',
-      'Praca w godzinach nadliczbowych',
+        'Jeden',
+        'dwadziescia',
+        '44',
+        'Grupa inwalidzka do przeprowadzki',
+        'Praca w godzinach nadliczbowych',
       ],
     },
     {
@@ -33,33 +30,45 @@ export class AddEntryComponent {
       ],
     },
   ];
+  @Input() isOpen: boolean;
+  @Output() isOpenChange = new EventEmitter();
+  @ViewChild('drawer') drawer;
+  chosenClient: string;
+  isProjectsShown = false;
+  projectsToChose: Array<string> = [];
+  chosenProject: string;
 
   constructor(
-    public dialogRef: MatDialogRef<AddEntryComponent>,
-    @Inject(MAT_DIALOG_DATA) public data
-    // public dataService: DataService
-  ) { }
+    private renderer: Renderer2,
+    private timeEntryService: TimeEntryService
+  ) {}
 
-  formControl = new FormControl('', [
-    Validators.required,
-    // Validators.email,
-  ]);
-
-  getErrorMessage() {
-    return this.formControl.hasError('required') ? 'Required field' :
-      this.formControl.hasError('email') ? 'Not a valid email' :
-        '';
+  closeDrawer() {
+    this.drawer.close();
+    setTimeout(() => {
+      this.isOpenChange.emit(false);
+    }, 200);
+    this.renderer.removeClass(document.body, 'drawer-open');
+    this.chosenClient = '';
+    this.isProjectsShown = false;
+  }
+  setClient(client) {
+    this.chosenClient = client.name;
+    this.projectsToChose = client.projects;
+    this.isProjectsShown = true;
   }
 
-  submit() {
-    // emppty stuff
+  goBack() {
+    this.isProjectsShown = false;
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
+  setProject(project) {
+    this.timeEntryService.createNewEntry(this.chosenClient, project);
+    this.closeDrawer();
   }
-
-  // public confirmAdd(): void {
-  //   this.dataService.addIssue(this.data);
-  // }
+  ngOnChanges() {
+    if (this.isOpen) {
+      this.renderer.addClass(document.body, 'drawer-open');
+    }
+  }
 }

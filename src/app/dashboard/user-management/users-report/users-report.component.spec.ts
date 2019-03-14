@@ -41,7 +41,7 @@ describe('UsersReportComponent', () => {
       {
         active: true,
         department: 'testDepartment',
-        emailLogin: 'testmail@test.com',
+        username: 'testmail@test.com',
         firstName: 'Nametest',
         lastName: 'Lastname',
         roles: ['CONSULTANT'],
@@ -50,7 +50,7 @@ describe('UsersReportComponent', () => {
       {
         active: true,
         department: 'userDepartment',
-        emailLogin: 'testmail444@test.com',
+        username: 'testmail444@test.com',
         firstName: 'TestName',
         lastName: 'Testlast',
         roles: ['CONSULTANT', 'MANAGER'],

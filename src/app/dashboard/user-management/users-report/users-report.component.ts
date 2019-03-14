@@ -30,7 +30,8 @@ import { User } from '../../../models';
   getUsersData(): void {
     this.userManagementService.getUsers()
     .subscribe(
-      (data: Array<User>) => {
+      (response) => {
+        const data: Array<User> = response._embedded.userBodyList;
         this.users = data;
         this.dataSource = new MatTableDataSource(this.users);
         this.isResponse = true;

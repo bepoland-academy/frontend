@@ -1,3 +1,4 @@
+<app-add-entry [(isOpen)]="isDrawerOpened"></app-add-entry>
 <div class="container">
   <mat-card class="main-card">
     <header class="header">
@@ -11,9 +12,12 @@
           <mat-form-field>
             <mat-datepicker touchUi #picker></mat-datepicker>
             <div class="current-title">
-              <h2 matRipple class="mat-h3 current-date" (click)="picker.open()">{{ week[0] }} - {{ week[week.length-1]}}</h2>
+              <h2 matRipple class="mat-h3 current-date" (click)="picker.open()">
+                {{ week[0].date }} - {{ week[week.length-1].date}}
+              </h2>
             </div>
-            <input hidden matInput [(ngModel)]="dateCalendar" (dateChange)="onCalendarChange($event)" [matDatepicker]="picker">
+            <input hidden matInput [(ngModel)]="dateCalendar" (dateChange)="onCalendarChange($event)"
+              [matDatepicker]="picker">
           </mat-form-field>
           <button mat-icon-button (click)="getNextWeek()">
             <mat-icon>chevron_right</mat-icon>
@@ -23,167 +27,63 @@
           </button>
         </div>
       </div>
-      <div class="add-entry" (click)="addNew()">
-        Add new entry
+      <div class="add-entry">
+        <button mat-icon-button (click)="openDrawer()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
-
     </header>
-    <!-- <div class="quantity">
-  <input type='number' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-  <div class="quantity__nav">
-    <div class="quantity__button quantity__up">+</div>
-    <div class="quantity__button quantity__down">-</div>
-  </div>
-</div> -->
-
-    <mat-card>
-      <div class="time-entry">
-        <mat-grid-list cols="13" rowHeight="64px">
-          <mat-grid-tile-header>
-            <mat-toolbar>
-              <mat-grid-tile [colspan]="2">
-                <h4>Client</h4>
-              </mat-grid-tile>
-              <mat-grid-tile [colspan]="2">
-                <h4>Projects</h4>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <h4>MON</h4>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <h4>TUE</h4>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <h4>WED</h4>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <h4>THU</h4>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <h4>FRI</h4>
-              </mat-grid-tile>
-              <mat-grid-tile class="day-off">
-                <h4>SAT</h4>
-              </mat-grid-tile>
-              <mat-grid-tile class="day-off">
-                <h4>SUN</h4>
-              </mat-grid-tile>
-              <mat-grid-tile [colspan]="2"></mat-grid-tile>
-            </mat-toolbar>
-          </mat-grid-tile-header>
-
-          <div *ngFor="let entry of entries">
-
-            <mat-grid-tile [colspan]="2" [rowspan]="entry.projects.length">
-              <p>{{entry.clientName}}</p>
-            </mat-grid-tile>
-            <div *ngFor="let project of entry.projects">
-              <mat-grid-tile [colspan]="2">
-                <p>{{project.projectName}}</p>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <div class="quantity" appChangeQuantity>
-                  <input [(ngModel)]="project.monday.hours" type='text' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav">
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <div class="quantity">
-                  <input [(ngModel)]="project.tuesday.hours" type='number' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav">
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <div class="quantity">
-                  <input [(ngModel)]="project.wednesday.hours" type='number' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav">
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <div class="quantity">
-                  <input [(ngModel)]="project.thursday.hours" type='number' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav">
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <div class="quantity">
-                  <input [(ngModel)]="project.friday.hours" type='number' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav">
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile class="day-off">
-                <div class="quantity">
-                  <input [(ngModel)]="project.saturday.hours" type='number' min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav">
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile class="day-off">
-                <div class="quantity">
-                  <input type='number' [(ngModel)]="project.sunday.hours" min="0" max="24" step="0.5" class="quantity__input" appTimeEntry />
-                  <div class="quantity__nav"> 
-                    <div class="quantity__button quantity__up" matRipple>+</div>
-                    <div class="quantity__button quantity__down" matRipple>-</div>
-                  </div>
-                </div>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <button mat-icon-button>
-                  <mat-icon>delete</mat-icon>
-                </button>
-                <button mat-icon-button>
-                  <mat-icon>edit</mat-icon>
-                </button>
-              </mat-grid-tile>
-              <mat-grid-tile>
-                <p>{{ sumAllDaysFromWeek(project) }}</p>
-              </mat-grid-tile>
-            </div>
-          </div>
-          <mat-grid-tile-footer>
-            <mat-grid-tile [colspan]="4"></mat-grid-tile>
-            <mat-grid-tile>
-              <p>{{ sumHoursFromSelectedDay('monday') }}</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>{{ sumHoursFromSelectedDay('tuesday') }}</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>{{ sumHoursFromSelectedDay('wednesday') }}</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>{{ sumHoursFromSelectedDay('thursday') }}</p>
-            </mat-grid-tile>
-            <mat-grid-tile>
-              <p>{{ sumHoursFromSelectedDay('friday') }}</p>
-            </mat-grid-tile>
-            <mat-grid-tile class="day-off">
-              <p>{{ sumHoursFromSelectedDay('saturday') }}</p>
-            </mat-grid-tile>
-            <mat-grid-tile class="day-off">
-              <p>{{ sumHoursFromSelectedDay('sunday') }}</p>
-            </mat-grid-tile>
-          </mat-grid-tile-footer>
-        </mat-grid-list>
+    <!-- header time enty -->
+    <mat-toolbar class="time-entry time-entry-header">
+      <h4>Client</h4>
+      <h4>Projects</h4>
+      <div *ngFor="let dayWeek of week">
+        <p>{{ dayWeek.date.slice(0, 5) }}</p>
+        <p>{{ dayWeek.day.slice(0, 3).toUpperCase() }}</p>
       </div>
-    </mat-card>
+    </mat-toolbar>
+
+    <!-- content time entry -->
+    <div class="time-entry-content" *ngFor="let client of projects">
+      <div [ngStyle]="{'grid-row': '1 / span ' + client.projects.length }" class="project-cell">
+        <h3>{{client.clientName}}</h3>
+      </div>
+      <div class="project-row" *ngFor="let project of client.projects">
+        <div class="project-cell">
+          <h5>{{project.projectName}}</h5>
+        </div>
+        <div class="project-cell" *ngFor="let day of project.weekDays">
+          <app-quantity 
+            [(inputValue)]="day.hours"
+            [isWeekend]="day.day === 'saturday' || day.day === 'sunday'"
+          ></app-quantity>
+        </div>
+        <div class="project-cell">
+          <button mat-icon-button (click)="removeProject(client, project)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div class="project-cell">
+          <p>{{ sumAllHoursFromWeek(project) }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- footer time entry -->
+    <div class="time-entry-footer">
+      <div></div>
+      <p class="project-cell" for="monday">{{ sumHoursFromSelectedDay('monday') }}</p>
+      <p class="project-cell" for="tuesday">{{ sumHoursFromSelectedDay('tuesday') }}</p>
+      <p class="project-cell" for="wednesday">{{ sumHoursFromSelectedDay('wednesday') }}</p>
+      <p class="project-cell" for="thursday">{{ sumHoursFromSelectedDay('thursday') }}</p>
+      <p class="project-cell" for="friday">{{ sumHoursFromSelectedDay('friday') }}</p>
+      <p class="project-cell" for="saturday">{{ sumHoursFromSelectedDay('saturday') }}</p>
+      <p class="project-cell" for="sunday">{{ sumHoursFromSelectedDay('sunday') }}</p>
+    </div>
+
     <footer class="footer">
       <button class="footer__save" mat-stroked-button>Save</button>
       <button mat-stroked-button>Submit</button>

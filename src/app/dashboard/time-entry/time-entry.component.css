@@ -34,17 +34,6 @@
 }
 
 
-input[type=number] { 
-  -moz-appearance: textfield;
-  appearance: textfield;
-  margin: 0; 
-}
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
-}
-
 .mat-form-field-infix {
   background-color: blue;
 }
@@ -80,54 +69,7 @@ button:focus {
 .add-entry {
   margin-left: auto;
 }
-.example-tree-invisible {
-  display: none;
-}
 
-.example-tree ul,
-.example-tree li {
-  margin-top: 0;
-  margin-bottom: 0;
-  list-style-type: none;
-}
-
-.quantity {
-  display: flex;
-  border: 1px solid #808080;
-  border-radius: 6px;
-  padding: 5px;
-  outline: none;
-}
-
-.quantity__nav {
-  margin: -5px;
-  border-left: 1px solid #808080;
-  width: 16px;
-}
-
-.quantity__button {
-  text-align: center;
-  cursor: pointer;
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none;
-}
-
-.quantity__input {
-  border: none;
-  text-align: center;
-}
-
-.quantity__input:focus {
-  outline: none;
-}
-
-.quantity__down {
-  border-top: 1px solid #808080;
-}
 
 .day-off {
   background: rgba(61, 58, 58, 0.466);
@@ -141,4 +83,38 @@ button:focus {
 
 .footer__save {
   margin-right: 25px;
+}
+
+.time-entry {
+  height: 70px;
+  display: grid;
+  grid-template-columns: 2fr 2fr repeat(9, 1fr);
+  grid-template-rows: 70px;
+  text-align: center;
+}
+
+.time-entry-content {
+  display: grid;
+  grid-template-columns: 2fr 11fr;
+  grid-auto-rows: 70px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 2fr repeat(9, 1fr);
+}
+
+.project-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.time-entry-footer {
+  display: grid;
+  grid-template-columns: 4fr repeat(7, 1fr) 2fr;
+  grid-template-rows: 40px;
+  border-bottom: 2px solid #f5f5f5;
 }

@@ -95,7 +95,7 @@ export class NavigationService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: '/track', pathMatch: 'full'  };
+    return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full' };
   }
 
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {

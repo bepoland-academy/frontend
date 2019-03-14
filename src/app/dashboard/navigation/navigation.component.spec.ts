@@ -22,7 +22,7 @@ const user: User = {
   userId: 1,
   active: true,
   department: 'bank',
-  emailLogin: 'test@test.com',
+  username: 'test@test.com',
   firstName: 'Testname',
   lastName: 'Testlastname',
   roles: ['testRole'],

@@ -1,14 +1,13 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core';
 
 @Directive({
   selector: '[appTimeEntry]',
 })
-export class NumberValidationDirective {
+export class ValidationDirective {
   private element: HTMLInputElement;
-  a;
+  @Output() checkedValue = new EventEmitter();
   constructor(private el: ElementRef) {
     this.element = el.nativeElement;
-    this.a = el;
   }
 
   @HostListener('input') oninput() {
@@ -17,17 +16,16 @@ export class NumberValidationDirective {
       'g'
     );
     const value = this.element.value;
-    console.log(value);
     if (regExp.test(value)) {
       this.element.value = value;
     } else {
+
       if (+value > 24) {
-        this.element.valueAsNumber = 24;
-      } else if (+value < 0) {
-        this.element.valueAsNumber = 0;
+        this.element.value = '24';
+      } else {
+        this.element.value = '';
       }
     }
+    this.checkedValue.emit(this.element.value.trim());
   }
-
-
 }

@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import * as moment from 'moment';
-import { AddEntryComponent } from './add-entry/add-entry.component';
 import { TimeEntryService } from './time-entry.service';
 
 @Component({
@@ -11,42 +9,36 @@ import { TimeEntryService } from './time-entry.service';
   styleUrls: ['./time-entry.component.css'],
 })
 export class TimeEntryComponent implements OnInit {
-  entries = [];
+  projects = [];
   week = [];
   currentWeek: number;
   displayedWeek: number;
   dateCalendar: Date;
-  constructor(
-    public dialog: MatDialog,
-    private timeEntryService: TimeEntryService
-  ) {}
+  isDrawerOpened: boolean;
+  constructor(private timeEntryService: TimeEntryService) {}
 
   ngOnInit() {
     this.timeEntryService.getTracks().subscribe(el => {
-      this.entries = el.entries;
+      this.projects = el.entries;
     });
     this.currentWeek = moment().week();
     this.displayedWeek = moment().week();
-    this.week = this.timeEntryService.getCurrentFullWeek(this.displayedWeek);
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(
+      this.displayedWeek
+    );
     this.dateCalendar = new Date();
   }
 
-  addNew(entry) {
-    const dialogRef = this.dialog.open(AddEntryComponent, {
-      data: { entry },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataService
-        // this.exampleDatabase.dataChange.value.push(this.dataService.getDialogData());
-        // this.refreshTable();
-      }
-    });
+  openDrawer() {
+    this.isDrawerOpened = true;
   }
+
+removeProject(client, project) {
+  this.timeEntryService.removeProject(client, project);
+}
+
   sumHoursFromSelectedDay(day): number {
-    return this.entries
+    return this.projects
       .map(
         client =>
           // mapping all projects from client and
@@ -54,43 +46,40 @@ export class TimeEntryComponent implements OnInit {
             .map(
               // taking hours from selected day
               project => {
-                // checking searched day exists in week. for eg monday if not exists it would return 0
-                if (!project[day]) {
-                  return 0;
-                }
-                return project[day].hours;
-              }
-              // sum from selected day of project
+
+                // taking from day hours or returning null and after that removing all null's and return last value
+                return project.weekDays
+                                      .map(weekDay => weekDay.day === day ? +weekDay.hours : null)
+                                      .filter(el => el !== null)[0];
+              } // sum from selected day of project
             )
             .reduce((sum, val) => sum + val)
         // suming all hours from day and pass intial value
-        )
-        .reduce((allDaySum, val) => allDaySum + val, 0);
+      )
+      .reduce((allDaySum, val) => allDaySum + val, 0);
   }
 
-  sumAllDaysFromWeek(week) {
-    let sum = 0;
-    for (const day in week) {
-      if (week[day].hours) {
-        sum += week[day].hours;
-      }
-    }
-    return sum;
+  sumAllHoursFromWeek(week) {
+    return week.weekDays.map(day => +day.hours).reduce((sum, nextValue) => sum + nextValue);
   }
 
   getPreviousWeek() {
-    this.week = this.timeEntryService.getCurrentFullWeek(this.displayedWeek - 1);
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(
+      this.displayedWeek - 1
+    );
     this.displayedWeek = this.displayedWeek - 1;
-    this.dateCalendar = moment(this.week[0], ['DD-MM-YYYY']).toDate();
+    this.dateCalendar = moment(this.week[0].date, ['DD-MM-YYYY']).toDate();
   }
   getNextWeek() {
-    this.week = this.timeEntryService.getCurrentFullWeek(this.displayedWeek + 1);
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(
+      this.displayedWeek + 1
+    );
     this.displayedWeek = this.displayedWeek + 1;
-    this.dateCalendar = moment(this.week[0], ['DD-MM-YYYY']).toDate();
+    this.dateCalendar = moment(this.week[0].date, ['DD-MM-YYYY']).toDate();
   }
   onCalendarChange(event) {
     const selectedWeek = moment(event.value).week();
     this.displayedWeek = selectedWeek;
-    this.week = this.timeEntryService.getCurrentFullWeek(selectedWeek);
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(selectedWeek);
   }
 }
