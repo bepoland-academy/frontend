@@ -82,7 +82,13 @@ fdescribe('PasswordComponent', () => {
 
     control = new FormControl('123qW!');
     const newResult = component.regexValidation(new FormControl('123qW!'));
+    control.markAsDirty();
     expect(component.regexValidation(control)).toBeNull();
+    expect(component.lowerCase).toBeTruthy();
+    expect(component.upperCase).toBeTruthy();
+    expect(component.digit).toBeTruthy();
+    expect(component.special).toBeTruthy();
+    expect(component.length).toBeTruthy();
     // console.log(newResult);
   });
 

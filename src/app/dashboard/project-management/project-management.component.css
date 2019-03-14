@@ -1,0 +1,90 @@
+.project-management {
+  justify-content: space-between;
+  display: flex;
+  padding: 0 30px;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+
+.projects {
+  margin: 40px 0 30px;
+  width: 65%;
+}
+
+.hidden {
+  display: none;
+}
+
+.mat-spinner {
+  margin: 100px auto;
+}
+
+.errorMessage {
+  text-align: center;
+  margin: 100px auto;
+  color: red;
+  font-size: 20px;
+  font-weight: bolder;
+  letter-spacing: 5px;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr;
+}
+
+.client-grid {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+}
+
+.main-grid .grid-item {
+  font-weight: bolder;
+  color: rgba(0,0,0,.54);
+  font-size: 14px;
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0,0,0,.12);
+  padding: 20px;
+  text-align: center;
+  color: rgba(0,0,0,.87);
+  font-size: 14px;
+}
+
+.mat-card {
+  margin-top: 20px;
+  height: 480px;
+  width: 310px;
+  flex-direction: column;
+  text-align: center;
+}
+
+.mat-form-field {
+  width: 280px;
+  margin: 0 auto;
+}
+
+.mat-card-header {
+  justify-content: center;
+}
+
+.successMessage, .failMessage {
+  height: 400px; 
+  text-align: center;
+  align-items: center;
+}
+ 
+.successMessage mat-card-title {
+  color: green;
+}
+
+.failMessage mat-card-title {
+  color: red;
+}
