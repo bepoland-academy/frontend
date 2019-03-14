@@ -4,7 +4,7 @@ import { PasswordComponent } from './password.component';
 import { rootModule } from './password.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomMaterialModule } from '../material/material.module';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
     rootModule,
     FlexLayoutModule,
     CustomMaterialModule,
-    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     PasswordComponent,

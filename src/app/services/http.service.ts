@@ -29,6 +29,18 @@ export class HttpService {
     );
   }
 
+  intercept(request, next) {
+
+    const token = localStorage.getItem('token');
+    request = request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return next.handle(request);
+  }
+
   post(endpoint: string, body: any): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
