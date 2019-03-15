@@ -1,120 +1,160 @@
-
 <div fxLayout="row" class="project-management">
-  <div class="projects">
-      <mat-spinner [ngClass]="{hidden: isDepartment === true}"></mat-spinner>
-      <div fxLayout="row">
-            <mat-form-field *ngIf="isDataAvailable">
-                  <mat-select 
-                     placeholder="Select department"
-                     (selectionChange)="displayProjects($event.value)"
-                     >
-                     <mat-option 
+      <div class="projects">
+         <mat-spinner [ngClass]="{hidden: isDepartment === true}"></mat-spinner>
+         <!-- Projects' Options -->
+         <div 
+            *ngIf="isDataAvailable" 
+            fxLayout="row" 
+            class="projectOptions"
+         >
+            <mat-form-field>
+               <mat-select 
+                  placeholder="Select department"
+                  (selectionChange)="displayProjects($event.value)"
+               >
+                  <mat-option 
                      *ngFor="let department of departments" 
                      [value]="department.name"
-                     >
-                     {{department.name}}
-                     </mat-option>
-                  </mat-select>
-               </mat-form-field>
-               <mat-form-field>
-                     <input matInput placeholder="Filter Clients" (keyup)="filterClients($event)">
-                   </mat-form-field>
-      </div>
-
-
-   <div *ngIf="serverError" class="errorMessage">
-      <p>Ups!
-         <br> There were problems with the server connection!
-      </p>
-   </div>
-   <div *ngIf="isProject">
-   <div class="main-grid">
-      <div class="grid-item">Client</div>
-      <div class="grid-item">Project</div>
-      <div class="grid-item">Rate</div>
-      <div class="grid-item">Comments</div>
-      <div class="grid-item">Active</div>
-      <div class="grid-item">Edit</div>
-   </div>
-   <div *ngFor="let client of projects">
-      <div class="client-grid">
-         <div class="grid-item">{{client[0]}}</div>
-         <div>
-            <div *ngFor="let project of client[1]; let i = index">
-               <div class="project-grid">
-                  <div class="grid-item">{{client[1][i].name}}</div>
-                  <div class="grid-item">{{client[1][i].rate}}</div>
-                  <div class="grid-item">{{client[1][i].comments}}</div>
-                  <div class="grid-item">{{client[1][i].active}}</div>
-                  <div class="grid-item">
-                     <button 
-                        mat-icon-button
-                        (click)="openDialog(client[0], client[1][i])"
-                     >
-                        <mat-icon>edit</mat-icon>
-                     </button></div>
+                  >
+                  {{department.name}}
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+               <input 
+                  matInput 
+                  placeholder="Filter Clients" 
+                  (keyup)="filterClients($event)"
+               >
+            </mat-form-field>
+         </div>
+         <!-- Projects Table -->
+         <div *ngIf="serverError" class="errorMessage">
+            <p>Ups!
+               <br> There were problems with the server connection!
+            </p>
+         </div>
+         <div *ngIf="isProject">
+            <div class="main-grid">
+               <div class="grid-item">Client</div>
+               <div class="grid-item">Project</div>
+               <div class="grid-item">Rate</div>
+               <div class="grid-item">Comments</div>
+               <div class="grid-item">Active</div>
+               <div class="grid-item">Edit</div>
+            </div>
+            <div *ngFor="let client of projects">
+               <div class="client-grid">
+                  <div class="grid-item">{{client[0]}}</div>
+                  <div>
+                     <div *ngFor="let project of client[1]; let i = index">
+                        <div class="project-grid">
+                           <div class="grid-item">{{client[1][i].name}}</div>
+                           <div class="grid-item">{{client[1][i].rate}}</div>
+                           <div class="grid-item">{{client[1][i].comments}}</div>
+                           <div class="grid-item">{{client[1][i].active}}</div>
+                           <div class="grid-item">
+                              <button 
+                                 mat-icon-button
+                                 (click)="openDialog(client[0], client[1][i])"
+                                 >
+                                 <mat-icon>edit</mat-icon>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
          </div>
       </div>
+      <!-- Create New Project -->
+      <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
+         <mat-card-header>
+            <mat-card-title>Create New Project</mat-card-title>
+         </mat-card-header>
+         <mat-card-content>
+            <form 
+               class="project-form" 
+               (ngSubmit)="createProject()" 
+               #myForm="ngForm" 
+               fxLayout="column"
+            >
+            <mat-form-field appearance="outline">
+               <mat-label>Project Name</mat-label>
+               <input 
+                  matInput 
+                  name="name" 
+                  ngModel 
+                  required
+               >
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+               <mat-label>Client</mat-label>
+               <input 
+                  matInput 
+                  name="client" 
+                  ngModel 
+                  required
+               >
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+               <mat-label>Project Rate</mat-label>
+               <input 
+                  matInput 
+                  name="rate" 
+                  ngModel
+               >
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+               <mat-label>Comments</mat-label>
+               <textarea 
+                  matInput 
+                  name="comments" 
+                  rows="3" 
+                  ngModel 
+                  maxlength="500"
+               >
+             </textarea>
+            </mat-form-field>
+            <mat-form-field>
+               <mat-select 
+                  matNativeControl 
+                  placeholder="Department" 
+                  name="department" 
+                  ngModel 
+                  required
+               >
+                  <mat-option value="DIGITAL">Digital</mat-option>
+                  <mat-option value="SALESFORCE">Salesforce</mat-option>
+                  <mat-option value="BANKING">Banking</mat-option>
+               </mat-select>
+            </mat-form-field>
+            <mat-card-actions fxLayoutAlign="center start">
+               <button 
+                  type="submit" 
+                  mat-raised-button 
+                  color="primary" 
+                  [disabled]="!myForm.valid"
+               >
+               Create
+               </button>
+            </mat-card-actions>
+            </form>
+         </mat-card-content>
+      </mat-card>
+      <mat-card [ngClass]="{hidden: isSuccess !== true}">
+         <mat-card-header class="successMessage" fxLayoutAlign="center center">
+            <mat-card-title>
+               New Project has been created
+            </mat-card-title>
+         </mat-card-header>
+      </mat-card>
+      <mat-card [ngClass]="{hidden: isFail !== true}">
+         <mat-card-header class="failMessage" fxLayoutAlign="center center">
+            <mat-card-title>
+               {{errorMessage}}
+            </mat-card-title>
+         </mat-card-header>
+      </mat-card>
    </div>
-</div>
-  </div>
-
-
-
-
-    <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
-       <mat-card-header>
-          <mat-card-title>Create New Project</mat-card-title>
-       </mat-card-header>
-       <mat-card-content>
-          <form class="project-form" (ngSubmit)="createProject()" #myForm="ngForm" fxLayout="column">
-          <mat-form-field appearance="outline" class="login-form-input">
-             <mat-label>Project Name</mat-label>
-             <input matInput name="name" ngModel required>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-             <mat-label>Client</mat-label>
-             <input matInput name="client" ngModel required>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-             <mat-label>Project Rate</mat-label>
-             <input matInput name="rate" ngModel>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-              <mat-label>Comments</mat-label>
-              <textarea matInput name="comments" rows="3" ngModel maxlength="500">
-              </textarea>
-           </mat-form-field>
-          <mat-form-field>
-             <mat-select matNativeControl placeholder="Department" name="department" ngModel required>
-                <mat-option value="DIGITAL">Digital</mat-option>
-                <mat-option value="SALESFORCE">Salesforce</mat-option>
-                <mat-option value="BANKING">Banking</mat-option>
-             </mat-select>
-          </mat-form-field>
-          <mat-card-actions fxLayoutAlign="center start">
-             <button type="submit" mat-raised-button color="primary" [disabled]="!myForm.valid">
-             Create
-             </button>
-          </mat-card-actions>
-          </form>
-       </mat-card-content>
-    </mat-card>
-    <mat-card [ngClass]="{hidden: isSuccess !== true}">
-        <mat-card-header class="successMessage" fxLayoutAlign="center center">
-           <mat-card-title>
-              New Project has been created
-           </mat-card-title>
-        </mat-card-header>
-     </mat-card>
-     <mat-card [ngClass]="{hidden: isFail !== true}">
-        <mat-card-header class="failMessage" fxLayoutAlign="center center">
-           <mat-card-title>
-              {{errorMessage}}
-           </mat-card-title>
-        </mat-card-header>
-     </mat-card>
-
- </div>

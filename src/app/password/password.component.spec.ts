@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { rootModule } from './password.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { By } from '@angular/platform-browser';
 
 
 

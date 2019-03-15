@@ -1,0 +1,85 @@
+<mat-card>
+    <mat-card-header>
+       <mat-card-title>Edit the project</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="project-form" 
+        (ngSubmit)="updateProject()" 
+        #updateForm="ngForm" 
+        fxLayout="column"
+      >
+       <div fxLayout="row">
+          <div>
+             <mat-form-field appearance="outline">
+                <mat-label>Project Name</mat-label>
+                <input 
+                  matInput 
+                  name="name" 
+                  ngModel 
+                  [(ngModel)]="data.name"
+                >
+             </mat-form-field>
+             <mat-form-field appearance="outline">
+                <mat-label>Client</mat-label>
+                <input 
+                  matInput 
+                  name="client" 
+                  ngModel 
+                  [(ngModel)]="data.client"
+                >
+             </mat-form-field>
+             <mat-form-field appearance="outline">
+                <mat-label>Project Rate</mat-label>
+                <input 
+                  matInput 
+                  name="rate" 
+                  ngModel 
+                  [(ngModel)]="data.rate"
+                >
+             </mat-form-field>
+          </div>
+          <div>
+             <mat-form-field appearance="outline">
+                <mat-label>Active</mat-label>
+                <input 
+                  matInput 
+                  name="active" 
+                  ngModel 
+                  [(ngModel)]="data.active"
+                >
+             </mat-form-field>
+             <mat-form-field appearance="outline">
+                <mat-label>Comments</mat-label>
+                <textarea 
+                  matInput 
+                  name="comments" 
+                  rows="3" 
+                  ngModel 
+                  maxlength="500" 
+                  [(ngModel)]="data.comments"
+                >
+                </textarea>
+             </mat-form-field>
+             <mat-form-field>
+                <mat-select 
+                  matNativeControl 
+                  placeholder="Department" 
+                  name="department" 
+                  ngModel 
+                  [(ngModel)]="data.department" 
+                  [(value)]="data.department"
+                >
+                <mat-option value="DIGITAL">Digital</mat-option>
+                <mat-option value="SALESFORCE">Salesforce</mat-option>
+                <mat-option value="BANKING">Banking</mat-option>
+                </mat-select>
+             </mat-form-field>
+          </div>
+       </div>
+       <div mat-dialog-actions>
+          <button mat-button (click)="onNoClick()">Cancel</button>
+          <button type="submit" mat-button cdkFocusInitial>Submit</button>
+       </div>
+       </form>
+    </mat-card-content>
+ </mat-card>
