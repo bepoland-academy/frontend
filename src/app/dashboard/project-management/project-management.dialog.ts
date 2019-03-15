@@ -44,7 +44,6 @@ export class ProjectManagementDialog implements OnInit {
   }
 
   checkDepartment() {
-
     this.actualDepartment = this.data.departments.find(
       el => el.departmentId === this.data.department
     ).name;

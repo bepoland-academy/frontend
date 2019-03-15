@@ -15,6 +15,7 @@ import { User } from '../../../models';
   isDataAvailable = false;
   isResponse = false;
   serverError = false;
+  departments = [];
 
   constructor(
     private userManagementService: UserManagementService,
@@ -22,6 +23,9 @@ import { User } from '../../../models';
   ) {}
 
   ngOnInit(): void {
+    this.userManagementService.getDepartments().subscribe(response => {
+      this.departments = response._embedded.departmentBodyList;
+    });
     this.userManagementService.getReloadStatus().subscribe(() => {
       this.getUsersData();
     });
@@ -31,7 +35,8 @@ import { User } from '../../../models';
     this.userManagementService.getUsers()
     .subscribe(
       (response) => {
-        const data: Array<User> = response._embedded.userBodyList;
+        let data = response._embedded.userBodyList;
+        data = data.map(el => ({...el, department: this.departments.find(a => a.departmentId === el.department).name}));
         this.users = data;
         this.dataSource = new MatTableDataSource(this.users);
         this.isResponse = true;
