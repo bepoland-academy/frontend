@@ -26,9 +26,7 @@
             </mat-form-field>
             <mat-form-field>
                <mat-select matNativeControl placeholder="Department" name="department" ngModel required>
-                  <mat-option value="DIGITAL">Digital</mat-option>
-                  <mat-option value="SALESFORCE">Salesforce</mat-option>
-                  <mat-option value="BANKING">Banking</mat-option>
+                  <mat-option *ngFor="let department of departments" [value]="department.departmentId">{{department.name}}</mat-option>
                </mat-select>
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">

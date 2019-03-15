@@ -35,6 +35,8 @@ export class ProjectManagementComponent implements OnInit {
   isFail = false;
   errorMessage: string;
   actualDepartment: string;
+  actualClient: string;
+  departmentChosen = false;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -45,7 +47,7 @@ export class ProjectManagementComponent implements OnInit {
   ngOnInit() {
     this.projectManagementService.getDepartments()
     .subscribe(
-      (data: Array<Department>) => {
+      (data: any) => {
         this.departments = data._embedded.departmentBodyList;
         this.isDataAvailable = true;
         this.isDepartment = true;
@@ -58,6 +60,7 @@ export class ProjectManagementComponent implements OnInit {
 
   setDepartment(event) {
     this.actualDepartment = event.name;
+    this.departmentChosen = true;
   }
 
   displayProjects(event) {
@@ -73,7 +76,7 @@ export class ProjectManagementComponent implements OnInit {
           {}
         );
         const groupedData = Object.keys(group_to_values).map(key => {
-          return { clientName: key, projects: group_to_values[key] };
+          return { clientName: key, projects: group_to_values[key], client: group_to_values[key][0].client };
         });
         this.clientList = groupedData;
         this.clients = groupedData;
@@ -120,7 +123,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   filterClients(event) {
-    this.clients = this.clientList.filter(client => client.clientName.includes(event.target.value));
+    this.clients = this.clientList.filter(client => client.clientName.toLowerCase().includes(event.target.value));
   }
 
 }

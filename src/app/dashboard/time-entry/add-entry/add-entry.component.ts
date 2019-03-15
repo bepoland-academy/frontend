@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Output, EventEmitter, Renderer2, OnChanges } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, Renderer2, OnChanges, OnInit } from '@angular/core';
 import { TimeEntryService } from '../time-entry.service';
 
 
@@ -7,7 +7,7 @@ import { TimeEntryService } from '../time-entry.service';
   templateUrl: './add-entry.component.html',
   styleUrls: ['./add-entry.component.css'],
 })
-export class AddEntryComponent implements OnChanges {
+export class AddEntryComponent implements OnChanges, OnInit {
   clients = [
     {
       name: 'PZU',
@@ -43,6 +43,20 @@ export class AddEntryComponent implements OnChanges {
     private timeEntryService: TimeEntryService
   ) {}
 
+  ngOnInit() {
+    // nie zrobiony endpoint
+    // this.timeEntryService.getClients().subscribe(clients => {
+    //   console.log(clients);
+    //   this.clients = clients._embedded.clientBodyList;
+    // });
+  }
+
+  ngOnChanges() {
+    if (this.isOpen) {
+      this.renderer.addClass(document.body, 'drawer-open');
+    }
+  }
+
   closeDrawer() {
     this.drawer.close();
     setTimeout(() => {
@@ -66,9 +80,5 @@ export class AddEntryComponent implements OnChanges {
     this.timeEntryService.createNewEntry(this.chosenClient, project);
     this.closeDrawer();
   }
-  ngOnChanges() {
-    if (this.isOpen) {
-      this.renderer.addClass(document.body, 'drawer-open');
-    }
-  }
+
 }

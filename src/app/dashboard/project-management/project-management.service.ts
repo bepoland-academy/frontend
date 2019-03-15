@@ -7,7 +7,7 @@ import { Department } from '../../models';
 export class ProjectManagementService {
 
   departments = 'departments';
-  projects1 = 'projects/';
+  projects1 = 'projects';
   projects2 = 'projects/?department=';
 
   constructor(private httpService: HttpService) { }

@@ -29,6 +29,10 @@ export class UserManagementService {
     return this.httpService.get(this.endpoint);
   }
 
+  getDepartments() {
+    return this.httpService.get('departments');
+  }
+
   updateUsers(user: any): Observable<any> {
     return this.httpService.put(user._links.self.href, user);
   }

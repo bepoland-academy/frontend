@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpService } from '../services/http.service';
 
 @Component({
   selector: 'app-password',
@@ -22,14 +23,20 @@ export class PasswordComponent implements OnInit {
   length = false;
   isLoading = false;
   isMatch = true;
+  token: string;
 
   constructor(
     public snackBar: MatSnackBar,
-    public router: Router
+    public router: Router,
+    public activatedRoute: ActivatedRoute,
+    private httpService: HttpService
   ) {}
 
 
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.token = params.token;
+    });
     this.setPasswordForm = new FormGroup({
       newPassword: new FormControl(null, [Validators.required, this.regexValidation.bind(this)]),
       confirmPassword: new FormControl(null, Validators.required),
@@ -96,11 +103,11 @@ export class PasswordComponent implements OnInit {
 
 
 sendPassword() {
-  this.password = {
-    newPassword: this.setPasswordForm.get('newPassword').value,
-    confirmPassword: this.setPasswordForm.get('confirmPassword').value,
-  };
-  this.router.navigate(['/login']);
+  const password = this.setPasswordForm.get('newPassword').value;
+  this.httpService
+    .changePassword('password?action=SET', { token: this.token, password })
+    .subscribe(() => this.router.navigate(['/login']));
+
 }
 
 }
