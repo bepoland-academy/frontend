@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TimeTrackingComponent } from './time-tracking.component';
+import { TimeEntryComponent } from './time-entry/time-entry.component';
 import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
 import { TimeApprovalComponent } from './time-approval.component';
@@ -16,7 +16,7 @@ import { ProjectManagementComponent } from './project-management/project-managem
   `,
   styles: [],
   entryComponents: [
-    TimeTrackingComponent,
+    TimeEntryComponent,
     HistoricalDataComponent,
     ReportsComponent,
     ProjectManagementComponent,

@@ -1,0 +1,33 @@
+<mat-drawer-container class="drawer-container" [ngClass]="{'overlay': isOpen}" autosize (click)="closeDrawer()">
+  <mat-drawer #drawer (click)="$event.stopPropagation()" class="drawer-content" [opened]="isOpen" mode="side"
+    position="end">
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <button class="go-back" [ngClass]="{'moveUp': !isProjectsShown}" (click)="goBack()" mat-icon-button>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button class="close" mat-icon-button (click)="closeDrawer()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </nav>
+      <div class="content" [ngClass]="{'moveLeft': isProjectsShown}">
+        <p class="mat-title text-center">Select Client</p>
+        <div class="content-to-choose">
+          <p
+            class="element mat-body-1"
+            [ngClass]="{'selected': chosenClient === client.name}"
+            *ngFor="let client of clients" 
+            (click)="setClient(client)"
+          >{{client.name}}</p>
+        </div>
+      </div>
+      <div class="content content-project" [ngClass]="{'moveUp': isProjectsShown}">
+        <p class="mat-title text-center">Choose {{chosenClient}} project</p>
+        <div class="content-to-choose">
+          <p class="element mat-body-1" *ngFor="let project of projectsToChose" (click)="setProject(project)">
+            {{project}}</p>
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
+</mat-drawer-container>

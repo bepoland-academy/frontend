@@ -7,7 +7,7 @@ import { User } from '../../models';
 @Injectable()
 export class UserManagementService {
 
-  endpoint = 'users/';
+  endpoint = 'users';
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
@@ -16,7 +16,7 @@ export class UserManagementService {
   changeReloadStatus() {
     this.reloadStatus.next(null);
   }
-  fa() {}
+
   getReloadStatus(): Observable<null> {
     return this.reloadStatus.asObservable();
   }
@@ -25,11 +25,11 @@ export class UserManagementService {
     return this.httpService.post(this.endpoint, userRegistrationData);
   }
 
-  getUsers(): Observable< Array<User> > {
+  getUsers(): Observable<any> {
     return this.httpService.get(this.endpoint);
   }
 
   updateUsers(user: any): Observable<any> {
-    return this.httpService.put(this.endpoint + user.id, user);
+    return this.httpService.put(user._links.self.href, user);
   }
 }

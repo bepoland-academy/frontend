@@ -1,41 +1,65 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
- } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class HttpService implements HttpInterceptor {
-  // url = 'http://192.168.20.30:8080/';
-  url = 'http://localhost:3000/';
+export class HttpService {
+  url = 'http://192.168.20.30:8080/';
 
-  constructor(private http: HttpClient) {}
+  token: string;
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  constructor(private http: HttpClient) {
+    this.getToken();
+  }
 
-    const token = localStorage.getItem('token');
-    request = request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  getToken() {
+    const token = JSON.parse(localStorage.getItem('token'));
+    if (token) {
+      this.token = token;
+    }
+  }
 
-    return next.handle(request);
+  login(endpoint: string, body: any, option): Observable<any> {
+    return this.http.post(this.url + endpoint, body, option).pipe(
+      tap(response => {
+        this.token = response.headers.get('Authorization');
+        localStorage.setItem('token', JSON.stringify(this.token));
+      })
+    );
   }
 
   post(endpoint: string, body: any): Observable<any> {
-    return this.http.post(this.url + endpoint, body);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this.token,
+      }),
+    };
+    return this.http.post(this.url + endpoint, body, httpOptions);
   }
 
   get(endpoint: string): Observable<any> {
-    return this.http.get(this.url + endpoint);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this.token,
+      }),
+    };
+    return this.http.get(this.url + endpoint, httpOptions);
   }
 
-  put(endpoint: string, body: any): Observable<any> {
-    return this.http.put(this.url + endpoint, body);
+  put(url: string, body: any): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this.token,
+      }),
+    };
+    return this.http.put(url, body, httpOptions);
+  }
+
+  fakeGet(url): Observable<any> {
+    return this.http.get(url);
   }
 }

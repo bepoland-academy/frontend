@@ -26,7 +26,6 @@ export class UserRegistrationComponent {
     }
     this.isLoading = true;
     const value: User = this.registrationForm.value;
-    value.active = true;
     if (!Array.isArray(value.roles)) {
       value.roles = [];
     }
@@ -45,7 +44,7 @@ export class UserRegistrationComponent {
         error => {
           this.isLoading = false;
           this.isFail = true;
-          if (error.error.message === '[emailLogin: must be a well-formed email address]') {
+          if (error.error.message === '[username: must be a well-formed email address]') {
             this.errorMessage = 'Please enter email address in a valid format';
           } else if (error.error.message === 'USER ALREADY EXISTS') {
             this.errorMessage = 'User with this email already exists';

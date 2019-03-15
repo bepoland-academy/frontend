@@ -24,8 +24,8 @@
                 <input 
                   matInput 
                   name="client" 
-                  ngModel 
-                  [(ngModel)]="data.client"
+                   
+                  [(ngModel)]="data.client.name"
                 >
              </mat-form-field>
              <mat-form-field appearance="outline">
@@ -60,20 +60,12 @@
                 >
                 </textarea>
              </mat-form-field>
-             <mat-form-field>
-                <mat-select 
-                  matNativeControl 
-                  placeholder="Department" 
-                  name="department" 
-                  ngModel 
-                  [(ngModel)]="data.department" 
-                  [(value)]="data.department"
-                >
-                <mat-option value="DIGITAL">Digital</mat-option>
-                <mat-option value="SALESFORCE">Salesforce</mat-option>
-                <mat-option value="BANKING">Banking</mat-option>
-                </mat-select>
-             </mat-form-field>
+            <mat-form-field>
+               <mat-select placeholder="Department" name="department" [(value)]="actualDepartment" [(ngModel)]="actualDepartment">
+                  <mat-option [value]="department.name" *ngFor="let department of data.departments">{{department.name}}</mat-option>
+                  
+               </mat-select>
+            </mat-form-field>
           </div>
        </div>
        <div mat-dialog-actions>

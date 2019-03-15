@@ -53,7 +53,7 @@ describe('LoginComponent', () => {
     spyOn(service, 'login').and.returnValue(of());
     const loginButton = fixture.debugElement.query(By.css('button[type="submit"]'));
     loginButton.triggerEventHandler('click', null);
-    expect(service.login).toHaveBeenCalledWith({ emailLogin: 'test123@test.pl', password: 'test123!' });
+    expect(service.login).toHaveBeenCalledWith({ username: 'test123@test.pl', password: 'test123!' });
     expect(component.isLoading).toBeTruthy();
   });
 

@@ -13,7 +13,7 @@ import { UserManagementService } from '../user-management.service';
 
 const testUser: NgForm['value'] = {
   department: 'testDepartment',
-  emailLogin: 'test12@test.com',
+  username: 'test12@test.com',
   firstName: 'Testname',
   lastName: 'Testlastname',
   roles: ['TEST'],
