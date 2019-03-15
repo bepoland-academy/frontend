@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class HttpService {
-  url = 'http://localhost:8080/';
+  url = 'http://192.168.20.30:8080/';
 
   token: string;
 

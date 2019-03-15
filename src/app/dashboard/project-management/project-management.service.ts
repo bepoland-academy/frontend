@@ -18,7 +18,6 @@ export class ProjectManagementService {
   // Don't forget to add Observable< Array<Project>
 
   getProjects(department: string): Observable <any> {
-    console.log(this.projects2 + department);
     return this.httpService.get(this.projects2 + department);
   }
 
@@ -26,8 +25,8 @@ export class ProjectManagementService {
     return this.httpService.post(this.projects1, newProjectData);
   }
 
-  updateProject(updatedProject: any) {
-    return this.httpService.put(this.projects1, updatedProject);
+  updateProject(url, updatedProject: any) {
+    return this.httpService.put(url, updatedProject);
   }
 }
 

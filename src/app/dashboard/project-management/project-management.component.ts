@@ -34,6 +34,7 @@ export class ProjectManagementComponent implements OnInit {
   isSuccess = false;
   isFail = false;
   errorMessage: string;
+  actualDepartment: string;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -45,9 +46,9 @@ export class ProjectManagementComponent implements OnInit {
     this.projectManagementService.getDepartments()
     .subscribe(
       (data: Array<Department>) => {
-      this.departments = data;
-      this.isDataAvailable = true;
-      this.isDepartment = true;
+        this.departments = data._embedded.departmentBodyList;
+        this.isDataAvailable = true;
+        this.isDepartment = true;
     },
       () => {
       this.serverError = true;
@@ -55,33 +56,38 @@ export class ProjectManagementComponent implements OnInit {
     });
   }
 
-  displayProjects(e: string) {
-    this.projectManagementService.getProjects(e)
-    .subscribe(
-      (data) => {
-        console.log(data);
+  setDepartment(event) {
+    this.actualDepartment = event.name;
+  }
 
-        let group_to_values = data.reduce((obj, item) => {
-          obj[item.client.name] = obj[item.client.name] || [];
-          obj[item.client.name].push(item);
-          return obj;
-        }, {});
-        const groupedData = Object.keys(group_to_values).map((key) => {
+  displayProjects(event) {
+    this.projectManagementService.getProjects(event.departmentId).subscribe(
+      data => {
+
+        let group_to_values = data._embedded.projectBodyList.reduce(
+          (obj, item) => {
+            obj[item.client.name] = obj[item.client.name] || [];
+            obj[item.client.name].push(item);
+            return obj;
+          },
+          {}
+        );
+        const groupedData = Object.keys(group_to_values).map(key => {
           return { clientName: key, projects: group_to_values[key] };
         });
         this.clientList = groupedData;
         this.clients = groupedData;
         this.isProject = true;
-    },
+      },
       () => {
-      this.serverError = true;
-    });
+        this.serverError = true;
+      }
+    );
 
   }
 
   createProject() {
     const value = this.newProjectForm.value;
-    console.log(value);
     this.projectManagementService.sendNewProject(value)
         .subscribe(
           () => {
@@ -105,23 +111,16 @@ export class ProjectManagementComponent implements OnInit {
         );
   }
 
-  openDialog(client, project): void {
-    console.log(client, project.rate);
+  openDialog(project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
-      data: {
-        client,
-        name: project.name,
-        rate: project.rate,
-        department: project.department,
-        comments: project.comments,
-        active: project.active,
-      },
+      data: {...project, departments: this.departments},
+
     });
   }
 
   filterClients(event) {
-    this.clients = this.clientList.filter(client => client.clientName.includes(event));
+    this.clients = this.clientList.filter(client => client.clientName.includes(event.target.value));
   }
 
 }

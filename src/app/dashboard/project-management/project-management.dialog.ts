@@ -1,4 +1,4 @@
-import { Component, ViewChild, Inject } from '@angular/core';
+import { Component, ViewChild, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProjectManagementService } from './project-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -20,24 +20,39 @@ export interface DialogData {
   `],
 })
 
-export class ProjectManagementDialog {
+export class ProjectManagementDialog implements OnInit {
 
   @ViewChild('updateForm') updateProjectForm: NgForm;
 
-
+  actualDepartment = '';
   constructor(
     public dialogRef: MatDialogRef<ProjectManagementDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private projectManagementService: ProjectManagementService
-    ) {}
+    private projectManagementService: ProjectManagementService,
+    private ref: ChangeDetectorRef
+  ) {
 
+    }
+  ngOnInit(): void {
+    this.checkDepartment();
+  }
   onNoClick(): void {
     this.dialogRef.close();
   }
 
+  checkDepartment() {
+
+    this.actualDepartment = this.data.departments.find(
+      el => el.departmentId === this.data.department
+    ).name;
+  }
+
   updateProject() {
     this.dialogRef.close();
-    this.projectManagementService.updateProject(this.updateProjectForm.value);
+    console.log(this.data);
+    this.updateProjectForm.value.client = this.data.client;
+    this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
+      .subscribe(el => console.log(el));
     console.log(this.updateProjectForm.value);
   }
 }
