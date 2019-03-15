@@ -5,7 +5,6 @@
   font-family: Roboto,"Helvetica Neue",sans-serif;
 }
 
-
 .projects {
   margin: 40px 0 30px;
   width: 65%;
@@ -17,6 +16,10 @@
 
 .mat-spinner {
   margin: 100px auto;
+}
+
+.projectOptions {
+  justify-content: space-between;
 }
 
 .errorMessage {
@@ -68,7 +71,6 @@
 
 .mat-form-field {
   width: 280px;
-  margin: 0 auto;
 }
 
 .mat-card-header {
