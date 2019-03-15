@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../services/http.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Department } from '../../models';
 
 @Injectable()
@@ -10,7 +10,18 @@ export class ProjectManagementService {
   projects1 = 'projects';
   projects2 = 'projects/?department=';
 
+  private reloadStatus = new BehaviorSubject<null>(null);
+
+
   constructor(private httpService: HttpService) { }
+
+  changeReloadStatus() {
+    this.reloadStatus.next(null);
+  }
+
+  getReloadStatus(): Observable<null> {
+    return this.reloadStatus.asObservable();
+  }
 
   getDepartments(): Observable< Array<Department> > {
     return this.httpService.get(this.departments);
