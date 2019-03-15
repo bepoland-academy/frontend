@@ -61,6 +61,10 @@
   font-size: 14px;
 }
 
+.addClient {
+  padding: 15px;
+}
+
 .mat-card {
   margin-top: 20px;
   height: 480px;

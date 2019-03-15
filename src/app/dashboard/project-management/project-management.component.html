@@ -66,11 +66,23 @@
                      </div>
                   </div>
                </div>
+               <div class="grid-item addClient">
+                  <button
+                     type="submit" 
+                     mat-raised-button 
+                     color="primary"
+                  >
+                  Add new Client
+                  </button>
+               </div>
             </div>
          </div>
       </div>
       <!-- Create New Project -->
-      <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
+      <mat-card
+         *ngIf="departmentChosen" 
+         [ngClass]="{hidden: isSuccess === true || isFail === true}"
+      >
          <mat-card-header>
             <mat-card-title>Create New Project</mat-card-title>
          </mat-card-header>
@@ -90,14 +102,22 @@
                   required
                >
             </mat-form-field>
-            <mat-form-field appearance="outline">
-               <mat-label>Client</mat-label>
-               <input 
-                  matInput 
+            <mat-form-field>
+               <mat-select 
+                  matNativeControl 
+                  placeholder="Client" 
                   name="client" 
-                  ngModel 
-                  required
+                  ngModel
+                  [(ngModel)]="actualClient"
+                  required                     
                >
+                  <mat-option 
+                     *ngFor="let client of clients" 
+                     [value]="client.client"
+                  >
+                     {{client.client.name}}
+                  </mat-option>
+                  </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Project Rate</mat-label>
@@ -145,17 +165,17 @@
          </mat-card-content>
       </mat-card>
       <mat-card [ngClass]="{hidden: isSuccess !== true}">
-         <mat-card-header class="successMessage" fxLayoutAlign="center center">
-            <mat-card-title>
-               New Project has been created
-            </mat-card-title>
-         </mat-card-header>
-      </mat-card>
-      <mat-card [ngClass]="{hidden: isFail !== true}">
-         <mat-card-header class="failMessage" fxLayoutAlign="center center">
-            <mat-card-title>
-               {{errorMessage}}
-            </mat-card-title>
-         </mat-card-header>
-      </mat-card>
+            <mat-card-header class="successMessage" fxLayoutAlign="center center">
+               <mat-card-title>
+                  New Project has been registered
+               </mat-card-title>
+            </mat-card-header>
+         </mat-card>
+         <mat-card [ngClass]="{hidden: isFail !== true}">
+            <mat-card-header class="failMessage" fxLayoutAlign="center center">
+               <mat-card-title>
+                  {{errorMessage}}
+               </mat-card-title>
+            </mat-card-header>
+         </mat-card>
    </div>

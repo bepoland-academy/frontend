@@ -9,6 +9,9 @@ export interface DialogData {
   rate: string;
   comments: string;
   active: string;
+  departments: Array<any>;
+  department: string;
+  _links: any;
 }
 
 @Component({
@@ -41,7 +44,6 @@ export class ProjectManagementDialog implements OnInit {
   }
 
   checkDepartment() {
-
     this.actualDepartment = this.data.departments.find(
       el => el.departmentId === this.data.department
     ).name;
@@ -49,7 +51,7 @@ export class ProjectManagementDialog implements OnInit {
 
   updateProject() {
     this.dialogRef.close();
-    console.log(this.data);
+    console.log(this.updateProjectForm.value.client, this.data.client);
     this.updateProjectForm.value.client = this.data.client;
     this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
       .subscribe(el => console.log(el));
