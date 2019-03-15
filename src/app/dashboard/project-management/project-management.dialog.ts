@@ -1,4 +1,4 @@
-import { Component, ViewChild, Inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, Inject, OnInit, ChangeDetectorRef, InjectionToken } from '@angular/core';
 import { ProjectManagementService } from './project-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -51,10 +51,8 @@ export class ProjectManagementDialog implements OnInit {
 
   updateProject() {
     this.dialogRef.close();
-    console.log(this.updateProjectForm.value.client, this.data.client);
     this.updateProjectForm.value.client = this.data.client;
     this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
-      .subscribe(el => console.log(el));
-    console.log(this.updateProjectForm.value);
+      .subscribe(el => {});
   }
 }

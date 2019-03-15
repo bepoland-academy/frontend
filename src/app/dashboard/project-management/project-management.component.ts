@@ -75,11 +75,9 @@ export class ProjectManagementComponent implements OnInit {
           },
           {}
         );
-        console.log(group_to_values);
         const groupedData = Object.keys(group_to_values).map(key => {
           return { clientName: key, projects: group_to_values[key], client: group_to_values[key][0].client };
         });
-        console.log(groupedData);
         this.clientList = groupedData;
         this.clients = groupedData;
         this.isProject = true;
@@ -92,7 +90,6 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   createProject() {
-    console.log(this.newProjectForm.value.client);
     const value = this.newProjectForm.value;
     this.projectManagementService.sendNewProject(value)
         .subscribe(

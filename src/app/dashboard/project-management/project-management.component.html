@@ -146,9 +146,7 @@
                   ngModel 
                   required
                >
-                  <mat-option value="DIGITAL">Digital</mat-option>
-                  <mat-option value="SALESFORCE">Salesforce</mat-option>
-                  <mat-option value="BANKING">Banking</mat-option>
+                  <mat-option [value]="department.departmentId" *ngFor="let department of departments">{{department.name}}</mat-option>
                </mat-select>
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">
