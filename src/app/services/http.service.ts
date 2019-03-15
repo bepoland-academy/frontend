@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class HttpService {
-  url = 'http://192.168.20.30:8080/';
+  url = 'http://54.37.131.33';
 
   token: string;
 
@@ -27,6 +27,10 @@ export class HttpService {
         localStorage.setItem('token', JSON.stringify(this.token));
       })
     );
+  }
+
+  changePassword(endpoint: string, body: any) {
+    return this.http.post(this.url + endpoint, body);
   }
 
   post(endpoint: string, body: any): Observable<any> {

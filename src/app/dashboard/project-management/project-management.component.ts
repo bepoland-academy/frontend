@@ -45,7 +45,7 @@ export class ProjectManagementComponent implements OnInit {
   ngOnInit() {
     this.projectManagementService.getDepartments()
     .subscribe(
-      (data: Array<Department>) => {
+      (data: any) => {
         this.departments = data._embedded.departmentBodyList;
         this.isDataAvailable = true;
         this.isDepartment = true;
