@@ -8,10 +8,10 @@ import { routerModule } from './dashboard.routing';
 import { TimeTrackingComponent } from './time-tracking.component';
 import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
-import { ProjectManagmentComponent } from './project-managment.component';
 import { TimeApprovalComponent } from './time-approval.component';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NoRoleComponent } from './no-role.component';
+import { ProjectManagementModule } from './project-management/project-management.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,6 @@ import { NoRoleComponent } from './no-role.component';
     TimeTrackingComponent,
     HistoricalDataComponent,
     ReportsComponent,
-    ProjectManagmentComponent,
     TimeApprovalComponent,
     NoRoleComponent,
   ],
@@ -29,6 +28,7 @@ import { NoRoleComponent } from './no-role.component';
     routerModule,
     NavigationModule,
     UserManagementModule,
+    ProjectManagementModule,
   ], exports: [
     DashboardComponent,
   ],

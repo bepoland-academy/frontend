@@ -6,7 +6,7 @@ import { TimeTrackingComponent } from '../time-tracking.component';
 import { HistoricalDataComponent } from '../historical-data.component';
 import { ReportsComponent } from '../reports.component';
 import { TimeApprovalComponent } from '../time-approval.component';
-import { ProjectManagmentComponent } from '../project-managment.component';
+import { ProjectManagementComponent } from '../project-management/project-management.component';
 import { UserManagementComponent } from '../user-management/user-management.component';
 import { NoRoleComponent } from '../no-role.component';
 
@@ -30,7 +30,7 @@ export class NavigationService {
     },
     {
       path: 'projects',
-      component: ProjectManagmentComponent,
+      component: ProjectManagementComponent,
       data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATION'] },
     },
     {

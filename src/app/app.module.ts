@@ -11,7 +11,7 @@ import { rootModule } from './app.routing';
 import { NavigationService } from './dashboard/navigation/navigation.service';
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { PasswordModule } from './password/password.module';
 
@@ -27,7 +27,6 @@ import { PasswordModule } from './password/password.module';
     BrowserAnimationsModule,
     rootModule,
     PasswordModule,
-    LoginModule,
     DashboardModule,
     HttpClientModule,
   ],
@@ -36,8 +35,12 @@ import { PasswordModule } from './password/password.module';
     AuthService,
     HttpService,
     { provide: APP_BASE_HREF, useValue: '/' },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpService,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
-
 })
 export class AppModule { }
