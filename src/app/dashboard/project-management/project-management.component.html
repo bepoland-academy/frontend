@@ -17,7 +17,7 @@
                   </mat-select>
                </mat-form-field>
                <mat-form-field>
-                     <input matInput placeholder="Filter Clients" (keyup)="filterClients($event)">
+                     <input matInput placeholder="Filter Clients" (ngModelChange)="filterClients($event)">
                    </mat-form-field>
       </div>
 
@@ -36,20 +36,20 @@
       <div class="grid-item">Active</div>
       <div class="grid-item">Edit</div>
    </div>
-   <div *ngFor="let client of projects">
+   <div *ngFor="let client of clients">
       <div class="client-grid">
-         <div class="grid-item">{{client[0]}}</div>
+         <div class="grid-item">{{ client.clientName }}</div>
          <div>
-            <div *ngFor="let project of client[1]; let i = index">
+            <div *ngFor="let project of client.projects; let i = index">
                <div class="project-grid">
-                  <div class="grid-item">{{client[1][i].name}}</div>
-                  <div class="grid-item">{{client[1][i].rate}}</div>
-                  <div class="grid-item">{{client[1][i].comments}}</div>
-                  <div class="grid-item">{{client[1][i].active}}</div>
+                  <div class="grid-item">{{project.name}}</div>
+                  <div class="grid-item">{{project.rate}}</div>
+                  <div class="grid-item">{{project.comments}}</div>
+                  <div class="grid-item">{{project.active}}</div>
                   <div class="grid-item">
                      <button 
                         mat-icon-button
-                        (click)="openDialog(client[0], client[1][i])"
+                        (click)="openDialog(client.clientName, project)"
                      >
                         <mat-icon>edit</mat-icon>
                      </button></div>

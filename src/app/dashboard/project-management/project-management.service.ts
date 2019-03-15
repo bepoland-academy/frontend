@@ -6,7 +6,7 @@ import { Department } from '../../models';
 @Injectable()
 export class ProjectManagementService {
 
-  departments = 'departments/';
+  departments = 'departments';
   projects1 = 'projects/';
   projects2 = 'projects/?department=';
 

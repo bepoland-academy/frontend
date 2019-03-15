@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +14,6 @@ import { rootModule } from './login.routing';
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     CustomMaterialModule,
     FormsModule,
     FlexLayoutModule,

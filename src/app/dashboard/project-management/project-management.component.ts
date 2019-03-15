@@ -27,7 +27,8 @@ isDataAvailable = false;
 isDepartment = false;
 isProject = false;
 serverError = false;
-projects: any;
+clientList: any;
+clients: any;
 isLoading = false;
 isSuccess = false;
 isFail = false;
@@ -64,28 +65,23 @@ displayProjects(e: string) {
   .subscribe(
     (data) => {
       console.log(data);
-      // this.projects = data.sort((a, b) => (a.client > b.client) ? 1 : ((b.client > a.client) ? -1 : 0));
-      const groupBy = ((xs, key) => {
-      return xs.reduce((rv, x) => {
-        (rv[x[key]] = rv[x[key]] || []).push(x);
-        return rv;
+
+      let group_to_values = data.reduce((obj, item) => {
+        obj[item.client.name] = obj[item.client.name] || [];
+        obj[item.client.name].push(item);
+        return obj;
       }, {});
-    });
-      this.projects = Object.entries(groupBy(data, 'client'));
-    //   const objectify = (array => {
-    //     return array.reduce((result, currentArray) => {
-    //         result[currentArray[0]] = currentArray[1];
-    //         return result;
-    //     }, {});
-    // });
+      const groupedData = Object.keys(group_to_values).map((key) => {
+        return { clientName: key, projects: group_to_values[key] };
+      });
+      this.clientList = groupedData;
+      this.clients = groupedData;
       this.isProject = true;
   },
     () => {
     this.serverError = true;
   });
-  setTimeout(() => {
-    console.log(this.projects);
-  }, 3000);
+
 }
 
 createProject() {
@@ -136,7 +132,7 @@ openDialog(client, project): void {
 }
 
 filterClients(event) {
-  console.log(event.path[0].value);
+  this.clients = this.clientList.filter(client => client.clientName.includes(event));
 }
 }
 
@@ -144,7 +140,6 @@ filterClients(event) {
   selector: 'project-management-dialog',
   templateUrl: './project-management-dialog.html',
 })
-
 export class ProjectManagementDialog {
   name: 'hey';
 

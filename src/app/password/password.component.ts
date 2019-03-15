@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-password',
@@ -21,7 +22,10 @@ export class PasswordComponent implements OnInit {
   isLoading = false;
   isMatch = true;
 
-  constructor(public snackBar: MatSnackBar) {}
+  constructor(
+    public snackBar: MatSnackBar,
+    public router: Router
+  ) {}
 
 
   ngOnInit() {
@@ -102,7 +106,7 @@ sendPassword() {
     newPassword: this.setPasswordForm.get('newPassword').value,
     confirmPassword: this.setPasswordForm.get('confirmPassword').value,
   };
-  // console.log(this.password);
+  this.router.navigate(['/login']);
 }
 
 }
