@@ -45,6 +45,7 @@ export class ProjectManagementComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.projectManagementService.getDepartments()
     .subscribe(
       (data: any) => {
@@ -61,6 +62,20 @@ export class ProjectManagementComponent implements OnInit {
   setDepartment(event) {
     this.actualDepartment = event.name;
     this.departmentChosen = true;
+  }
+
+  getDepartments() {
+    this.projectManagementService.getDepartments()
+      .subscribe(
+        (data: any) => {
+          this.departments = data._embedded.departmentBodyList;
+          this.isDataAvailable = true;
+          this.isDepartment = true;
+        },
+        () => {
+          this.serverError = true;
+          this.isDepartment = true;
+        });
   }
 
   displayProjects(event) {
