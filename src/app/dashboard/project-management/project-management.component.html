@@ -52,8 +52,8 @@
                         <div class="project-grid">
                            <div class="grid-item">{{project.name}}</div>
                            <div class="grid-item">{{project.rate}}</div>
-                           <div class="grid-item">{{project.comments}}</div>
-                           <div class="grid-item">{{project.active}}</div>
+                           <div class="grid-item comments" title="{{project.comments}}">{{project.comments}}</div>
+                           <div class="grid-item">{{project.active? 'Yes' : 'No'}}</div>
                            <div class="grid-item">
                               <button 
                                  mat-icon-button
@@ -79,10 +79,7 @@
          </div>
       </div>
       <!-- Create New Project -->
-      <mat-card
-         *ngIf="departmentChosen" 
-         [ngClass]="{hidden: isSuccess === true || isFail === true}"
-      >
+      <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
          <mat-card-header>
             <mat-card-title>Create New Project</mat-card-title>
          </mat-card-header>
@@ -108,14 +105,13 @@
                   placeholder="Client" 
                   name="client" 
                   ngModel
-                  [(ngModel)]="actualClient"
                   required                     
                >
                   <mat-option 
-                     *ngFor="let client of clients" 
-                     [value]="client.client"
+                     *ngFor="let client of clientsList" 
+                     [value]="client.clientId"
                   >
-                     {{client.client.name}}
+                     {{client.name}}
                   </mat-option>
                   </mat-select>
             </mat-form-field>
@@ -146,7 +142,12 @@
                   ngModel 
                   required
                >
-                  <mat-option [value]="department.departmentId" *ngFor="let department of departments">{{department.name}}</mat-option>
+                  <mat-option 
+                     [value]="department.departmentId" 
+                     *ngFor="let department of departments"
+                  >
+                     {{department.name}}
+                  </mat-option>
                </mat-select>
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">
@@ -165,7 +166,7 @@
       <mat-card [ngClass]="{hidden: isSuccess !== true}">
             <mat-card-header class="successMessage" fxLayoutAlign="center center">
                <mat-card-title>
-                  New Project has been registered
+                  New Project has been created
                </mat-card-title>
             </mat-card-header>
          </mat-card>

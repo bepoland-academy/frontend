@@ -52,7 +52,10 @@ export class ProjectManagementDialog implements OnInit {
   updateProject() {
     this.dialogRef.close();
     this.updateProjectForm.value.client = this.data.client;
+    console.log(this.updateProjectForm.value);
     this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
-      .subscribe(el => {});
+      .subscribe(el => {
+        this.projectManagementService.changeReloadStatus();
+      });
   }
 }

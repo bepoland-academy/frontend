@@ -9,6 +9,7 @@ export class ProjectManagementService {
   departments = 'departments';
   projects1 = 'projects';
   projects2 = 'projects/?department=';
+  clients = 'clients';
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
@@ -27,6 +28,10 @@ export class ProjectManagementService {
     return this.httpService.get(this.departments);
   }
   // Don't forget to add Observable< Array<Project>
+
+  getClientsList(): Observable<any> {
+    return this.httpService.get(this.clients);
+  }
 
   getProjects(department: string): Observable <any> {
     return this.httpService.get(this.projects2 + department);

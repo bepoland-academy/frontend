@@ -4,6 +4,7 @@ import { Department } from '../../models';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ProjectManagementDialog } from './project-management.dialog';
+import { Observable } from 'rxjs';
 
 export interface DialogData {
   client: string;
@@ -36,7 +37,8 @@ export class ProjectManagementComponent implements OnInit {
   errorMessage: string;
   actualDepartment: string;
   actualClient: string;
-  departmentChosen = false;
+  currentDepartment: any;
+  clientsList: Array<object>;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -45,25 +47,37 @@ export class ProjectManagementComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projectManagementService.getDepartments()
-    .subscribe(
+    this.getDepartments();
+    this.projectManagementService.getReloadStatus().subscribe(() => {
+      if (this.currentDepartment) {
+        this.displayProjects(this.currentDepartment);
+      }
+    });
+    this.projectManagementService.getClientsList().subscribe((data: Array<object>) => {
+      this.clientsList = data._embedded.clientBodyList;
+    });
+  }
+
+  getDepartments() {
+    this.projectManagementService.getDepartments().subscribe(
       (data: any) => {
         this.departments = data._embedded.departmentBodyList;
         this.isDataAvailable = true;
         this.isDepartment = true;
-    },
+      },
       () => {
-      this.serverError = true;
-      this.isDepartment = true;
-    });
+        this.serverError = true;
+        this.isDepartment = true;
+      });
   }
+
 
   setDepartment(event) {
     this.actualDepartment = event.name;
-    this.departmentChosen = true;
   }
 
   displayProjects(event) {
+    this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
       data => {
 
@@ -90,34 +104,38 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   createProject() {
-    const value = this.newProjectForm.value;
+    const value = {
+      ...this.newProjectForm.value,
+      client: {clientId: this.newProjectForm.value.client},
+    };
     this.projectManagementService.sendNewProject(value)
-        .subscribe(
-          () => {
-            this.isLoading = false;
-            this.isSuccess = true;
-            setTimeout(() => {
-              this.isSuccess = false;
-              this.changeDetectorRefs.detectChanges();
-            }, 3000);
-            this.newProjectForm.resetForm();
-          },
-          error => {
-            this.isLoading = false;
-            this.isFail = true;
-            this.errorMessage = 'Ups! Something went wrong :(';
-            setTimeout(() => {
-              this.isFail = false;
-              this.changeDetectorRefs.detectChanges();
-            }, 3000);
-          }
-        );
+      .subscribe(
+        () => {
+          this.isLoading = false;
+          this.isSuccess = true;
+          this.projectManagementService.changeReloadStatus();
+          setTimeout(() => {
+            this.isSuccess = false;
+            this.changeDetectorRefs.detectChanges();
+          }, 3000);
+          this.newProjectForm.resetForm();
+        },
+        error => {
+          this.isLoading = false;
+          this.isFail = true;
+          this.errorMessage = 'Ups! Something went wrong :(';
+          setTimeout(() => {
+            this.isFail = false;
+            this.changeDetectorRefs.detectChanges();
+          }, 3000);
+        }
+      );
   }
 
   openDialog(project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
-      data: {...project, departments: this.departments},
+      data: { ...project, departments: this.departments },
 
     });
   }
