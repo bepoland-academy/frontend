@@ -16,9 +16,10 @@
                      placeholder="Client" 
                      name="client" 
                      ngModel
-                     [(ngModel)]="data.client.clientId" 
+                     [(ngModel)]="data.client"
+                     [compareWith]="compareObjects"
                   >
-                     <mat-option *ngFor="let client of clientsList" [value]="client.clientId">
+                     <mat-option *ngFor="let client of data.clients" [value]="client">
                         {{client.name}}
                      </mat-option>
                   </mat-select>
@@ -51,10 +52,18 @@
                 </textarea>
                </mat-form-field>
                <mat-form-field>
-                  <mat-select placeholder="Department" name="department" [(value)]="actualDepartment"
-                     [(ngModel)]="actualDepartment">
-                     <mat-option [value]="department.name" *ngFor="let department of data.departments">
-                        {{department.name}}</mat-option>
+                  <mat-select 
+                     placeholder="Department" 
+                     name="department" 
+                     ngModel
+                     [(ngModel)]="data.department"
+                  >
+                     <mat-option 
+                        [value]="department.departmentId" 
+                        *ngFor="let department of data.departments"
+                     >
+                        {{department.name}}
+                     </mat-option>
                   </mat-select>
                </mat-form-field>
             </div>

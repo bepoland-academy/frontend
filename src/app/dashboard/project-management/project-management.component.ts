@@ -53,7 +53,7 @@ export class ProjectManagementComponent implements OnInit {
         this.displayProjects(this.currentDepartment);
       }
     });
-    this.projectManagementService.getClientsList().subscribe((data: Array<object>) => {
+    this.projectManagementService.getClientsList().subscribe((data: any) => {
       this.clientsList = data._embedded.clientBodyList;
     });
   }
@@ -68,6 +68,13 @@ export class ProjectManagementComponent implements OnInit {
       () => {
         this.serverError = true;
         this.isDepartment = true;
+        this.isLoading = false;
+        this.isFail = true;
+        this.errorMessage = 'Ups! Something went wrong :(';
+        setTimeout(() => {
+          this.isFail = false;
+          this.changeDetectorRefs.detectChanges();
+        }, 3000);
       });
   }
 
@@ -98,6 +105,13 @@ export class ProjectManagementComponent implements OnInit {
       },
       () => {
         this.serverError = true;
+        this.isLoading = false;
+        this.isFail = true;
+        this.errorMessage = 'Ups! Something went wrong :(';
+        setTimeout(() => {
+          this.isFail = false;
+          this.changeDetectorRefs.detectChanges();
+        }, 3000);
       }
     );
 
@@ -135,8 +149,7 @@ export class ProjectManagementComponent implements OnInit {
   openDialog(project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
-      data: { ...project, departments: this.departments },
-
+      data: { ...project, departments: this.departments, clients: this.clientsList },
     });
   }
 

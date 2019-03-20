@@ -7,11 +7,11 @@
          <form class="registration-form" (ngSubmit)="onSubmit()" #myForm="ngForm" fxLayout="column">
             <mat-form-field appearance="outline" class="login-form-input">
                <mat-label>First Name</mat-label>
-               <input matInput name="firstName" ngModel>
+               <input matInput name="firstName" ngModel required>
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Surname</mat-label>
-               <input matInput name="lastName" ngModel>
+               <input matInput name="lastName" ngModel required>
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Email</mat-label>

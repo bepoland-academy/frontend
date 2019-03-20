@@ -1,6 +1,6 @@
 <div class="user-management">
     <mat-spinner [ngClass]="{hidden: isResponse === true}"></mat-spinner>
-    <div *ngIf="isDataAvailable">
+    <div *ngIf="isDataAvailable && !serverError">
         <mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="employee">
                 <mat-header-cell *matHeaderCellDef>Employee</mat-header-cell>

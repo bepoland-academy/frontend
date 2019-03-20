@@ -28,11 +28,12 @@ export class LoginComponent implements OnInit {
         (err) => {
           this.isLoading = false;
           if ((/^[4]\d/g).test(err.status)) {
-            this.errorMessage = 'Bad credentials login or password is wrong.';
+            this.errorMessage = 'Please check your username(email) or password';
           } else if ((/^[5]/g).test(err.status)) {
-            this.errorMessage = 'Some problems occur in the server, please contact administrator';
+            this.errorMessage = `Oh no! Something bad happened.
+            Please come back later when we fixed that problem. Thanks`;
           } else {
-            this.errorMessage = 'Check your internet connection';
+            this.errorMessage = 'Please check your Internet connection';
           }
         }
       );
