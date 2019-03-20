@@ -50,15 +50,15 @@ export class UserRegistrationComponent implements OnInit {
       error => {
         this.isLoading = false;
         this.isFail = true;
-        if (
-          error.error.message ===
-          '[username: must be a well-formed email address]'
-        ) {
-          this.errorMessage = 'Please enter email address in a valid format';
-        } else if (error.error.message === 'USER ALREADY EXISTS') {
-          this.errorMessage = 'User with this email already exists';
-        } else if (error.status === 0) {
-          this.errorMessage = 'There were problems with the server connection';
+        if ((/^[4]\d/g).test(error.status)) {
+          if (error.error.message === 'USER ALREADY EXISTS') {
+            this.errorMessage = 'Please check your username(email) or password';
+          }
+        } else if ((/^[5]/g).test(error.status)) {
+          this.errorMessage = `Oh no! Something bad happened.
+          Please come back later when we fixed that problem. Thanks`;
+        } else {
+          this.errorMessage = 'Please check your Internet connection';
         }
         setTimeout(() => {
           this.isFail = false;
