@@ -7,7 +7,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { NavigationComponent } from './navigation.component';
 import { CustomMaterialModule } from '../../material/material.module';
 import { rootModule } from '../../app.routing';
-import { NavigationService } from './navigation.service';
+import { NavigationService } from '../../core/services/navigation.service';
 import { AuthService } from '../../services/auth.service';
 import { HttpService } from '../../services/http.service';
 import { User } from '../../models';

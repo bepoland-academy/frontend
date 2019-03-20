@@ -5,17 +5,17 @@
          <mat-card-title>Login</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-         <form fxLayout="column">
-            <mat-form-field appearance="outline">
+         <form (ngSubmit)="login()" #myForm="ngForm" fxLayout="column">
+            <mat-form-field appearance="outline" >
                <mat-label>Username(email)</mat-label>
-               <input matInput [(ngModel)]="username" name="name" required #name="ngModel" />
+               <input matInput [(ngModel)]="username" name="name" required #name="ngModel"/>
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Password</mat-label>
                <input matInput [(ngModel)]="password" type="password" name="password" #pass="ngModel" required>
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">
-               <button type="submit" mat-raised-button color="primary" (click)="login()" [disabled]="name.invalid || pass.invalid">
+               <button type="submit" mat-raised-button color="primary" [disabled]="!myForm.valid">
                   Login
                </button>
             </mat-card-actions>

@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { NavigationService } from '../dashboard/navigation/navigation.service';
+import { NavigationService } from './navigation.service';
 import { HttpService } from './http.service';
-import { User, Credentials } from '../models/index';
+import { User, Credentials } from '../../shared/interfaces';
+
+const defaultUser = {} as User;
 
 @Injectable()
 export class AuthService {
-
   loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  user: ReplaySubject<User> = new ReplaySubject(1);
+  user: BehaviorSubject<User> = new BehaviorSubject(defaultUser);
 
   constructor(
     private navigationService: NavigationService,
@@ -20,11 +22,11 @@ export class AuthService {
     this.getUser();
   }
 
-  login(credentials: Credentials): Observable<User> {
+  login(credentials: Credentials): Observable<HttpResponse<User>> {
     return this.http
       .login('auth/login', credentials, { observe: 'response' as 'body' })
       .pipe(
-        tap((response) => {
+        tap((response: HttpResponse<User>) => {
           localStorage.setItem('user', JSON.stringify(response.body));
           this.navigationService.filterRoutes(response.body.roles);
           this.loggedIn.next(true);
@@ -33,8 +35,8 @@ export class AuthService {
       );
   }
 
-  getUserStream(): ReplaySubject<User> {
-    return this.user;
+  getUserStream(): Observable<User> {
+    return this.user.asObservable();
   }
 
   logout(): void {
@@ -54,5 +56,4 @@ export class AuthService {
       this.user.next(user);
     }
   }
-
 }

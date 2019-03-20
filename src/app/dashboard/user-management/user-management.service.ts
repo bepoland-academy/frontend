@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { HttpService } from '../../services/http.service';
-import { User } from '../../models';
+import { HttpService } from '../../core/services/http.service';
+import { User } from '../../shared/interfaces';
 
 @Injectable()
 export class UserManagementService {
@@ -11,7 +11,7 @@ export class UserManagementService {
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService) {}
 
   changeReloadStatus() {
     this.reloadStatus.next(null);

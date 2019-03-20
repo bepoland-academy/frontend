@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../../services/http.service';
+
 import { Observable } from 'rxjs';
-import { Department } from '../../models';
+import { HttpService } from '../../core/services/http.service';
+import { DepartmentResponse } from '../../shared/interfaces';
 
 @Injectable()
 export class ProjectManagementService {
@@ -12,7 +13,7 @@ export class ProjectManagementService {
 
   constructor(private httpService: HttpService) { }
 
-  getDepartments(): Observable< Array<Department> > {
+  getDepartments(): Observable< DepartmentResponse > {
     return this.httpService.get(this.departments);
   }
   // Don't forget to add Observable< Array<Project>

@@ -1,15 +1,15 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { NgForm } from '@angular/forms';
-import { User } from '../../../models';
+import { User } from '../../../shared/interfaces';
 
 @Component({
-  selector: "app-user-registration",
-  templateUrl: "./user-registration.component.html",
-  styleUrls: ["./user-registration.component.css"]
+  selector: 'app-user-registration',
+  templateUrl: './user-registration.component.html',
+  styleUrls: ['./user-registration.component.css'],
 })
 export class UserRegistrationComponent implements OnInit {
-  @ViewChild("myForm") registrationForm: NgForm;
+  @ViewChild('myForm') registrationForm: NgForm;
   isLoading = false;
   isSuccess = false;
   isFail = false;
@@ -52,13 +52,13 @@ export class UserRegistrationComponent implements OnInit {
         this.isFail = true;
         if (
           error.error.message ===
-          "[username: must be a well-formed email address]"
+          '[username: must be a well-formed email address]'
         ) {
-          this.errorMessage = "Please enter email address in a valid format";
-        } else if (error.error.message === "USER ALREADY EXISTS") {
-          this.errorMessage = "User with this email already exists";
+          this.errorMessage = 'Please enter email address in a valid format';
+        } else if (error.error.message === 'USER ALREADY EXISTS') {
+          this.errorMessage = 'User with this email already exists';
         } else if (error.status === 0) {
-          this.errorMessage = "There were problems with the server connection";
+          this.errorMessage = 'There were problems with the server connection';
         }
         setTimeout(() => {
           this.isFail = false;

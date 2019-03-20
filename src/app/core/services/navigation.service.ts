@@ -2,13 +2,13 @@ import { Injectable, NgZone } from '@angular/core';
 import { Routes, Route, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
-import { TimeEntryComponent } from '../time-entry/time-entry.component';
-import { HistoricalDataComponent } from '../historical-data.component';
-import { ReportsComponent } from '../reports.component';
-import { TimeApprovalComponent } from '../time-approval.component';
-import { ProjectManagementComponent } from '../project-management/project-management.component';
-import { UserManagementComponent } from '../user-management/user-management.component';
-import { NoRoleComponent } from '../no-role.component';
+import { TimeEntryComponent } from '../../dashboard/time-entry/time-entry.component';
+import { HistoricalDataComponent } from '../../dashboard/historical-data.component';
+import { ReportsComponent } from '../../dashboard/reports.component';
+import { TimeApprovalComponent } from '../../dashboard/time-approval.component';
+import { ProjectManagementComponent } from '../../dashboard/project-management/project-management.component';
+import { UserManagementComponent } from '../../dashboard/user-management/user-management.component';
+import { NoRoleComponent } from '../../dashboard/no-role.component';
 
 @Injectable()
 export class NavigationService {

@@ -1,9 +1,10 @@
 import { Component, ViewChild, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
 import { ProjectManagementService } from './project-management.service';
-import { Department } from '../../models';
+import { Department } from '../../core/models';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ProjectManagementDialog } from './project-management.dialog';
+import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
 
 export interface DialogData {
   client: string;
@@ -81,20 +82,9 @@ export class ProjectManagementComponent implements OnInit {
   displayProjects(event) {
     this.projectManagementService.getProjects(event.departmentId).subscribe(
       data => {
-
-        let group_to_values = data._embedded.projectBodyList.reduce(
-          (obj, item) => {
-            obj[item.client.name] = obj[item.client.name] || [];
-            obj[item.client.name].push(item);
-            return obj;
-          },
-          {}
-        );
-        const groupedData = Object.keys(group_to_values).map(key => {
-          return { clientName: key, projects: group_to_values[key], client: group_to_values[key][0].client };
-        });
-        this.clientList = groupedData;
-        this.clients = groupedData;
+        const projects = groupProjectsByClient(data._embedded.projectBodyList);
+        this.clientList = projects;
+        this.clients = projects;
         this.isProject = true;
       },
       () => {

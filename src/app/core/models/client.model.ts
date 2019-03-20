@@ -11,5 +11,4 @@ export interface Project {
 export interface WeekDays {
   day: string;
   date: string;
-
 }

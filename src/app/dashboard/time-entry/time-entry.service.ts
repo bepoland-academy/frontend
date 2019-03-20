@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import * as moment from 'moment';
-import { HttpService } from '../../services/http.service';
+import { HttpService } from '../../core/services/http.service';
 import { map, tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 

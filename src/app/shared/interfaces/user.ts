@@ -1,5 +1,4 @@
 export interface User {
-  userId: number;
   username: string;
   firstName: string;
   lastName: string;
@@ -7,3 +6,4 @@ export interface User {
   roles: Array<string>;
   active: boolean;
 }
+
