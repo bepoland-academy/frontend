@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TimeEntryComponent } from '../../dashboard/time-entry/time-entry.component';
 import { HistoricalDataComponent } from '../../dashboard/historical-data.component';
 import { ReportsComponent } from '../../dashboard/reports.component';
-import { TimeApprovalComponent } from '../../dashboard/time-approval.component';
+import { TimeApprovalComponent } from '../../dashboard/time-approval/time-approval.component';
 import { ProjectManagementComponent } from '../../dashboard/project-management/project-management.component';
 import { UserManagementComponent } from '../../dashboard/user-management/user-management.component';
 import { NoRoleComponent } from '../../dashboard/no-role.component';

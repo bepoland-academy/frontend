@@ -14,6 +14,11 @@ export interface DialogData {
   _links: any;
 }
 
+export interface Client {
+  clientId: string;
+  name: string;
+}
+
 @Component({
   selector: 'project-management-dialog',
   templateUrl: './project-management.dialog.html',
@@ -28,19 +33,25 @@ export class ProjectManagementDialog implements OnInit {
   @ViewChild('updateForm') updateProjectForm: NgForm;
 
   actualDepartment = '';
+
   constructor(
     public dialogRef: MatDialogRef<ProjectManagementDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private projectManagementService: ProjectManagementService,
     private ref: ChangeDetectorRef
   ) {
-
     }
   ngOnInit(): void {
     this.checkDepartment();
   }
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  compareObjects(client1: Client, client2: Client): boolean {
+    if (client1 && client2) {
+      return client1.clientId === client2.clientId && client1.name === client2.name;
+    }
   }
 
   checkDepartment() {
@@ -52,7 +63,14 @@ export class ProjectManagementDialog implements OnInit {
   updateProject() {
     this.dialogRef.close();
     this.updateProjectForm.value.client = this.data.client;
+    console.log(this.updateProjectForm.value);
     this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
-      .subscribe(el => {});
+      .subscribe(el => {
+        this.projectManagementService.changeReloadStatus();
+      },
+      (err) => {
+        console.log(err);
+      });
   }
 }
+

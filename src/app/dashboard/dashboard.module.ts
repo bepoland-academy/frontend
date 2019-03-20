@@ -7,18 +7,17 @@ import { NavigationModule } from './navigation/navigation.module';
 import { routerModule } from './dashboard.routing';
 import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
-import { TimeApprovalComponent } from './time-approval.component';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NoRoleComponent } from './no-role.component';
 import { TimeEntryModule } from './time-entry/time-entry.module';
 import { ProjectManagementModule } from './project-management/project-management.module';
+import { TimeApprovalModule } from './time-approval/time-approval.module';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     HistoricalDataComponent,
     ReportsComponent,
-    TimeApprovalComponent,
     NoRoleComponent,
   ],
   imports: [
@@ -29,7 +28,9 @@ import { ProjectManagementModule } from './project-management/project-management
     UserManagementModule,
     TimeEntryModule,
     ProjectManagementModule,
-  ], exports: [
+    TimeApprovalModule,
+  ],
+  exports: [
     DashboardComponent,
   ],
 })

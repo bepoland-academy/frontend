@@ -77,6 +77,13 @@ import { User } from '../../../shared/interfaces';
     this.userManagementService.updateUsers(user)
       .subscribe(() => {
         this.userManagementService.changeReloadStatus();
+      },
+      () => {
+        this.serverError = true;
+        this.isResponse = true;
       });
+    setTimeout(() => {
+        this.serverError = false;
+      }, 3000);
   }
  }
