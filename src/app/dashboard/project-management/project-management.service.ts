@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../../services/http.service';
+import { HttpService } from '../../core/services/http.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Department } from '../../models';
+import { Department } from '../../core/models';
 
 @Injectable()
 export class ProjectManagementService {

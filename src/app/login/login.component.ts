@@ -1,7 +1,8 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,8 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  @ViewChild('myForm') loginForm: NgForm;
+  @ViewChild('field') field: ElementRef;
    username: string;
    password: string;
    isLoading = false;
@@ -39,8 +42,10 @@ export class LoginComponent implements OnInit {
       );
   }
 
+ 
+
    ngOnInit(): void {
-    this.authService.loggedIn.subscribe((value: boolean) => {
+     this.authService.loggedIn.subscribe((value: boolean) => {
       if (value) {
         this.ngZone.run(() => {
         this.router.navigate(['/']);

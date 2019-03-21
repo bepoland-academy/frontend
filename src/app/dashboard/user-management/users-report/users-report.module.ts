@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UsersReportComponent } from './users-report.component';
-import { CustomMaterialModule } from '../../../material/material.module';
+import { CustomMaterialModule } from '../../../shared/material/material.module';
 import { UserManagementService } from '../user-management.service';
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { NgForm } from '@angular/forms';
-import { User } from '../../../models';
+import { User } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-user-registration',
