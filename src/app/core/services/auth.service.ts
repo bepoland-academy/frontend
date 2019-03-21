@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 
 import { NavigationService } from './navigation.service';
 import { HttpService } from './http.service';
-import { User, Credentials } from '../../shared/interfaces';
+import { User, Credentials } from '../../core/models';
 
 const defaultUser = {} as User;
 

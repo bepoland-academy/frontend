@@ -1,6 +1,14 @@
 import { Component, ViewChild, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
 import { ProjectManagementService } from './project-management.service';
-import { Department } from '../../core/models';
+import {
+  Department,
+  DepartmentsResponse,
+  Client,
+  ClientsResponse,
+  Project,
+  ProjectsResponse,
+  ProjectsByClient
+} from '../../core/models';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
@@ -25,18 +33,17 @@ export class ProjectManagementComponent implements OnInit {
   @ViewChild('myForm') newProjectForm: NgForm;
 
   departments: Array<Department> = [];
-  projectsList1: Array<any> = [];
+  clients: Array<Client> = [];
+  projectsList1: Array<ProjectsByClient> = [];
   // Duplicate projectsList for the filter purpose
-  projectsList2: Array<any> = [];
-  isLoading = false;
+  projectsList2: Array<ProjectsByClient> = [];
   isSuccess = false;
   isFail = false;
   errorMessage = '';
   errorOnCreate = '';
   actualDepartment: string;
   actualClient: string;
-  currentDepartment: any;
-  clientsList: Array<object>;
+  currentDepartment: Department;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -51,18 +58,17 @@ export class ProjectManagementComponent implements OnInit {
         this.displayProjects(this.currentDepartment);
       }
     });
-    this.projectManagementService.getClientsList().subscribe((data: any) => {
-      this.clientsList = data._embedded.clientBodyList;
+    this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
+      this.clients = data._embedded.clientBodyList;
     });
   }
 
   getDepartments() {
     this.projectManagementService.getDepartments().subscribe(
-      (data: any) => {
+      (data: DepartmentsResponse) => {
         this.departments = data._embedded.departmentBodyList;
       },
       () => {
-        this.isLoading = false;
         this.isFail = true;
         this.errorMessage = 'Ups! Something went wrong :(';
         setTimeout(() => {
@@ -73,21 +79,19 @@ export class ProjectManagementComponent implements OnInit {
   }
 
 
-  setDepartment(event) {
+  setDepartment(event: Department) {
     this.actualDepartment = event.name;
   }
 
-  displayProjects(event) {
+  displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      data => {
-
+      (data: ProjectsResponse) => {
         const projects = groupProjectsByClient(data._embedded.projectBodyList);
         this.projectsList1 = projects;
         this.projectsList2 = projects;
       },
       () => {
-        this.isLoading = false;
         this.isFail = true;
         this.errorMessage = 'Ups! Something went wrong :(';
         setTimeout(() => {
@@ -106,7 +110,6 @@ export class ProjectManagementComponent implements OnInit {
     this.projectManagementService.sendNewProject(value)
       .subscribe(
         () => {
-          this.isLoading = false;
           this.isSuccess = true;
           this.projectManagementService.changeReloadStatus();
           setTimeout(() => {
@@ -115,8 +118,7 @@ export class ProjectManagementComponent implements OnInit {
           }, 3000);
           this.newProjectForm.resetForm();
         },
-        error => {
-          this.isLoading = false;
+        () => {
           this.isFail = true;
           this.errorOnCreate = 'Ups! Something went wrong :(';
           setTimeout(() => {
@@ -127,16 +129,15 @@ export class ProjectManagementComponent implements OnInit {
       );
   }
 
-  openDialog(project): void {
+  openDialog(project: Project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
-      data: { ...project, departments: this.departments, clients: this.clientsList },
+      data: { ...project, departments: this.departments, clients: this.clients },
     });
   }
 
-  filterClients(event) {
+  filterClients(event: Event) {
     this.projectsList2 = this.projectsList1.filter(
-      client => client.clientName.toLowerCase().includes(event.target.value));
+      client => client.clientName.toLowerCase().includes((<HTMLInputElement> event.target).value));
   }
-
 }

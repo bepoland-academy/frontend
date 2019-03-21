@@ -1,14 +1,10 @@
 export interface Client {
-  clientName: string;
-  projects: Array<Project>;
+  clientId: string;
+  name: string;
 }
 
-export interface Project {
-  projectName: string;
-  weekDays: Array<WeekDays>;
-}
-
-export interface WeekDays {
-  day: string;
-  date: string;
+export interface ClientsResponse {
+  _embedded: {
+    clientBodyList: Array<Client>
+  };
 }
