@@ -14,7 +14,7 @@ export class ProjectManagementService {
   private reloadStatus = new BehaviorSubject<null>(null);
 
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService) {}
 
   changeReloadStatus() {
     this.reloadStatus.next(null);

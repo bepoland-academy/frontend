@@ -28,18 +28,18 @@
         </div>
       </div>
       <div class="add-entry">
-        <button mat-icon-button (click)="openDrawer()">
-          <mat-icon>add</mat-icon>
+        <button mat-raised-button (click)="openDrawer()">
+          Add new entry
         </button>
       </div>
     </header>
     <!-- header time enty -->
-    <mat-toolbar class="time-entry time-entry-header">
+    <mat-toolbar class="time-entry time-entry-header" color="primary">
       <h4>Client</h4>
       <h4>Projects</h4>
-      <div *ngFor="let dayWeek of week">
-        <p>{{ dayWeek.date.slice(0, 5) }}</p>
-        <p>{{ dayWeek.day.slice(0, 3).toUpperCase() }}</p>
+      <div class="dayWeek-cnt" *ngFor="let dayWeek of week" appWeekend [day]="dayWeek.day">
+        <p class="dayWeek time-entry-header__week-date">{{ dayWeek.date.slice(0, 5) }}</p>
+        <p class="dayWeek time-entry-header__week-day">{{ dayWeek.day.slice(0, 3).toUpperCase() }}</p>
       </div>
     </mat-toolbar>
 
@@ -52,18 +52,14 @@
         <div class="project-cell">
           <h5>{{project.projectName}}</h5>
         </div>
-        <div class="project-cell" *ngFor="let day of project.weekDays">
-          <app-quantity 
-            [(inputValue)]="day.hours"
-            [isWeekend]="day.day === 'saturday' || day.day === 'sunday'"
-          ></app-quantity>
-        </div>
+        <app-quantity *ngFor="let day of project.weekDays"
+          [(inputValue)]="day.hours"
+          appWeekend
+          [day]="day.day"
+        ></app-quantity>
         <div class="project-cell">
           <button mat-icon-button (click)="removeProject(client, project)">
             <mat-icon>delete</mat-icon>
-          </button>
-          <button mat-icon-button>
-            <mat-icon>edit</mat-icon>
           </button>
         </div>
         <div class="project-cell">
@@ -80,8 +76,8 @@
       <p class="project-cell" for="wednesday">{{ sumHoursFromSelectedDay('wednesday') }}</p>
       <p class="project-cell" for="thursday">{{ sumHoursFromSelectedDay('thursday') }}</p>
       <p class="project-cell" for="friday">{{ sumHoursFromSelectedDay('friday') }}</p>
-      <p class="project-cell" for="saturday">{{ sumHoursFromSelectedDay('saturday') }}</p>
-      <p class="project-cell" for="sunday">{{ sumHoursFromSelectedDay('sunday') }}</p>
+      <p class="project-cell" appWeekend day="saturday" for="saturday">{{ sumHoursFromSelectedDay('saturday') }}</p>
+      <p class="project-cell" appWeekend day="sunday" for="sunday">{{ sumHoursFromSelectedDay('sunday') }}</p>
     </div>
 
     <footer class="footer">

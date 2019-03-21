@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProjectManagementService } from './project-management.service';
 import { Department } from '../../core/models';
 import { NgForm } from '@angular/forms';

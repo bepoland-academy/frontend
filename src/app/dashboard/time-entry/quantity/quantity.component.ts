@@ -10,6 +10,7 @@ export class QuantityComponent implements OnInit {
   @Input() isWeekend;
   @Output() inputValueChange = new EventEmitter();
 
+
   constructor() {}
 
   ngOnInit() {
@@ -29,5 +30,14 @@ export class QuantityComponent implements OnInit {
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 24) {
       this.verifiedValue(+this.inputValue - 0.5);
     }
+  }
+
+  onMouseWheel(event) {
+    if (event.deltaY < 0) {
+      this.increaseValue();
+    } else {
+      this.decreaseValue();
+    }
+    return false;
   }
 }

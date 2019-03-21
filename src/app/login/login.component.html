@@ -12,10 +12,10 @@
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Password</mat-label>
-               <input matInput [(ngModel)]="password" type="password" name="password" #pass="ngModel" required>
+               <input matInput [(ngModel)]="password" type="password" name="password" #pass="ngModel">
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">
-               <button type="submit" mat-raised-button color="primary" [disabled]="!myForm.valid">
+               <button  type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid">
                   Login
                </button>
             </mat-card-actions>

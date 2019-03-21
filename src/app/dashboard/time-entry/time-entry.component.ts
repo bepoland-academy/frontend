@@ -15,7 +15,7 @@ export class TimeEntryComponent implements OnInit {
   displayedWeek: number;
   dateCalendar: Date;
   isDrawerOpened: boolean;
-  constructor(private timeEntryService: TimeEntryService) {}
+  constructor(private timeEntryService: TimeEntryService) { }
 
   ngOnInit() {
     this.timeEntryService.getTracks().subscribe(el => {
@@ -33,9 +33,9 @@ export class TimeEntryComponent implements OnInit {
     this.isDrawerOpened = true;
   }
 
-removeProject(client, project) {
-  this.timeEntryService.removeProject(client, project);
-}
+  removeProject(client, project) {
+    this.timeEntryService.removeProject(client, project);
+  }
 
   sumHoursFromSelectedDay(day): number {
     return this.projects
@@ -49,8 +49,8 @@ removeProject(client, project) {
 
                 // taking from day hours or returning null and after that removing all null's and return last value
                 return project.weekDays
-                                      .map(weekDay => weekDay.day === day ? +weekDay.hours : null)
-                                      .filter(el => el !== null)[0];
+                  .map(weekDay => weekDay.day === day ? +weekDay.hours : null)
+                  .filter(el => el !== null)[0];
               } // sum from selected day of project
             )
             .reduce((sum, val) => sum + val)

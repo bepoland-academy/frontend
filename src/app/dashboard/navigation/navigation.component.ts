@@ -57,6 +57,5 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.substription.unsubscribe();
-
   }
 }
