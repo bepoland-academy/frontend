@@ -4,7 +4,7 @@ import { Router, Routes } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NavigationService } from '../../core/services/navigation.service';
 import { AuthService } from '../../core/services/auth.service';
-import { User } from '../../shared/interfaces';
+import { User } from '../../core/models';
 
 @Component({
   selector: 'app-navigation',

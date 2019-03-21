@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { MatTableDataSource } from '@angular/material';
-import { User } from '../../../shared/interfaces';
+import { User } from '../../../core/models';
 
 @Component({
   selector: 'app-users-report',

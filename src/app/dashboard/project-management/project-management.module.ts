@@ -5,7 +5,7 @@ import { CustomMaterialModule } from '../../shared/material/material.module';
 import { ProjectManagementService } from './project-management.service';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ProjectManagementDialog } from './project-management.dialog';
+import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
 
 @NgModule({
   declarations: [

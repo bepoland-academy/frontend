@@ -1,7 +1,9 @@
-import { Component, ViewChild, Inject, OnInit, ChangeDetectorRef, InjectionToken } from '@angular/core';
-import { ProjectManagementService } from './project-management.service';
+import { Component, ViewChild, Inject, OnInit } from '@angular/core';
+import { ProjectManagementService } from '../project-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Client } from '../../../core/models';
+
 
 export interface DialogData {
   client: string;
@@ -14,14 +16,10 @@ export interface DialogData {
   _links: any;
 }
 
-export interface Client {
-  clientId: string;
-  name: string;
-}
 
 @Component({
-  selector: 'project-management-dialog',
-  templateUrl: './project-management.dialog.html',
+  selector: 'app-project-management-dialog',
+  templateUrl: './project-management-dialog.html',
   styles: [`
   .mat-card-header, .mat-dialog-actions {justify-content: space-around;}
   .mat-card {text-align: center;}
@@ -37,8 +35,7 @@ export class ProjectManagementDialog implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ProjectManagementDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private projectManagementService: ProjectManagementService,
-    private ref: ChangeDetectorRef
+    private projectManagementService: ProjectManagementService
   ) {
     }
   ngOnInit(): void {
@@ -63,9 +60,8 @@ export class ProjectManagementDialog implements OnInit {
   updateProject() {
     this.dialogRef.close();
     this.updateProjectForm.value.client = this.data.client;
-    console.log(this.updateProjectForm.value);
     this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
-      .subscribe(el => {
+      .subscribe(() => {
         this.projectManagementService.changeReloadStatus();
       },
       (err) => {

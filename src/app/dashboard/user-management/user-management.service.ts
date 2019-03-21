@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { HttpService } from '../../core/services/http.service';
-import { User } from '../../shared/interfaces';
+import { User } from '../../core/models';
 
 @Injectable()
 export class UserManagementService {

@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../core/services/http.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Department } from '../../core/models';
+import {
+  ClientsResponse,
+  DepartmentsResponse,
+  NewProject,
+  Project,
+  ProjectsResponse,
+} from '../../core/models';
 
 @Injectable()
 export class ProjectManagementService {
 
   departments = 'departments';
-  projects1 = 'projects';
-  projects2 = 'projects/?department=';
+  projects = 'projects';
+  projectsByDepartment = 'projects/?department=';
   clients = 'clients';
 
   private reloadStatus = new BehaviorSubject<null>(null);
@@ -24,24 +30,23 @@ export class ProjectManagementService {
     return this.reloadStatus.asObservable();
   }
 
-  getDepartments(): Observable< Array<Department> > {
+  getDepartments(): Observable<DepartmentsResponse> {
     return this.httpService.get(this.departments);
   }
-  // Don't forget to add Observable< Array<Project>
 
-  getClientsList(): Observable<any> {
+  getClientsList(): Observable<ClientsResponse> {
     return this.httpService.get(this.clients);
   }
 
-  getProjects(department: string): Observable <any> {
-    return this.httpService.get(this.projects2 + department);
+  getProjects(department: string): Observable <ProjectsResponse> {
+    return this.httpService.get(this.projectsByDepartment + department);
   }
 
-  sendNewProject(newProjectData: any) {
-    return this.httpService.post(this.projects1, newProjectData);
+  sendNewProject(newProjectData: NewProject) {
+    return this.httpService.post(this.projects, newProjectData);
   }
 
-  updateProject(url, updatedProject: any) {
+  updateProject(url: string, updatedProject: Project) {
     return this.httpService.put(url, updatedProject);
   }
 }
