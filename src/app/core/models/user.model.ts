@@ -1,9 +1,21 @@
 export interface User {
-  username: string;
-  firstName: string;
-  lastName: string;
-  department: string;
-  roles: Array<string>;
-  active: boolean;
+active: boolean;
+department: string;
+email: string;
+firstName: string;
+lastName: string;
+roles: Array<string>;
+userId: string;
+_links?: {
+  self: {
+    href: string;
+  }
+};
 }
 
+
+export interface UsersResponse {
+  _embedded: {
+    userBodyList: Array<User>
+  };
+}

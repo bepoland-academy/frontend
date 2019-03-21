@@ -1,7 +1,7 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { NgForm } from '@angular/forms';
-import { User } from '../../../core/models';
+import { User, Department, DepartmentsResponse } from '../../../core/models';
 
 @Component({
   selector: 'app-user-registration',
@@ -9,12 +9,13 @@ import { User } from '../../../core/models';
   styleUrls: ['./user-registration.component.css'],
 })
 export class UserRegistrationComponent implements OnInit {
+
   @ViewChild('myForm') registrationForm: NgForm;
   isLoading = false;
   isSuccess = false;
   isFail = false;
   errorMessage: string;
-  departments;
+  departments: Array<Department>;
 
   constructor(
     private userManagementService: UserManagementService,
@@ -22,7 +23,7 @@ export class UserRegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userManagementService.getDepartments().subscribe(response => {
+    this.userManagementService.getDepartments().subscribe((response: DepartmentsResponse) => {
       this.departments = response._embedded.departmentBodyList;
     });
   }
