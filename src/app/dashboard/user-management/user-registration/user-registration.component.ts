@@ -50,7 +50,7 @@ export class UserRegistrationComponent implements OnInit {
       error => {
         this.isLoading = false;
         this.isFail = true;
-        if ((/^[4]\d/g).test(error.status)) {
+        if (error.status === 409) {
           if (error.error.message === 'USER ALREADY EXISTS') {
             this.errorMessage = 'Please check your username(email) or password';
           }

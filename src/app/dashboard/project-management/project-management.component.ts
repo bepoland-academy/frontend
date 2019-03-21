@@ -3,8 +3,7 @@ import { ProjectManagementService } from './project-management.service';
 import { Department } from '../../models';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { ProjectManagementDialog } from './project-management.dialog';
-import { Observable } from 'rxjs';
+import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
 
 export interface DialogData {
   client: string;
@@ -24,17 +23,14 @@ export class ProjectManagementComponent implements OnInit {
 
   @ViewChild('myForm') newProjectForm: NgForm;
 
-  departments: Array<Department>;
-  isDataAvailable = false;
-  isDepartment = false;
-  isProject = false;
-  serverError = false;
-  clientList: any;
-  clients: any;
+  departments: Array<Department> = [];
+  projectsList1: Array<any> = [];
+  projectsList2: Array<any> = [];
   isLoading = false;
   isSuccess = false;
   isFail = false;
-  errorMessage: string;
+  errorMessage = '';
+  errorOnCreate = '';
   actualDepartment: string;
   actualClient: string;
   currentDepartment: any;
@@ -62,12 +58,8 @@ export class ProjectManagementComponent implements OnInit {
     this.projectManagementService.getDepartments().subscribe(
       (data: any) => {
         this.departments = data._embedded.departmentBodyList;
-        this.isDataAvailable = true;
-        this.isDepartment = true;
       },
       () => {
-        this.serverError = true;
-        this.isDepartment = true;
         this.isLoading = false;
         this.isFail = true;
         this.errorMessage = 'Ups! Something went wrong :(';
@@ -99,12 +91,11 @@ export class ProjectManagementComponent implements OnInit {
         const groupedData = Object.keys(group_to_values).map(key => {
           return { clientName: key, projects: group_to_values[key], client: group_to_values[key][0].client };
         });
-        this.clientList = groupedData;
-        this.clients = groupedData;
-        this.isProject = true;
+        this.projectsList1 = groupedData;
+        this.projectsList2 = groupedData;
+        console.log(this.projectsList1, this.projectsList2, this.clientsList);
       },
       () => {
-        this.serverError = true;
         this.isLoading = false;
         this.isFail = true;
         this.errorMessage = 'Ups! Something went wrong :(';
@@ -114,7 +105,6 @@ export class ProjectManagementComponent implements OnInit {
         }, 3000);
       }
     );
-
   }
 
   createProject() {
@@ -137,7 +127,7 @@ export class ProjectManagementComponent implements OnInit {
         error => {
           this.isLoading = false;
           this.isFail = true;
-          this.errorMessage = 'Ups! Something went wrong :(';
+          this.errorOnCreate = 'Ups! Something went wrong :(';
           setTimeout(() => {
             this.isFail = false;
             this.changeDetectorRefs.detectChanges();
@@ -154,7 +144,8 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   filterClients(event) {
-    this.clients = this.clientList.filter(client => client.clientName.toLowerCase().includes(event.target.value));
+    this.projectsList2 = this.projectsList1.filter(
+      client => client.clientName.toLowerCase().includes(event.target.value));
   }
 
 }

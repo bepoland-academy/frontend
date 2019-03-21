@@ -1,5 +1,5 @@
 import { Component, ViewChild, Inject, OnInit, ChangeDetectorRef, InjectionToken } from '@angular/core';
-import { ProjectManagementService } from './project-management.service';
+import { ProjectManagementService } from '../project-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -21,7 +21,7 @@ export interface Client {
 
 @Component({
   selector: 'project-management-dialog',
-  templateUrl: './project-management.dialog.html',
+  templateUrl: './project-management-dialog.html',
   styles: [`
   .mat-card-header, .mat-dialog-actions {justify-content: space-around;}
   .mat-card {text-align: center;}

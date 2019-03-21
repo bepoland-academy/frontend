@@ -1,9 +1,8 @@
 <div fxLayout="row" class="project-management">
       <div class="projects">
-         <mat-spinner [ngClass]="{hidden: isDepartment === true}"></mat-spinner>
          <!-- Projects' Options -->
          <div 
-            *ngIf="isDataAvailable" 
+            *ngIf="departments.length" 
             fxLayout="row" 
             class="projectOptions"
          >
@@ -30,12 +29,12 @@
             </mat-form-field>
          </div>
          <!-- Projects Table -->
-         <div *ngIf="serverError" class="errorMessage">
+         <div *ngIf="errorMessage.length" class="errorMessage">
             <p>Ups!
                <br> There were problems with the server connection!
             </p>
          </div>
-         <div *ngIf="isProject">
+         <div *ngIf="projectsList2.length">
             <div class="main-grid">
                <div class="grid-item">Client</div>
                <div class="grid-item">Project</div>
@@ -44,7 +43,7 @@
                <div class="grid-item">Active</div>
                <div class="grid-item">Edit</div>
             </div>
-            <div *ngFor="let client of clients">
+            <div *ngFor="let client of projectsList2">
                <div class="client-grid">
                   <div class="grid-item">{{client.clientName}}</div>
                   <div>
@@ -173,7 +172,7 @@
          <mat-card [ngClass]="{hidden: isFail !== true}">
             <mat-card-header class="failMessage" fxLayoutAlign="center center">
                <mat-card-title>
-                  {{errorMessage}}
+                  {{errorOnCreate}}
                </mat-card-title>
             </mat-card-header>
          </mat-card>
