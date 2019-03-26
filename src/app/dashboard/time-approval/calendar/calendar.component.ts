@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { TimeApprovalService } from '../time-approval.service';
 
 @Component({
   selector: 'app-calendar',
@@ -10,7 +11,9 @@ export class CalendarComponent implements OnInit {
   @Input() toggleButtonVisible: boolean;
   @Output() listClick = new EventEmitter<null>();
 
-  constructor() { }
+  constructor(
+    private timeApprovalService: TimeApprovalService
+  ) { }
 
   ngOnInit() {
   }

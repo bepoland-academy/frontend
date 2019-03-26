@@ -13,9 +13,23 @@ _links?: {
 };
 }
 
-
 export interface UsersResponse {
   _embedded: {
     userBodyList: Array<User>
   };
+}
+
+export interface UserTimeMonthly {
+  consultantdId: string;
+  month: string;
+  monthDays: Array<DayForManager>;
+  projectId: string;
+}
+
+export interface DayForManager {
+  data: string;
+  hours: number;
+  status: string;
+  comment: string;
+  test: string;
 }

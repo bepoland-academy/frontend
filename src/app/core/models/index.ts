@@ -2,13 +2,14 @@ import { Department, DepartmentsResponse } from './department.model';
 import { Project, ProjectsResponse, ProjectsByClient, NewProject } from './project.model';
 import { Client, ClientsResponse } from './client.model';
 import { Credentials } from './credentials.model';
-import { User, UsersResponse } from './user.model';
+import { DayForManager, User, UsersResponse, UserTimeMonthly } from './user.model';
 
 
 export {
   Client,
   ClientsResponse,
   Credentials,
+  DayForManager,
   Department,
   DepartmentsResponse,
   Project,
@@ -16,5 +17,6 @@ export {
   ProjectsByClient,
   NewProject,
   User,
-  UsersResponse
+  UsersResponse,
+  UserTimeMonthly
 };

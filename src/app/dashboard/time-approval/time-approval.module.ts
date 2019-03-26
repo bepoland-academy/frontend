@@ -5,6 +5,7 @@ import { ConsultantsListModule } from './consultants-list/consultants-list.modul
 import { CalendarModule } from './calendar/calendar.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomMaterialModule } from 'src/app/shared/material/material.module';
+import { TimeApprovalService } from './time-approval.service';
 
 @NgModule({
   declarations: [TimeApprovalComponent],
@@ -18,5 +19,8 @@ import { CustomMaterialModule } from 'src/app/shared/material/material.module';
   exports: [
     TimeApprovalComponent,
   ],
+  providers: [
+   TimeApprovalService,
+   ],
 })
 export class TimeApprovalModule { }
