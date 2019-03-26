@@ -5,12 +5,6 @@ import * as moment from 'moment';
 import { TimeEntryService } from './time-entry.service';
 import { Project, ProjectsByClient, Day, TimeEntry } from '../../core/models';
 
-
-
-
-
-
-
 @Component({
   selector: 'app-time-entry',
   templateUrl: './time-entry.component.html',
@@ -55,7 +49,7 @@ export class TimeEntryComponent implements OnInit {
         this.isLoading = false;
         this.isError = false;
     },
-    () => {
+    (a) => {
       this.isError = true;
       this.isLoading = false;
     });
@@ -86,21 +80,6 @@ export class TimeEntryComponent implements OnInit {
     this.projects = this.projects.filter(proj => proj.projectId !== project.projectId);
   }
 
-  sumHoursFromSelectedDay(day: string): number {
-    return this.projects
-      .map((project: TimeEntry) =>
-        project.weekDays.map((weekDay: Day) =>
-          weekDay.day === day ? weekDay.hours : 0
-        ).reduce((sum: number, val: number) => sum + val)
-      ).reduce((allDaySum: number, val: number) => allDaySum + val);
-  }
-
-  sumAllHoursFromWeek(week: TimeEntry): number {
-    return week.weekDays
-      .map((day: Day) => +day.hours)
-      .reduce((sum: number, nextValue: number) => sum + nextValue);
-  }
-
   getPreviousWeek(): void {
     this.displayedWeek = this.displayedWeek - 1;
     if (this.displayedWeek < 1) {
@@ -117,8 +96,8 @@ export class TimeEntryComponent implements OnInit {
     }
     this.changeRouteAndSetWeekWithDates();
   }
-  onCalendarChange(event): void {
-    const value: moment.Moment = moment(event.value);
+  getWeekFromCalendar(val): void {
+    const value = moment(val);
     const selectedWeek: number = value.week();
     const selectedYear: number = value.year();
     const isDecember: boolean = value.month() === 11;
@@ -148,7 +127,7 @@ export class TimeEntryComponent implements OnInit {
       );
   }
 
-  sumbitCurrentEntries() {
+  submitCurrentEntries() {
     this.projects = this.projects
       .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
       .map((project: TimeEntry) => (

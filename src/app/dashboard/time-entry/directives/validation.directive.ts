@@ -11,8 +11,9 @@ export class ValidationDirective {
   }
 
   @HostListener('keydown', ['$event']) onKeydown(e) {
-    if (e.code === 'Backspace') {
+    if (e.code === 'Backspace' && this.element.value.length === 1) {
       this.element.value = '';
+      this.oninput();
     }
   }
 
@@ -22,7 +23,6 @@ export class ValidationDirective {
       'g'
     );
     const value = this.element.value;
-
 
     if (mainRegExp.test(value)) {
       this.element.value = value.replace(',', '.');

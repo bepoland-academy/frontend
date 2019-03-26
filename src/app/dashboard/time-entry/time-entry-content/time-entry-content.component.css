@@ -1,0 +1,26 @@
+.time-entry-content {
+  display: grid;
+  grid-template-columns: 2fr 11fr;
+  grid-auto-rows: 70px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 2fr repeat(9, 1fr);
+}
+.project-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.submitted {
+  background-color: rgb(	173, 216, 230);
+  pointer-events: none;
+}
+
+.saved {
+  background-color: rgb(190,190,190);
+}

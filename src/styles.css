@@ -8,3 +8,20 @@
 input {
   background-color: inherit;
 }
+
+button {
+  color: inherit;
+  background-color: inherit;
+  border: unset;
+  font: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+button:disabled {
+  color: rgb(150, 150, 119);
+}
+
+p {
+  margin: 0;
+}

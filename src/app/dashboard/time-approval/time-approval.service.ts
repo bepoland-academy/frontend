@@ -18,7 +18,7 @@ export class TimeApprovalService {
   // }
 
   getUsers(): Observable<UsersResponse> {
-    return this.httpService.get('http://beontime.be-academy.pl/gateway/users');
+    return this.httpService.fakeGet('http://beontime.be-academy.pl/gateway/users');
   }
 
     // const managerId = '7041cb03-200d-457c-84a9-a4881527448f';
@@ -29,7 +29,7 @@ export class TimeApprovalService {
   // }
 
   getUsersTime(managerId: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
-    return this.httpService.get(
+    return this.httpService.fakeGet(
       `http://localhost:3000/managers-${managerId}-consultants-${consultantId}-month-${monthNumber}`);
   }
 }

@@ -1,0 +1,32 @@
+<nav class="navigation">
+  <div class="timesheet">
+    <h2 class="mat-h2">Enter your timesheet for</h2>
+    <div class="date-wrapper">
+      <button mat-icon-button (click)="setPreviousWeekHandler()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <mat-form-field>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+        <div class="current-title">
+          <h2 matRipple class="mat-h3 current-date" (click)="picker.open()">
+            {{ week[0].date }} - {{ week[week.length-1].date}}
+          </h2>
+        </div>
+        <input hidden matInput [(ngModel)]="dateCalendar" (dateChange)="setWeekFromCalendarHandler($event)"
+          [matDatepicker]="picker">
+      </mat-form-field>
+      <button mat-icon-button (click)="setNextWeekHandler()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button matRipple class="date-range" (click)="picker.open()">
+        <mat-icon>date_range</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="add-entry">
+    <button mat-raised-button (click)="openDrawerHandler()">
+      Add new entry
+    </button>
+  </div>
+</nav>

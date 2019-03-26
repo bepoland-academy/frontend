@@ -1,0 +1,8 @@
+<mat-toolbar class="time-entry-heading" color="primary">
+  <h4>Client</h4>
+  <h4>Projects</h4>
+  <div class="dayWeek-cnt" *ngFor="let dayWeek of week" appWeekend [day]="dayWeek">
+    <p class="dayWeek">{{ dayWeek.date.slice(0, 5) }}</p>
+    <p class="dayWeek">{{ dayWeek.day.slice(0, 3).toUpperCase() }}</p>
+  </div>
+</mat-toolbar>

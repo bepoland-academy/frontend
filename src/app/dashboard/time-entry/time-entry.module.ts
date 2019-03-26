@@ -7,9 +7,13 @@ import { CustomMaterialModule } from '../../shared/material/material.module';
 import { AddEntryComponent } from './add-entry/add-entry.component';
 import { TimeEntryService } from './time-entry.service';
 import { ValidationDirective } from './directives/validation.directive';
-import { QuantityComponent } from './quantity/quantity.component';
+import { QuantityComponent } from './time-entry-content/quantity/quantity.component';
 import { WeekendDirective } from './directives/weekend.directive';
 import { GroupProjectsByClientPipe } from './groupProjectsByClient.pipe';
+import { TimeEntryNaviagtionComponent } from './time-entry-naviagtion/time-entry-naviagtion.component';
+import { TimeEntryHeadingComponent } from './time-entry-heading/time-entry-heading.component';
+import { TimeEntryContentComponent } from './time-entry-content/time-entry-content.component';
+import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +24,10 @@ import { GroupProjectsByClientPipe } from './groupProjectsByClient.pipe';
     AddEntryComponent,
     WeekendDirective,
     GroupProjectsByClientPipe,
+    TimeEntryNaviagtionComponent,
+    TimeEntryHeadingComponent,
+    TimeEntryContentComponent,
+    TimeEntryFooterComponent,
   ],
   imports: [
     CommonModule,
