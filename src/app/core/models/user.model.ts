@@ -20,7 +20,7 @@ export interface UsersResponse {
 }
 
 export interface UserTimeMonthly {
-  consultantdId: string;
+  consultantId: string;
   month: string;
   monthDays: Array<DayForManager>;
   projectId: string;
