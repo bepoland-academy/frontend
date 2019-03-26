@@ -17,8 +17,8 @@ export class TimeApprovalService {
   //   return this.httpService.get(this.endpoint);
   // }
 
-  getUsers(): Observable<UsersResponse> {
-    return this.httpService.get('http://beontime.be-academy.pl/gateway/users');
+  getUsers(department: string): Observable<UsersResponse> {
+    return this.httpService.get(`http://beontime.be-academy.pl/gateway/users?department=${department}`);
   }
 
     // const managerId = '7041cb03-200d-457c-84a9-a4881527448f';

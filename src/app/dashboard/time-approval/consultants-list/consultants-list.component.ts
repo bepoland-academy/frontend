@@ -26,11 +26,9 @@ export class ConsultantsListComponent implements OnInit {
     console.log(manager.department);
 
     // Get all users from the Manager's department
-    this.timeApprovalService.getUsers().subscribe(
+    this.timeApprovalService.getUsers(manager.department).subscribe(
       (users: UsersResponse) => {
-        this.usersByDepartment = users._embedded.userBodyList.filter((user) => {
-          return user.department === manager.department;
-        });
+        this.usersByDepartment = users._embedded.userBodyList;
         console.log(this.usersByDepartment);
       }
     );
