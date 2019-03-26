@@ -1,13 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { MatTableDataSource } from '@angular/material';
-import { User } from '../../../core/models';
+import { User, Department, DepartmentsResponse } from '../../../core/models';
+import { UsersResponse } from 'src/app/core/models/user.model';
 
 @Component({
   selector: 'app-users-report',
   templateUrl: './users-report.component.html',
   styleUrls: ['./users-report.component.css'],
  })
+
  export class UsersReportComponent implements OnInit {
   users: Array<User>;
   dataSource: MatTableDataSource<User>;
@@ -15,7 +17,7 @@ import { User } from '../../../core/models';
   isDataAvailable = false;
   isResponse = false;
   serverError = false;
-  departments = [];
+  departments: Array<Department>;
 
   constructor(
     private userManagementService: UserManagementService,
@@ -23,7 +25,7 @@ import { User } from '../../../core/models';
   ) {}
 
   ngOnInit(): void {
-    this.userManagementService.getDepartments().subscribe(response => {
+    this.userManagementService.getDepartments().subscribe((response: DepartmentsResponse) => {
       this.departments = response._embedded.departmentBodyList;
     });
     this.userManagementService.getReloadStatus().subscribe(() => {
@@ -34,7 +36,8 @@ import { User } from '../../../core/models';
   getUsersData(): void {
     this.userManagementService.getUsers()
     .subscribe(
-      (response) => {
+      (response: UsersResponse) => {
+        console.log(response);
         let data = response._embedded.userBodyList;
         data = data.map(el => ({...el, department: this.departments.find(a => a.departmentId === el.department).name}));
         this.users = data;
