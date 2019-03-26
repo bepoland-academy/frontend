@@ -24,6 +24,9 @@ export interface UserTimeMonthly {
   month: string;
   monthDays: Array<DayForManager>;
   projectId: string;
+  firstName?: string;
+  lastName?: string;
+  overallStatus?: string;
 }
 
 export interface DayForManager {
