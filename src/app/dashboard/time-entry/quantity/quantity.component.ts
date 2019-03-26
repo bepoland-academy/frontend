@@ -7,13 +7,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class QuantityComponent implements OnInit {
   @Input() inputValue;
-  @Input() isWeekend;
   @Output() inputValueChange = new EventEmitter();
 
+  @Input() day;
 
   constructor() {}
 
   ngOnInit() {
+    console.log(this.day)
   }
 
   verifiedValue(newValue) {
@@ -22,17 +23,26 @@ export class QuantityComponent implements OnInit {
   }
 
   increaseValue() {
+    if (this.day.status === 'submitted') {
+      return;
+    }
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 0) {
       this.verifiedValue(+this.inputValue + 0.5);
     }
   }
   decreaseValue() {
+    if (this.day.status === 'submitted') {
+      return;
+    }
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 24) {
       this.verifiedValue(+this.inputValue - 0.5);
     }
   }
 
   onMouseWheel(event) {
+    if (this.day.status === 'submitted') {
+      return;
+    }
     if (event.deltaY < 0) {
       this.increaseValue();
     } else {

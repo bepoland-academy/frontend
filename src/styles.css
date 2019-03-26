@@ -4,3 +4,7 @@
 .drawer-open {
   overflow: hidden;
 }
+
+input {
+  background-color: inherit;
+}

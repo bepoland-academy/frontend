@@ -128,4 +128,18 @@ p {
   margin: 0;
 }
 
- 
+.submitted {
+  background-color: rgb(	173, 216, 230);
+  pointer-events: none;
+}
+
+.saved {
+  background-color: rgb(190,190,190);
+}
+.loading-spinner {
+  margin-top: 30px;
+}
+
+.warn {
+  color: red;
+}

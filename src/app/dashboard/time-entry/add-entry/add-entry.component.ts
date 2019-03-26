@@ -8,47 +8,22 @@ import { TimeEntryService } from '../time-entry.service';
   styleUrls: ['./add-entry.component.css'],
 })
 export class AddEntryComponent implements OnChanges, OnInit {
-  clients = [
-    {
-      name: 'PZU',
-      projects: [
-        'Jeden',
-        'dwadziescia',
-        '44',
-        'Grupa inwalidzka do przeprowadzki',
-        'Praca w godzinach nadliczbowych',
-      ],
-    },
-    {
-      name: 'BePoland',
-      projects: [
-        'Akademia',
-        'Akademia dwa',
-        'Akademia',
-        'Przeprowadzki',
-        'Jazda na rowerze samochodem',
-      ],
-    },
-  ];
+  @Input() clients = [];
   @Input() isOpen: boolean;
   @Output() isOpenChange = new EventEmitter();
+  @Output() createNewProject = new EventEmitter();
+
   @ViewChild('drawer') drawer;
-  chosenClient: string;
+  chosenClient: any;
   isProjectsShown = false;
-  projectsToChose: Array<string> = [];
   chosenProject: string;
 
   constructor(
-    private renderer: Renderer2,
-    private timeEntryService: TimeEntryService
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
-    // nie zrobiony endpoint
-    // this.timeEntryService.getClients().subscribe(clients => {
-    //   console.log(clients);
-    //   this.clients = clients._embedded.clientBodyList;
-    // });
+    console.log(this.clients);
   }
 
   ngOnChanges() {
@@ -63,12 +38,11 @@ export class AddEntryComponent implements OnChanges, OnInit {
       this.isOpenChange.emit(false);
     }, 200);
     this.renderer.removeClass(document.body, 'drawer-open');
-    this.chosenClient = '';
+    this.chosenClient = null;
     this.isProjectsShown = false;
   }
   setClient(client) {
-    this.chosenClient = client.name;
-    this.projectsToChose = client.projects;
+    this.chosenClient = client;
     this.isProjectsShown = true;
   }
 
@@ -77,7 +51,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
   }
 
   setProject(project) {
-    this.timeEntryService.createNewEntry(this.chosenClient, project);
+    this.createNewProject.emit(project);
     this.closeDrawer();
   }
 

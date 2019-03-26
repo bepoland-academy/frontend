@@ -1,4 +1,5 @@
-<app-add-entry [(isOpen)]="isDrawerOpened"></app-add-entry>
+<app-add-entry [clients]="clientList" (createNewProject)="createNewProject($event)" [(isOpen)]="isDrawerOpened">
+</app-add-entry>
 <div class="container">
   <mat-card class="main-card">
     <header class="header">
@@ -33,56 +34,76 @@
         </button>
       </div>
     </header>
-    <!-- header time enty -->
+      <!-- header time entry -->
     <mat-toolbar class="time-entry time-entry-header" color="primary">
       <h4>Client</h4>
       <h4>Projects</h4>
-      <div class="dayWeek-cnt" *ngFor="let dayWeek of week" appWeekend [day]="dayWeek.day">
+      <div class="dayWeek-cnt" *ngFor="let dayWeek of week" appWeekend [day]="dayWeek">
         <p class="dayWeek time-entry-header__week-date">{{ dayWeek.date.slice(0, 5) }}</p>
         <p class="dayWeek time-entry-header__week-day">{{ dayWeek.day.slice(0, 3).toUpperCase() }}</p>
       </div>
     </mat-toolbar>
-
-    <!-- content time entry -->
-    <div class="time-entry-content" *ngFor="let client of projects">
-      <div [ngStyle]="{'grid-row': '1 / span ' + client.projects.length }" class="project-cell">
-        <h3>{{client.clientName}}</h3>
+    <div *ngIf="!isLoading">
+  
+      <!-- content time entry -->
+      <div class="time-entry-content" *ngFor="let client of projects | groupProjectsByClient">
+        <div [ngStyle]="{'grid-row': '1 / span ' + client.projects.length }" class="project-cell">
+          <h3>{{client.clientName}}</h3>
+        </div>
+        <div 
+          class="project-row" 
+          *ngFor="let project of client.projects"
+          [ngClass]="{
+            'submitted': project.weekDays[0].status === 'submitted',
+            'saved': project.weekDays[0].status === 'saved'
+          }"
+        >
+          <div class="project-cell">
+            <h5>{{project.projectInfo.name}}</h5>
+          </div>
+          <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" appWeekend [day]="day">
+          </app-quantity>
+          <div class="project-cell">
+            <button
+              [disabled]="project.weekDays[0].status === 'submitted'"
+              mat-icon-button
+              (click)="removeProject(project)"
+            >
+              <mat-icon >delete</mat-icon>
+            </button>
+          </div>
+          <div class="project-cell">
+            <p>{{ sumAllHoursFromWeek(project) }}</p>
+          </div>
+        </div>
       </div>
-      <div class="project-row" *ngFor="let project of client.projects">
-        <div class="project-cell">
-          <h5>{{project.projectName}}</h5>
+  
+      <!-- footer time entry -->
+      <footer *ngIf="projects.length">
+        <div class="time-entry-footer">
+          <div></div>
+          <p
+            class="project-cell" 
+            *ngFor="let dayWeek of week"
+            appWeekend
+            [day]="dayWeek"
+          >
+            {{ sumHoursFromSelectedDay(dayWeek.day) }}
+          </p>
         </div>
-        <app-quantity *ngFor="let day of project.weekDays"
-          [(inputValue)]="day.hours"
-          appWeekend
-          [day]="day.day"
-        ></app-quantity>
-        <div class="project-cell">
-          <button mat-icon-button (click)="removeProject(client, project)">
-            <mat-icon>delete</mat-icon>
-          </button>
+        <div class="footer">
+          <button class="footer__save" mat-stroked-button (click)="saveCurrentEntries()">Save</button>
+          <button mat-stroked-button (click)="sumbitCurrentEntries()">Submit</button>
         </div>
-        <div class="project-cell">
-          <p>{{ sumAllHoursFromWeek(project) }}</p>
-        </div>
+      </footer>
+      <div class="project-cell" *ngIf="!projects.length && !isError">
+        <p class="mat-display-1">Choose project and then you can enter your time</p>
       </div>
-    </div>
 
-    <!-- footer time entry -->
-    <div class="time-entry-footer">
-      <div></div>
-      <p class="project-cell" for="monday">{{ sumHoursFromSelectedDay('monday') }}</p>
-      <p class="project-cell" for="tuesday">{{ sumHoursFromSelectedDay('tuesday') }}</p>
-      <p class="project-cell" for="wednesday">{{ sumHoursFromSelectedDay('wednesday') }}</p>
-      <p class="project-cell" for="thursday">{{ sumHoursFromSelectedDay('thursday') }}</p>
-      <p class="project-cell" for="friday">{{ sumHoursFromSelectedDay('friday') }}</p>
-      <p class="project-cell" appWeekend day="saturday" for="saturday">{{ sumHoursFromSelectedDay('saturday') }}</p>
-      <p class="project-cell" appWeekend day="sunday" for="sunday">{{ sumHoursFromSelectedDay('sunday') }}</p>
     </div>
-
-    <footer class="footer">
-      <button class="footer__save" mat-stroked-button>Save</button>
-      <button mat-stroked-button>Submit</button>
-    </footer>
+    <div class="project-cell loading-spinner">
+      <mat-spinner *ngIf="isLoading"></mat-spinner>
+      <p class="mat-display-1 warn" *ngIf="isError">Can't get data from the server. Please log out and log in. If it won't help please contact administration worker</p>
+    </div>
   </mat-card>
 </div>

@@ -10,14 +10,22 @@ export class ValidationDirective {
     this.element = el.nativeElement;
   }
 
+  @HostListener('keydown', ['$event']) onKeydown(e) {
+    if (e.code === 'Backspace') {
+      this.element.value = '';
+    }
+  }
+
   @HostListener('input') oninput() {
     const mainRegExp = new RegExp(
       /^(?:([0-9]|1[0-9]|2[0-3])((\.|\,)|(?:(\.|\,)[0,5]))?|24)$/,
       'g'
     );
     const value = this.element.value;
+
+
     if (mainRegExp.test(value)) {
-      this.element.value = value;
+      this.element.value = value.replace(',', '.');
     } else {
       const regExpForFixingNumber = new RegExp(/^(?:([0-9]|1[0-9]|2[0-3])((\.|\,)|(?:(\.|\,)[0-9])))$/, 'g');
       if (regExpForFixingNumber.test(value)) {
@@ -28,6 +36,6 @@ export class ValidationDirective {
         this.element.value = '';
       }
     }
-    this.checkedValue.emit(this.element.value.trim());
+    this.checkedValue.emit(+this.element.value);
   }
 }

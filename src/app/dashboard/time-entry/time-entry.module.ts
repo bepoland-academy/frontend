@@ -6,9 +6,10 @@ import { TimeEntryComponent } from './time-entry.component';
 import { CustomMaterialModule } from '../../shared/material/material.module';
 import { AddEntryComponent } from './add-entry/add-entry.component';
 import { TimeEntryService } from './time-entry.service';
-import { ValidationDirective } from './validation.directive';
+import { ValidationDirective } from './directives/validation.directive';
 import { QuantityComponent } from './quantity/quantity.component';
-import { WeekendDirective } from './weekend.directive';
+import { WeekendDirective } from './directives/weekend.directive';
+import { GroupProjectsByClientPipe } from './groupProjectsByClient.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { WeekendDirective } from './weekend.directive';
     QuantityComponent,
     AddEntryComponent,
     WeekendDirective,
+    GroupProjectsByClientPipe,
   ],
   imports: [
     CommonModule,

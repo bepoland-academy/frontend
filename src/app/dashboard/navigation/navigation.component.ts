@@ -37,7 +37,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.substription.add(
       this.navigationService.getLinks().subscribe((links: Routes) => {
         this.links = links;
-        this.currentUrl = this.router.url.substr(1);
+        this.currentUrl = this.urlWithoutQueryString(this.router.url);
 
         // dispatching new event to set underline to matched url
         setTimeout(() => {
@@ -48,13 +48,23 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     // setting current url to changed url from router
     this.router.events.subscribe(() => {
-      this.currentUrl = this.router.url.substr(1);
+      this.currentUrl = this.urlWithoutQueryString(this.router.url);
     });
   }
   logout(): void {
     this.authService.logout();
     this.ngZone.run(() => this.router.navigate(['/login']));
   }
+
+  urlWithoutQueryString(passedUrl) {
+    let url = passedUrl.substr(1);
+    const index = url.indexOf('?');
+    if (index > -1) {
+      url = url.substring(0, index);
+    }
+    return url;
+  }
+
   ngOnDestroy(): void {
     this.substription.unsubscribe();
   }
