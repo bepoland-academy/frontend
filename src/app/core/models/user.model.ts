@@ -1,16 +1,18 @@
+import { Day } from './day.model';
+
 export interface User {
-active: boolean;
-department: string;
-email: string;
-firstName: string;
-lastName: string;
-roles: Array<string>;
-userId: string;
-_links?: {
-  self: {
-    href: string;
-  }
-};
+  active: boolean;
+  department: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  roles: Array<string>;
+  userId: string;
+  _links?: {
+    self: {
+      href: string;
+    }
+  };
 }
 
 export interface UsersResponse {
@@ -22,14 +24,6 @@ export interface UsersResponse {
 export interface UserTimeMonthly {
   consultantdId: string;
   month: string;
-  monthDays: Array<DayForManager>;
+  monthDays: Array<Day>;
   projectId: string;
-}
-
-export interface DayForManager {
-  data: string;
-  hours: number;
-  status: string;
-  comment: string;
-  test: string;
 }

@@ -4,7 +4,6 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import {
   ClientsResponse,
   DepartmentsResponse,
-  NewProject,
   Project,
   ProjectsResponse,
 } from '../../core/models';
@@ -42,7 +41,7 @@ export class ProjectManagementService {
     return this.httpService.get(this.projectsByDepartment + department);
   }
 
-  sendNewProject(newProjectData: NewProject) {
+  sendNewProject(newProjectData: Project) {
     return this.httpService.post(this.projects, newProjectData);
   }
 

@@ -3,28 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import * as moment from 'moment';
 import { TimeEntryService } from './time-entry.service';
-import { Project, ProjectsByClient } from '../../core/models';
+import { Project, ProjectsByClient, Day, TimeEntry } from '../../core/models';
 
-export interface Day {
-  day: string;
-  date: string;
-  hours: number;
-  status: string;
-  comment: string;
-}
 
-export interface TimeEntry {
-  projectId: string;
-  week: string;
-  weekDays: Array<Day>;
-}
 
-export interface TimeEntry {
-  projectId: string;
-  week: string;
-  weekDays: Array<Day>;
-  projectInfo: Project;
-}
+
+
 
 
 @Component({
@@ -68,7 +52,6 @@ export class TimeEntryComponent implements OnInit {
       (projects: [Array<TimeEntry>, Array<ProjectsByClient>]) => {
         this.projects = projects[0];
         this.clientList = projects[1];
-        console.log(projects);
         this.isLoading = false;
         this.isError = false;
     },

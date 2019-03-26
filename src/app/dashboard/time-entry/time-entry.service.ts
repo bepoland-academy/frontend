@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 
 import * as moment from 'moment';
+import { TimeEntryResponse, TimeEntry, Day, ProjectsResponse, ProjectsByClient, Project } from '../../core/models';
 import { HttpService } from '../../core/services/http.service';
 import { map, flatMap } from 'rxjs/operators';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Observable } from 'rxjs';
 import { groupProjectsByClient } from '../../shared/utils/groupProjectsByClient';
 
 
 
 
-const sortWeekByDate = (project) => project.sort((first, second) => {
+const sortWeekByDate = (weekDays: Array<Day>) => weekDays.sort((first: Day, second: Day) => {
   const firstEl = moment(first.date, 'DD-MM-YYYY');
   const secondEl = moment(second.date, 'DD-MM-YYYY');
   if (firstEl > secondEl) {
@@ -31,15 +32,15 @@ export class TimeEntryService {
       this.httpService
         .fakeGet(`http://localhost:3000/${week}`)
         .pipe(
-          flatMap((timeEntriesResponse) => {
+          flatMap((timeEntriesResponse: TimeEntryResponse) => {
             if (timeEntriesResponse._embedded) {
               return of(timeEntriesResponse._embedded.timeEntries);
             }
-            const weekBefore = +week.substr(6, 2) - 1;
+            const weekBefore: number = +week.substr(6, 2) - 1;
             return this.httpService.fakeGet(`http://localhost:3000/${week.substring(0, 6)}${weekBefore}`)
               .pipe(
-                map(secondResponse => secondResponse._embedded.timeEntries),
-                map(secondResponse => secondResponse.map(project => ({
+                map((secondResponse: TimeEntryResponse) => secondResponse._embedded.timeEntries),
+                map((timeEtries: Array<TimeEntry>) => timeEtries.map(project => ({
                   ...project,
                   weekDays: project.weekDays.map(day => ({...day, status: ''})),
                 })))
@@ -49,23 +50,22 @@ export class TimeEntryService {
       this.httpService
         .get(`projects?department=${user.department}`)
         .pipe(
-          map(projectsResponse => projectsResponse._embedded.projectBodyList)
+          map((projectsResponse: ProjectsResponse) => projectsResponse._embedded.projectBodyList)
         ),
-    ]).pipe(map(data => {
-      console.log(data);
-      let timeEntries = data[0] || [];
-      let projects = data[1] || [];
-      timeEntries = timeEntries.map(entry => ({
+    ]).pipe(map((data: [Array<TimeEntry>, Array<Project>]) => {
+      let timeEntries: Array<TimeEntry> = data[0] || [];
+      const projects: Array<Project> = data[1] || [];
+      timeEntries = timeEntries.map((entry: TimeEntry) => ({
         ...entry,
         weekDays: sortWeekByDate(entry.weekDays),
         projectInfo: projects.filter(project => entry.projectId === project.projectId)[0],
       }));
-      projects = groupProjectsByClient(projects);
-      return [timeEntries, projects];
+      const groupedProjects: Array<ProjectsByClient> = groupProjectsByClient(projects);
+      return [timeEntries, groupedProjects];
     }));
   }
 
-  createAttributesForNewProject(project, { year, week }) {
+  createAttributesForNewProject(project: Project, { year, week }): TimeEntry {
     return {
       projectInfo: project,
       weekDays: this.getFullWeekDaysWithDate(year, week),
@@ -74,9 +74,8 @@ export class TimeEntryService {
     };
   }
 
-  getFullWeekDaysWithDate(year, week) {
-    let dates = [];
-    dates = this.getCurrentFullWeek(year, week);
+  getFullWeekDaysWithDate(year: number, week: number): Array<Day> {
+    const dates: Array<string> = this.getCurrentFullWeek(year, week);
     const weekDays = [
       'monday',
       'tuesday',
@@ -86,7 +85,7 @@ export class TimeEntryService {
       'saturday',
       'sunday',
     ];
-    return dates.map((date, index) => ({
+    return dates.map((date: string, index: number) => ({
       date,
       day: weekDays[index],
       hours: 0,
@@ -95,7 +94,7 @@ export class TimeEntryService {
     }));
   }
 
-  getCurrentFullWeek(year, week) {
+  getCurrentFullWeek(year: number, week: number): Array<string> {
     const startOfWeek = moment(year, 'YYYY')
       .week(week)
       .startOf('isoWeek');
@@ -104,7 +103,7 @@ export class TimeEntryService {
       .week(week)
       .endOf('isoWeek');
 
-    const days = [];
+    const days: Array<string> = [];
     let day = startOfWeek;
     while (day <= endOfWeek) {
       days.push(day.format('DD-MM-YYYY'));

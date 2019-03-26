@@ -1,22 +1,25 @@
 import { Department, DepartmentsResponse } from './department.model';
-import { Project, ProjectsResponse, ProjectsByClient, NewProject } from './project.model';
+import { Project, ProjectsResponse, ProjectsByClient } from './project.model';
 import { Client, ClientsResponse } from './client.model';
 import { Credentials } from './credentials.model';
-import { DayForManager, User, UsersResponse, UserTimeMonthly } from './user.model';
+import { User, UsersResponse, UserTimeMonthly } from './user.model';
+import { TimeEntry, TimeEntryResponse } from './timeEntry.model';
+import { Day } from './day.model';
 
 
 export {
   Client,
   ClientsResponse,
   Credentials,
-  DayForManager,
+  Day,
   Department,
   DepartmentsResponse,
   Project,
   ProjectsResponse,
   ProjectsByClient,
-  NewProject,
   User,
   UsersResponse,
-  UserTimeMonthly
+  UserTimeMonthly,
+  TimeEntry,
+  TimeEntryResponse
 };

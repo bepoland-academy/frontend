@@ -1,23 +1,24 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+import { Day } from '../../../core/models';
+
 @Component({
   selector: 'app-quantity',
   templateUrl: './quantity.component.html',
   styleUrls: ['./quantity.component.css'],
 })
 export class QuantityComponent implements OnInit {
-  @Input() inputValue;
-  @Output() inputValueChange = new EventEmitter();
+  @Input() inputValue: number;
+  @Output() inputValueChange: EventEmitter<number> = new EventEmitter();
 
-  @Input() day;
+  @Input() day: Day;
 
   constructor() {}
 
   ngOnInit() {
-    console.log(this.day)
   }
 
-  verifiedValue(newValue) {
+  verifiedValue(newValue: number) {
     this.inputValue = newValue;
     this.inputValueChange.emit(newValue);
   }
@@ -39,7 +40,7 @@ export class QuantityComponent implements OnInit {
     }
   }
 
-  onMouseWheel(event) {
+  onMouseWheel(event: WheelEvent) {
     if (this.day.status === 'submitted') {
       return;
     }

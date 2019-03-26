@@ -1,5 +1,6 @@
 import { Component, ViewChild, Input, Output, EventEmitter, Renderer2, OnChanges, OnInit } from '@angular/core';
-import { TimeEntryService } from '../time-entry.service';
+
+import { ProjectsByClient, Project } from '../../../core/models';
 
 
 @Component({
@@ -8,13 +9,13 @@ import { TimeEntryService } from '../time-entry.service';
   styleUrls: ['./add-entry.component.css'],
 })
 export class AddEntryComponent implements OnChanges, OnInit {
-  @Input() clients = [];
+  @Input() clients: Array<ProjectsByClient> = [];
   @Input() isOpen: boolean;
-  @Output() isOpenChange = new EventEmitter();
-  @Output() createNewProject = new EventEmitter();
+  @Output() isOpenChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() createNewProject: EventEmitter<Project> = new EventEmitter();
 
   @ViewChild('drawer') drawer;
-  chosenClient: any;
+  chosenClient: ProjectsByClient;
   isProjectsShown = false;
   chosenProject: string;
 
@@ -23,7 +24,6 @@ export class AddEntryComponent implements OnChanges, OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.clients);
   }
 
   ngOnChanges() {
@@ -41,7 +41,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
     this.chosenClient = null;
     this.isProjectsShown = false;
   }
-  setClient(client) {
+  setClient(client: ProjectsByClient) {
     this.chosenClient = client;
     this.isProjectsShown = true;
   }
@@ -50,7 +50,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
     this.isProjectsShown = false;
   }
 
-  setProject(project) {
+  setProject(project: Project) {
     this.createNewProject.emit(project);
     this.closeDrawer();
   }
