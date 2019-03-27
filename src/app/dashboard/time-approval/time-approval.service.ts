@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../core/services/http.service';
-import { User, UsersResponse, UserTimeMonthly } from '../../core/models';
+import { User, UsersResponse, UserTimeMonthlyResponse } from '../../core/models';
 
 @Injectable()
 
@@ -9,26 +9,30 @@ export class TimeApprovalService {
 
   endpoint = 'users?department=';
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService) { }
 
 
-  department = JSON.parse(localStorage.getItem('user')).department;
 
   async getUsersTime() {
+    const department = JSON.parse(localStorage.getItem('user')).department;
     const date = new Date();
     const yearMonth = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2);
-    const usersTime: Array<UserTimeMonthly> = [];
+    const usersTime: Array<UserTimeMonthlyResponse> = [];
 
-    const usersResponse = await this.getUsers(this.department).toPromise();
+    const usersResponse = await this.getUsers(department).toPromise();
+    console.log(usersResponse);
 
     const usersByDepartment: Array<User> = usersResponse._embedded.userBodyList;
     await usersByDepartment.map(async (user: User) => {
-      const request = await this.getUserTime(this.department, user.userId, yearMonth).toPromise();
-      if (request) {
-        usersTime.push({...request, firstName: user.firstName, lastName: user.lastName});
+      const response = await this.getUserTime(department, user.userId, yearMonth).toPromise();
+
+      if (response._embedded) {
+        usersTime.push({ month:  response._embedded.monthTimeEntryBodyList, firstName: user.firstName, lastName: user.lastName });
+      }
+      if (response.message) {
+        usersTime.push({ month: [], firstName: user.firstName, lastName: user.lastName });
       }
     });
-
     return usersTime;
   }
 
@@ -36,7 +40,7 @@ export class TimeApprovalService {
     return this.httpService.get(this.endpoint + `${department}`);
   }
 
-  getUserTime(department: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
+  getUserTime(department: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthlyResponse> {
     return this.httpService.get(
       `managers/${department}/consultants/${consultantId}/months/${monthNumber}`);
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { TimeApprovalService } from './time-approval.service';
-import { UserTimeMonthly } from '../../core/models';
+import { UserTimeMonthlyResponse } from '../../core/models';
 import * as _ from 'lodash';
 
 @Component({
@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 
 export class TimeApprovalComponent implements OnInit {
 
-  usersTime: Array<UserTimeMonthly> = [];
+  usersTime: Array<UserTimeMonthlyResponse> = [];
   errorMessage: string;
   sidenavOpen = true;
   toggleButtonVisible = false;
@@ -19,9 +19,9 @@ export class TimeApprovalComponent implements OnInit {
   constructor(private timeApprovalService: TimeApprovalService) { }
 
   ngOnInit() {
-    this.timeApprovalService.getUsersTime().then((users: Array<UserTimeMonthly>) => {
-      this.usersTime = users;
-      // this.sortUsersTimeData(users);
+    this.timeApprovalService.getUsersTime().then((users: Array<UserTimeMonthlyResponse>) => {
+      console.log(users);
+      this.sortUsersTimeData(users);
     })
     .catch((error) => {
       if ((/^[5]/g).test(error.status)) {
@@ -33,25 +33,29 @@ export class TimeApprovalComponent implements OnInit {
     });
   }
 
-  // sortUsersTimeData(users: Array<UserTimeMonthly>) {
+  sortUsersTimeData(users) {
+    const x = users;
+    console.log(x);
+        // Assign overall status to each user
+    for (let i = 0; i < x.length; i++) {
+      console.log(x[i].lastName);
+      // for (let j = 0; j < users[i].month.length; j++) {
+      //   for (let k = 0; k < users[i].month[j].monthDays.length; k++) {
+      //     if (users[i].month[j].monthDays[k].status === 'SUBMITTED') {
+      //       // array[i] = {...array[i], overallStatus: 'submitted'};
+      //       console.log(users[i].lastName);
+      //     } else {
+      //       //  array[i] = {...array[i], overallStatus: 'notSubmitted'};
+      //       console.log('nothing found');
+      //     }
+      //   }
+      // }
+    }
 
-  //       // Assign overall status to each user
-  //   const sortUsers = ((array: Array<UserTimeMonthly>) => {
-  //         for (let i = 0; i < array.length; i++) {
-  //           for (let j = 0; j < array[i].monthDays.length; j++) {
-  //              if (array[i].monthDays[j].status === 'submitted') {
-  //                array[i] = {...array[i], overallStatus: 'submitted'};
-  //              } else {
-  //               array[i] = {...array[i], overallStatus: 'notSubmitted'};
-  //              }
-  //           }
-  //       }
-  //       });
-
-  //   sortUsers(users);
-  //   this.usersTime = users.sort((a) => (a.overallStatus !== 'submitted') ? 1 : -1);
-  //   this.usersTime = users.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1);
-  // }
+    // sortUsers(users);
+    this.usersTime = users.sort((a) => (a.overallStatus !== 'submitted') ? 1 : -1);
+    this.usersTime = users.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1);
+  }
 
   hideSidenav() {
     this.sidenavOpen = false;
@@ -62,6 +66,5 @@ export class TimeApprovalComponent implements OnInit {
     this.sidenavOpen = true;
     this.toggleButtonVisible = false;
   }
-
 
 }
