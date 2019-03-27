@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 export class TimeApprovalComponent implements OnInit {
 
   usersTime: Array<UserTimeMonthly> = [];
+  errorMessage: string;
   sidenavOpen = true;
   toggleButtonVisible = false;
 
@@ -21,6 +22,14 @@ export class TimeApprovalComponent implements OnInit {
     this.timeApprovalService.getUsersTime().then((users: Array<UserTimeMonthly>) => {
       this.usersTime = users;
       // this.sortUsersTimeData(users);
+    })
+    .catch((error) => {
+      if ((/^[5]/g).test(error.status)) {
+        this.errorMessage = `Oh no! Something bad happened.
+        Please come back later when we fixed that problem. Thanks`;
+      } else {
+        this.errorMessage = 'Please check your Internet connection';
+      }
     });
   }
 
@@ -53,5 +62,6 @@ export class TimeApprovalComponent implements OnInit {
     this.sidenavOpen = true;
     this.toggleButtonVisible = false;
   }
+
 
 }

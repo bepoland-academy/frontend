@@ -4,12 +4,10 @@ import { HttpService } from '../../core/services/http.service';
 import { User, UsersResponse, UserTimeMonthly } from '../../core/models';
 
 @Injectable()
+
 export class TimeApprovalService {
 
-  endpoint = 'users';
-  usersTime: Array<UserTimeMonthly> = [];
-  monthNumber = '2019-03';
-  // monthNumber = '1';
+  endpoint = 'users?department=';
 
   constructor(private httpService: HttpService) {}
 
@@ -17,29 +15,30 @@ export class TimeApprovalService {
   department = JSON.parse(localStorage.getItem('user')).department;
 
   async getUsersTime() {
-    const usersResponse = await this.getUsers(this.department).toPromise();
-    const usersByDepartment: Array<User> = usersResponse._embedded.userBodyList;
+    const date = new Date();
+    const yearMonth = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2);
+    const usersTime: Array<UserTimeMonthly> = [];
 
+    const usersResponse = await this.getUsers(this.department).toPromise();
+
+    const usersByDepartment: Array<User> = usersResponse._embedded.userBodyList;
     await usersByDepartment.map(async (user: User) => {
-      const request = await this.getUserTime(this.department, user.userId, this.monthNumber).toPromise();
+      const request = await this.getUserTime(this.department, user.userId, yearMonth).toPromise();
       if (request) {
-        this.usersTime.push({...request, firstName: user.firstName, lastName: user.lastName});
+        usersTime.push({...request, firstName: user.firstName, lastName: user.lastName});
       }
     });
-    return this.usersTime;
+
+    return usersTime;
   }
 
   getUsers(department: string): Observable<UsersResponse> {
-    return this.httpService.get(`http://beontime.be-academy.pl/gateway/users?department=${department}`);
+    return this.httpService.get(this.endpoint + `${department}`);
   }
-
-    // getUsers(department): Observable<UsersResponse> {
-  //   return this.httpService.get(this.endpoint + `?department=${department}`);
-  // }
 
   getUserTime(department: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
     return this.httpService.get(
-      `http://beontime.be-academy.pl/gateway/managers/${department}/consultants/${consultantId}/months/${monthNumber}`);
+      `managers/${department}/consultants/${consultantId}/months/${monthNumber}`);
   }
 
   // getUserTime(department: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
