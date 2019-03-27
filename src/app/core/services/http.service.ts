@@ -31,10 +31,6 @@ export class HttpService {
     return this.http.get(this.url + endpoint);
   }
 
-  // get(endpoint: string): Observable<any> {
-  //   return this.http.get(endpoint);
-  // }
-
   put(url: string, body: any): Observable<any> {
     return this.http.put(url, body);
   }

@@ -7,6 +7,12 @@
     forward
   </i>
 </div>
+<button (click)="updateEvents()">Update events</button>
 
+<ng-container *ngIf="options">
+  <ng-fullcalendar #fullcalendar (dateClick)="dateClick($event)" (clickButton)="clickButton($event)"
+    (eventDragStop)="eventDragStop($event)" [eventsModel]="eventsModel" [options]="options"
+    (eventClick)="eventClick($event)"></ng-fullcalendar>
+</ng-container>
 
 

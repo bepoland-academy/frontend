@@ -10,6 +10,6 @@ export interface TimeEntry {
 
 export interface TimeEntryResponse {
   _embedded: {
-    timeEntries: Array<TimeEntry>
+    weekTimeEntryBodyList: Array<TimeEntry>
   };
 }

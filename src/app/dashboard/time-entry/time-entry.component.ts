@@ -44,6 +44,7 @@ export class TimeEntryComponent implements OnInit {
     this.displayedWeek = +currentWeek.substr(6, 2);
     this.timeEntryService.fetchTracks(currentWeek).subscribe(
       (projects: [Array<TimeEntry>, Array<ProjectsByClient>]) => {
+        console.log(projects);
         this.projects = projects[0];
         this.clientList = projects[1];
         this.isLoading = false;

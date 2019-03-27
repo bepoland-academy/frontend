@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 
 import * as moment from 'moment';
-import { TimeEntryResponse, TimeEntry, Day, ProjectsResponse, ProjectsByClient, Project } from '../../core/models';
+import {
+  TimeEntryResponse,
+  TimeEntry,
+  Day,
+  ProjectsResponse,
+  ProjectsByClient,
+  Project,
+  User
+} from '../../core/models';
 import { HttpService } from '../../core/services/http.service';
 import { map, flatMap } from 'rxjs/operators';
 import { forkJoin, of, Observable } from 'rxjs';
@@ -27,19 +35,24 @@ export class TimeEntryService {
   constructor(private httpService: HttpService) {}
 
   fetchTracks(week: string) {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user: User = JSON.parse(localStorage.getItem('user'));
     return forkJoin([
       this.httpService
-        .fakeGet(`http://localhost:3000/${week}`)
+        .get(`consultants/${user.userId}/weeks/${week}`)
         .pipe(
           flatMap((timeEntriesResponse: TimeEntryResponse) => {
             if (timeEntriesResponse._embedded) {
-              return of(timeEntriesResponse._embedded.timeEntries);
+              return of(timeEntriesResponse._embedded.weekTimeEntryBodyList);
             }
             const weekBefore: number = +week.substr(6, 2) - 1;
-            return this.httpService.fakeGet(`http://localhost:3000/${week.substring(0, 6)}${weekBefore}`)
+            return this.httpService.get(`consultants/${user.userId}/weeks/${week.substring(0, 6)}${weekBefore}`)
               .pipe(
-                map((secondResponse: TimeEntryResponse) => secondResponse._embedded.timeEntries),
+                map((secondResponse: TimeEntryResponse) => {
+                  if (secondResponse._embedded) {
+                    return secondResponse._embedded.weekTimeEntryBodyList;
+                  }
+                  return [];
+                }),
                 map((timeEtries: Array<TimeEntry>) => timeEtries.map(project => ({
                   ...project,
                   weekDays: project.weekDays.map(day => ({...day, status: ''})),
