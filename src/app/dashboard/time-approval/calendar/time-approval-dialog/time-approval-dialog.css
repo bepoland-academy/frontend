@@ -1,9 +1,3 @@
-.mat-card {
-  /* border: 1px solid red; */
-  padding: 0;
-  justify-content: start;
-}
-
 .mat-card-title {
   font-size: 14px;
   text-align: left;
@@ -28,7 +22,9 @@ span {
 
 .mat-dialog-actions {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
 }
 
 .mat-button {
@@ -38,6 +34,7 @@ span {
   width: 80px;
   border-radius: 5px;
   border: 1px solid #bfbfbf;
+  margin: 0 10px;
 }
 
 .comments {
@@ -45,6 +42,21 @@ span {
   flex-direction: column;
   padding: 0 5px;
 }
+
+button {
+  margin: 0;
+}
+
+::ng-deep .mat-form-field-outline {
+    color: #d9d9d9!important;
+}
+
+
+
+
+
+
+
 
 
 

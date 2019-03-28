@@ -1,11 +1,11 @@
 .calendarComponent {
   display: flex;
-  height: 85vh;
 }
 
 .icon {
   width: 100px;
   background-color: #d9ddf2;
+  margin-bottom: 20px;
 }
 
 .material-icons {
@@ -46,9 +46,6 @@ img {
   margin: 3px;
 }
 
-.approval {
-}
-
 .mat-raised-button {
   margin: 10px 0 0 30px;
   background-color: #d9ddf2;
@@ -65,5 +62,4 @@ img {
 
 .calendar {
   margin: 20px;
-  overflow: hidden;
 }

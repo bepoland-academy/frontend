@@ -1,13 +1,13 @@
 <!-- Navigation Bar -->
-<div class="calendarComponent" *ngIf="toggleButtonVisible">
+<div class="calendarComponent" >
 <!-- <div class="calendarComponent"> -->
-  <div class="icon">
+  <div class="icon" *ngIf="toggleButtonVisible">
     <i class="material-icons" (click)=askToShow()>
       forward
     </i>
   </div>
   <!-- Above Header -->
-  <div class="calendarWrapper">
+  <div class="calendarWrapper" *ngIf="currentUser">
     <div class="aboveHeader">
       <!-- User Info -->
       <div class="userInfo">

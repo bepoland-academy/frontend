@@ -29,6 +29,10 @@ export class TimeApprovalDialog implements OnInit {
     this.dialogRef.close();
   }
 
+  cancelReject() {
+    this.comments = false;
+  }
+
   decideOnHours() {
     this.dialogRef.close();
   }

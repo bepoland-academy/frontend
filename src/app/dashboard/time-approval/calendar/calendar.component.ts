@@ -106,16 +106,13 @@ export class CalendarComponent implements OnInit {
 
   openDialog(model): void {
     const dialogRef = this.dialog.open(TimeApprovalDialog, {
-      width: '250px',
-      height: '250px',
+      // width: '250px',
+      // height: '250px',
       data: {date: model.event.extendedProps.projects[0].day.date, projects: model.event.extendedProps.projects },
     });
-    console.log({date: model.event.extendedProps.projects[0].day.date, projects: model.event.extendedProps.projects });
   }
   eventClick(model) {
     this.openDialog(model);
-    console.log(model, 'efwefwef');
-    console.log(model.event.extendedProps.projects[0].day.date);
   }
   eventDragStop(model) {
     console.log(model);

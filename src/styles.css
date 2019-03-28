@@ -31,10 +31,6 @@ p {
   position: relative !important;
 }
 
-/* .fc-day-grid-event {
-  position: absolute !important;
-  bottom: 0 !important;
-} */
 .fc-event {
   height: 30px !important;
   width: 30px !important;
@@ -51,4 +47,8 @@ p {
 .fc-title {
   font-size: 13px !important;
   font-weight: bolder;
+}
+
+.fc-scroller.fc-day-grid-container {
+  overflow: hidden !important;
 }
