@@ -6,8 +6,8 @@
     class="project-row" 
     *ngFor="let project of client.projects" 
     [ngClass]="{
-      'submitted': project.weekDays[0].status === 'submitted',
-      'saved': project.weekDays[0].status === 'saved'
+      'SUBMITTED': project.weekDays[0].status === 'SUBMITTED',
+      'saved': project.weekDays[0].status === 'SAVED'
     }"
   >
     <div class="project-cell">
@@ -16,7 +16,7 @@
     <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" appWeekend [day]="day">
     </app-quantity>
     <div class="project-cell">
-      <button [disabled]="project.weekDays[0].status === 'submitted'" mat-icon-button (click)="removeProjectHandler(project)">
+      <button [disabled]="project.weekDays[0].status === 'SUBMITTED'" mat-icon-button (click)="removeProjectHandler(project)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

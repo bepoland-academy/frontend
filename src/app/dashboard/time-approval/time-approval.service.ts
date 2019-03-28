@@ -2,36 +2,50 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../core/services/http.service';
 import { User, UsersResponse, UserTimeMonthly } from '../../core/models';
-import { map, switchMap, mergeMap, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class TimeApprovalService {
 
   endpoint = 'users';
-  // users: Observable<any>;
-  usersByDepartment: any;
+  usersTime: Array<UserTimeMonthly> = [];
+  monthNumber = '2019-03';
+  // monthNumber = '1';
 
   constructor(private httpService: HttpService) {}
 
-  // getUsers(): Observable<UsersResponse> {
-  //   return this.httpService.get(this.endpoint);
-  // }
 
-  getUsers(): Observable<UsersResponse> {
-    return this.httpService.fakeGet('http://beontime.be-academy.pl/gateway/users');
+  department = JSON.parse(localStorage.getItem('user')).department;
+
+  async getUsersTime() {
+    const usersResponse = await this.getUsers(this.department).toPromise();
+    const usersByDepartment: Array<User> = usersResponse._embedded.userBodyList;
+
+    await usersByDepartment.map(async (user: User) => {
+      const request = await this.getUserTime(this.department, user.userId, this.monthNumber).toPromise();
+      if (request) {
+        this.usersTime.push({...request, firstName: user.firstName, lastName: user.lastName});
+      }
+    });
+    return this.usersTime;
   }
 
-    // const managerId = '7041cb03-200d-457c-84a9-a4881527448f';
+  getUsers(department: string): Observable<UsersResponse> {
+    return this.httpService.get(`users?department=${department}`);
+  }
 
-  // getUsersTime(managerId: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
+    // getUsers(department): Observable<UsersResponse> {
+  //   return this.httpService.get(this.endpoint + `?department=${department}`);
+  // }
+
+  getUserTime(department: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
+    return this.httpService.get(
+      `managers/${department}/consultants/${consultantId}/months/${monthNumber}`);
+  }
+
+  // getUserTime(department: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
   //   return this.httpService.get(
-  //     `http://url.com/timeEntries/managers/${managerId}/consultants/${consultantId}/month/${monthNumber}`);
+  //     `http://localhost:3000/managers-${department}-consultants-${consultantId}-month-${monthNumber}`);
   // }
-
-  getUsersTime(managerId: string, consultantId: string, monthNumber: string): Observable<UserTimeMonthly> {
-    return this.httpService.fakeGet(
-      `http://localhost:3000/managers-${managerId}-consultants-${consultantId}-month-${monthNumber}`);
-  }
 }
 
 

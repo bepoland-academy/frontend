@@ -24,7 +24,7 @@ export class QuantityComponent implements OnInit {
   }
 
   increaseValue() {
-    if (this.day.status === 'submitted') {
+    if (this.day.status === 'SUBMITTED') {
       return;
     }
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 0) {
@@ -32,7 +32,7 @@ export class QuantityComponent implements OnInit {
     }
   }
   decreaseValue() {
-    if (this.day.status === 'submitted') {
+    if (this.day.status === 'SUBMITTED') {
       return;
     }
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 24) {
@@ -41,7 +41,7 @@ export class QuantityComponent implements OnInit {
   }
 
   onMouseWheel(event: WheelEvent) {
-    if (this.day.status === 'submitted') {
+    if (this.day.status === 'SUBMITTED') {
       return;
     }
     if (event.deltaY < 0) {

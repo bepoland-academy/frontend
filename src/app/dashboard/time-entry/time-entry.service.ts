@@ -37,45 +37,69 @@ export class TimeEntryService {
   fetchTracks(week: string) {
     const user: User = JSON.parse(localStorage.getItem('user'));
     return forkJoin([
-      this.httpService
-        .get(`consultants/${user.userId}/weeks/${week}`)
-        .pipe(
-          flatMap((timeEntriesResponse: TimeEntryResponse) => {
-            if (timeEntriesResponse._embedded) {
-              return of(timeEntriesResponse._embedded.weekTimeEntryBodyList);
-            }
-            const weekBefore: number = +week.substr(6, 2) - 1;
-            return this.httpService.get(`consultants/${user.userId}/weeks/${week.substring(0, 6)}${weekBefore}`)
-              .pipe(
-                map((secondResponse: TimeEntryResponse) => {
-                  if (secondResponse._embedded) {
-                    return secondResponse._embedded.weekTimeEntryBodyList;
-                  }
-                  return [];
-                }),
-                map((timeEtries: Array<TimeEntry>) => timeEtries.map(project => ({
-                  ...project,
-                  weekDays: project.weekDays.map(day => ({...day, status: ''})),
-                })))
-              );
-          })
-        ),
+      this.getTimeEntries(week),
       this.httpService
         .get(`projects?department=${user.department}`)
         .pipe(
           map((projectsResponse: ProjectsResponse) => projectsResponse._embedded.projectBodyList)
         ),
-    ]).pipe(map((data: [Array<TimeEntry>, Array<Project>]) => {
-      let timeEntries: Array<TimeEntry> = data[0] || [];
-      const projects: Array<Project> = data[1] || [];
-      timeEntries = timeEntries.map((entry: TimeEntry) => ({
+    ]).pipe(map((data) => {
+      let timeEntries = data[0].timeEntries || [];
+      const projects = data[1] || [];
+      const links = data[0]._links || {};
+      timeEntries = timeEntries.map((entry) => ({
         ...entry,
         weekDays: sortWeekByDate(entry.weekDays),
         projectInfo: projects.filter(project => entry.projectId === project.projectId)[0],
       }));
-      const groupedProjects: Array<ProjectsByClient> = groupProjectsByClient(projects);
-      return [timeEntries, groupedProjects];
+      const groupedProjects = groupProjectsByClient(projects);
+      return [timeEntries, groupedProjects, {...links}];
     }));
+  }
+
+  getTimeEntries(week) {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    return this.httpService
+      .get(`consultants/${user.userId}/weeks/${week}`)
+      .pipe(
+        flatMap((timeEntriesResponse: TimeEntryResponse) => {
+          if (timeEntriesResponse._embedded) {
+            return of({
+              timeEntries: timeEntriesResponse._embedded.weekTimeEntryBodyList,
+              _links: timeEntriesResponse._links,
+            });
+          }
+          const weekBefore: number = +week.substr(6, 2) - 1;
+          return this.httpService.get(`consultants/${user.userId}/weeks/${week.substring(0, 6)}${weekBefore}`)
+            .pipe(
+              map((secondResponse: TimeEntryResponse) => {
+                if (secondResponse._embedded) {
+                  return {
+                    timeEntries: secondResponse._embedded.weekTimeEntryBodyList,
+                    _links: secondResponse._links,
+                  };
+                }
+                return { timeEntries: [], _links: '' };
+              }),
+              map((result) => ({
+                ...result,
+                timeEntries: result.timeEntries.map(project => ({
+                  ...project,
+                  weekDays: project.weekDays.map(day => ({ ...day, status: '' })),
+                })),
+              }))
+            );
+        })
+      );
+  }
+
+  sendNewEntries(week, body) {
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    return this.httpService.post(`consultants/${user.userId}/weeks/${week}?`, body);
+  }
+
+  updateEntries(url, body) {
+    return this.httpService.put(url, body);
   }
 
   createAttributesForNewProject(project: Project, { year, week }): TimeEntry {
@@ -90,13 +114,13 @@ export class TimeEntryService {
   getFullWeekDaysWithDate(year: number, week: number): Array<Day> {
     const dates: Array<string> = this.getCurrentFullWeek(year, week);
     const weekDays = [
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-      'sunday',
+      'MONDAY',
+      'TUESDAY',
+      'WEDNESDAY',
+      'THURSDAY',
+      'FRIDAY',
+      'SATURDAY',
+      'SUNDAY',
     ];
     return dates.map((date: string, index: number) => ({
       date,

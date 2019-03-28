@@ -23,7 +23,7 @@ export class WeekendDirective implements AfterViewInit {
   }
 
   isSubmitted() {
-    if (this.day.status === 'submitted') {
+    if (this.day.status === 'SUBMITTED') {
       this.element.style.pointerEvents = 'none';
     }
   }

@@ -12,4 +12,5 @@ export interface TimeEntryResponse {
   _embedded: {
     weekTimeEntryBodyList: Array<TimeEntry>
   };
+  _links: string;
 }

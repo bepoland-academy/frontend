@@ -25,3 +25,11 @@ button:disabled {
 p {
   margin: 0;
 }
+
+.fc-content {
+  height: 50px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

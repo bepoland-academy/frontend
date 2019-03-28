@@ -1,8 +1,10 @@
 <ng-container *ngIf="usersTime">
     <p 
-    *ngFor="let user of usersTime"
-    (click)="askToHide()"
->{{user.firstName}} {{user.lastName}}</p>
+        *ngFor="let user of usersTime"
+        (click)="askToHide()"
+    >
+        {{user.lastName}} {{user.firstName}}
+    </p>
 </ng-container>
 
 

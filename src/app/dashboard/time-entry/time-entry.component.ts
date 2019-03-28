@@ -11,9 +11,9 @@ import { Project, ProjectsByClient, Day, TimeEntry } from '../../core/models';
   styleUrls: ['./time-entry.component.css'],
 })
 export class TimeEntryComponent implements OnInit {
-  projects: Array<TimeEntry> = [];
+  projects: any = [];
   week: Array<Day> = [];
-  clientList: Array<ProjectsByClient> = [];
+  clientList: any = [];
   currentWeek: number;
   displayedWeek: number;
   dateCalendar: Date;
@@ -21,6 +21,7 @@ export class TimeEntryComponent implements OnInit {
   isDrawerOpened: boolean;
   isLoading: boolean;
   isError: boolean;
+  _links: any;
 
   constructor(
     private timeEntryService: TimeEntryService,
@@ -43,14 +44,16 @@ export class TimeEntryComponent implements OnInit {
     this.currentWeek = +currentWeek.substr(6, 2);
     this.displayedWeek = +currentWeek.substr(6, 2);
     this.timeEntryService.fetchTracks(currentWeek).subscribe(
-      (projects: [Array<TimeEntry>, Array<ProjectsByClient>]) => {
+      (projects) => {
         console.log(projects);
         this.projects = projects[0];
         this.clientList = projects[1];
+        this._links = projects[2];
         this.isLoading = false;
         this.isError = false;
     },
     (a) => {
+      console.log(a);
       this.isError = true;
       this.isLoading = false;
     });
@@ -75,7 +78,7 @@ export class TimeEntryComponent implements OnInit {
   }
 
   removeProject(project: TimeEntry): void {
-    if (project.weekDays[0].status === 'submitted') {
+    if (project.weekDays[0].status === 'SUBMITTED') {
       return;
     }
     this.projects = this.projects.filter(proj => proj.projectId !== project.projectId);
@@ -112,9 +115,26 @@ export class TimeEntryComponent implements OnInit {
   }
 
   changeRouteAndSetWeekWithDates(): void {
-    this.router.navigate([], { queryParams: { week: `${this.currentYear}-W${this.displayedWeek}` } });
+    this.projects = [];
+    this.isLoading = true;
+    const param = `${this.currentYear}-W${this.displayedWeek}`;
+    this.router.navigate([], { queryParams: { week: param } });
     this.week = this.timeEntryService.getFullWeekDaysWithDate(this.currentYear, this.displayedWeek);
     this.dateCalendar = moment(this.week[0].date, ['DD-MM-YYYY']).toDate();
+    this.timeEntryService.fetchTracks(param).subscribe(
+      (projects) => {
+        console.log(projects);
+        this.projects = projects[0];
+        this.clientList = projects[1];
+        this._links = {...projects[2]};
+        this.isLoading = false;
+        this.isError = false;
+      },
+      (a) => {
+        console.log(a);
+        this.isError = true;
+        this.isLoading = false;
+      });
   }
 
   saveCurrentEntries() {
@@ -123,9 +143,18 @@ export class TimeEntryComponent implements OnInit {
       .map((project: TimeEntry) => (
         {
           ...project,
-          weekDays: project.weekDays.map((day: Day) => ({ ...day, status: !day.status ? 'saved' : day.status })),
+          weekDays: project.weekDays.map((day: Day) => ({ ...day, status: !day.status ? 'SAVED' : day.status })),
         })
       );
+    if (!this.projects.length) {
+        return ;
+      }
+    const dataToSend = this.projects.map(({projectInfo, ...rest}) => rest);
+    if (this._links.self) {
+      this.timeEntryService.updateEntries(this._links.self, dataToSend).subscribe((res) => {console.log('poszlos'); });
+    } else {
+      this.timeEntryService.sendNewEntries(`${this.currentYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
+    }
   }
 
   submitCurrentEntries() {
@@ -137,10 +166,20 @@ export class TimeEntryComponent implements OnInit {
           weekDays: project.weekDays.map((day: Day) => (
             {
               ...day,
-              status: day.status !== 'submitted' ? 'submitted' : day.status,
+              status: day.status !== 'SUBMITTED' ? 'SUBMITTED' : day.status,
             })
           ),
         })
       );
+
+    if (!this.projects.length) {
+      return;
+    }
+    const dataToSend = this.projects.map(({ projectInfo, ...rest }) => rest);
+    if (this._links.self) {
+      this.timeEntryService.updateEntries(this._links.self, dataToSend).subscribe((res) => { console.log('poszlos'); });
+    } else {
+      this.timeEntryService.sendNewEntries(`${this.currentYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
+    }
   }
 }

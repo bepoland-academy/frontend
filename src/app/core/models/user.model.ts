@@ -22,8 +22,11 @@ export interface UsersResponse {
 }
 
 export interface UserTimeMonthly {
-  consultantdId: string;
+  consultantId: string;
   month: string;
   monthDays: Array<Day>;
   projectId: string;
+  firstName?: string;
+  lastName?: string;
+  overallStatus?: string;
 }

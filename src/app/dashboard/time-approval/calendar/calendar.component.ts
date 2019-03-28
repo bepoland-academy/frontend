@@ -6,6 +6,23 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarComponent as NgCalendar } from 'ng-fullcalendar';
 
+
+const convertDataToCalendar = (projects) => {
+  const dateWithHours = projects
+    .flatMap(project => project.monthDays)
+    .map((el, i, currentArr) => ({
+      title: currentArr.filter(date => date.date === el.date).reduce((sum, val) => sum + val.hours, 0),
+      start: el.date,
+    }))
+    .filter((el, index, currentArr) => index === currentArr.findIndex((t) => t.title === el.title && t.hours === el.hours));
+  return dateWithHours.map(entry => ({
+    ...entry,
+    projects: projects.flatMap(project => ({
+      day: project.monthDays.find(el => el.date === entry.start),
+      project: project.projectInfo,
+    })),
+  }));
+};
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -18,20 +35,55 @@ export class CalendarComponent implements OnInit {
   @ViewChild('fullcalendar') fullcalendar: NgCalendar;
   options: OptionsInput;
   eventsModel: any;
+  projects = [
+    {
+      projectId: '1111',
+      projectInfo: {name: 'Jakis name'},
+      consultantId: '13',
+      month: '2019-03',
+      monthDays: [
+        {
+          date: '2019-03-01',
+          hours: 9,
+          status: 'SAVED',
+          comment: '',
+        },
+        {
+          date: '2019-03-02',
+          hours: 9,
+          status: 'SAVED',
+          comment: '',
+        },
+      ],
+  },
+    {
+      projectId: '222',
+      consultantId: '13',
+      projectInfo: { name: 'Another name' },
+      month: '2019-03',
+      monthDays: [
+        {
+          date: '2019-03-01',
+          hours: 5,
+          status: 'SUBMITTED',
+          comment: '',
+        },
+        {
+          date: '2019-03-02',
+          hours: 9,
+          status: 'SAVED',
+          comment: '',
+        },
+      ],
+    },
+];
   constructor(
     private timeApprovalService: TimeApprovalService
   ) { }
   ngOnInit() {
     this.options = {
+      firstDay:   1,
       editable: true,
-      customButtons: {
-        myCustomButton: {
-          text: 'custom!',
-          click() {
-            alert('clicked the custom button!');
-          },
-        },
-      },
       header: {
         left: 'prev,next today myCustomButton',
         center: 'title',
@@ -39,9 +91,15 @@ export class CalendarComponent implements OnInit {
       },
       plugins: [dayGridPlugin, interactionPlugin],
       weekNumbers: true,
+      events: convertDataToCalendar(this.projects),
+      allDayDefault: true,
     };
-
   }
+
+  askToShow() {
+    this.listClick.emit();
+  }
+
   eventClick(model) {
     console.log(model);
   }
@@ -54,15 +112,5 @@ export class CalendarComponent implements OnInit {
   dateClick(model) {
     console.log(model, 'asd');
   }
-  updateEvents() {
-    this.eventsModel = [{
-      title: 'Updaten Event',
-      start: this.yearMonth + '-08',
-      end: this.yearMonth + '-10',
-    }];
-  }
-  get yearMonth(): string {
-    const dateObj = new Date();
-    return dateObj.getUTCFullYear() + '-' + (dateObj.getUTCMonth() + 1);
-  }
+
 }
