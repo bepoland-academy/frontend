@@ -41,7 +41,7 @@ export class CalendarComponent implements OnInit {
   projects = [
     {
       projectId: '1111',
-      projectInfo: {name: 'Jakis name'},
+      projectInfo: { name: 'Jakis name' },
       consultantId: '13',
       month: '2019-03',
       monthDays: [
@@ -58,7 +58,7 @@ export class CalendarComponent implements OnInit {
           comment: '',
         },
       ],
-  },
+    },
     {
       projectId: '222',
       consultantId: '13',
@@ -79,15 +79,14 @@ export class CalendarComponent implements OnInit {
         },
       ],
     },
-];
+  ];
   constructor(
     private timeApprovalService: TimeApprovalService,
     public dialog: MatDialog
   ) { }
   ngOnInit() {
-    this.openDialog();
     this.options = {
-      firstDay:   1,
+      firstDay: 1,
       editable: true,
       header: {
         left: 'prev,next today myCustomButton',
@@ -105,23 +104,26 @@ export class CalendarComponent implements OnInit {
     this.listClick.emit();
   }
 
-  openDialog(): void {
+  openDialog(model): void {
     const dialogRef = this.dialog.open(TimeApprovalDialog, {
       width: '250px',
       height: '250px',
-      data: {},
+      data: {date: model.event.extendedProps.projects[0].day.date, projects: model.event.extendedProps.projects },
     });
-
-    eventClick(model); {
+    console.log({date: model.event.extendedProps.projects[0].day.date, projects: model.event.extendedProps.projects });
+  }
+  eventClick(model) {
+    this.openDialog(model);
+    console.log(model, 'efwefwef');
+    console.log(model.event.extendedProps.projects[0].day.date);
+  }
+  eventDragStop(model) {
     console.log(model);
   }
-    eventDragStop(model); {
+  clickButton(model) {
     console.log(model);
   }
-    clickButton(model); {
-    console.log(model);
-  }
-    dateClick(model); {
+  dateClick(model) {
     console.log(model, 'asd');
   }
 

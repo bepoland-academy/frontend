@@ -1,5 +1,6 @@
 <!-- Navigation Bar -->
 <div class="calendarComponent" *ngIf="toggleButtonVisible">
+<!-- <div class="calendarComponent"> -->
   <div class="icon">
     <i class="material-icons" (click)=askToShow()>
       forward
@@ -34,14 +35,16 @@
     </div>
     <!-- end of Above Header -->
     <!-- Calendar -->
-    <div class="calendar"></div>
+    <div class="calendar">
+      <ng-container *ngIf="options">
+        <ng-fullcalendar #fullcalendar (dateClick)="dateClick($event)" (clickButton)="clickButton($event)"
+          (eventDragStop)="eventDragStop($event)" [eventsModel]="eventsModel" [options]="options"
+          (eventClick)="eventClick($event)"></ng-fullcalendar>
+      </ng-container>
+    </div>
   </div>
 
-<ng-container *ngIf="options">
-  <ng-fullcalendar #fullcalendar (dateClick)="dateClick($event)" (clickButton)="clickButton($event)"
-    (eventDragStop)="eventDragStop($event)" [eventsModel]="eventsModel" [options]="options"
-    (eventClick)="eventClick($event)"></ng-fullcalendar>
-</ng-container>
+
 
 
 </div>

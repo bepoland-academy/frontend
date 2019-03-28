@@ -20,7 +20,7 @@ export class TimeApprovalComponent implements OnInit {
   constructor(private timeApprovalService: TimeApprovalService) { }
 
   ngOnInit() {
-    this.timeApprovalService.getUsersTime().then((users) => {
+    this.timeApprovalService.getUsersTime().then((users: Array<UserTimeMonthlyResponse>) => {
       console.log(users);
       this.sortUsersTimeData(users);
     })
@@ -62,7 +62,6 @@ export class TimeApprovalComponent implements OnInit {
     this.sidenavOpen = false;
     this.toggleButtonVisible = true;
     this.currentUser = event.event.lastName + ' ' + event.event.firstName;
-    console.log(this.currentUser);
   }
 
   showSidenav() {

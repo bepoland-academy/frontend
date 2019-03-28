@@ -14,26 +14,26 @@ export class TimeApprovalService {
 
 
   async getUsersTime() {
-    // const department = JSON.parse(localStorage.getItem('user')).department;
-    // const date = new Date();
-    // const yearMonth = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2);
-    // const usersTime: Array<UserTimeMonthlyResponse> = [];
+    const department = JSON.parse(localStorage.getItem('user')).department;
+    const date = new Date();
+    const yearMonth = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2);
+    const usersTime: Array<UserTimeMonthlyResponse> = [];
 
-    // const usersResponse = await this.getUsers(department).toPromise();
-    // console.log(usersResponse);
+    const usersResponse = await this.getUsers(department).toPromise();
+    console.log(usersResponse);
 
-    // const usersByDepartment: Array<User> = usersResponse._embedded.userBodyList;
-    // await usersByDepartment.map(async (user: User) => {
-    //   const response = await this.getUserTime(department, user.userId, yearMonth).toPromise();
+    const usersByDepartment: Array<User> = usersResponse._embedded.userBodyList;
+    await usersByDepartment.map(async (user: User) => {
+      const response = await this.getUserTime(department, user.userId, yearMonth).toPromise();
 
-    //   if (response._embedded) {
-    //     usersTime.push({ month:  response._embedded.monthTimeEntryBodyList, firstName: user.firstName, lastName: user.lastName });
-    //   }
-    //   if (response.message) {
-    //     usersTime.push({ month: [], firstName: user.firstName, lastName: user.lastName });
-    //   }
-    // });
-    // return usersTime;
+      if (response._embedded) {
+        usersTime.push({ month:  response._embedded.monthTimeEntryBodyList, firstName: user.firstName, lastName: user.lastName });
+      }
+      if (response.message) {
+        usersTime.push({ month: [], firstName: user.firstName, lastName: user.lastName });
+      }
+    });
+    return usersTime;
   }
 
   getUsers(department: string): Observable<UsersResponse> {
