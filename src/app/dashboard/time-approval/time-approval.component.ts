@@ -15,6 +15,7 @@ export class TimeApprovalComponent implements OnInit {
   errorMessage: string;
   sidenavOpen = true;
   toggleButtonVisible = false;
+  currentUser: string;
 
   constructor(private timeApprovalService: TimeApprovalService) { }
 
@@ -57,9 +58,11 @@ export class TimeApprovalComponent implements OnInit {
     this.usersTime = users.sort((a, b) => (a.lastName > b.lastName) ? 1 : -1);
   }
 
-  hideSidenav() {
+  handleUserClick(event) {
     this.sidenavOpen = false;
     this.toggleButtonVisible = true;
+    this.currentUser = event.event.lastName + ' ' + event.event.firstName;
+    console.log(this.currentUser);
   }
 
   showSidenav() {

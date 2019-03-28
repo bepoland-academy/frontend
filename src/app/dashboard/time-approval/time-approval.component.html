@@ -7,7 +7,7 @@
       <div class="wrapper2">
           <app-consultants-list
             [usersTime]="usersTime"
-            (consultantClick)="hideSidenav()"
+            (consultantClick)="handleUserClick($event)"
           >
           </app-consultants-list>
       </div>    
@@ -17,6 +17,7 @@
     <app-calendar 
       [toggleButtonVisible]="toggleButtonVisible"
       (listClick)="showSidenav()"
+      [currentUser]="currentUser"
     >
     </app-calendar>
   </mat-sidenav-content>

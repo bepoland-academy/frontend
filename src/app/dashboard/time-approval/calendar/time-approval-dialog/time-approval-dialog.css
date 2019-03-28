@@ -1,0 +1,53 @@
+.mat-card {
+  /* border: 1px solid red; */
+  padding: 0;
+  justify-content: start;
+}
+
+.mat-card-title {
+  font-size: 14px;
+  text-align: left;
+  font-weight: bolder;
+  margin: 5px 0;
+  color: #4d4d4d;
+}
+
+.mat-list-base .mat-list-item {
+  font-size: 12px;
+  font-weight: bolder;
+  /* border: 1px solid green; */
+  height: 20px;
+  padding: 3px 0;
+  color: #666666;
+}
+
+span {
+  /* border: 1px solid red; */
+  margin-left: auto;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-button {
+  /* border: 1px solid red; */
+  background-color: #d9ddf2;
+  color:  #737373;
+  width: 80px;
+  border-radius: 5px;
+  border: 1px solid #bfbfbf;
+}
+/* 
+margin: 10px 0 0 30px;
+background-color: #d9ddf2;
+color:  #737373;
+width: 200px;
+padding: 2px;
+border-radius: 5px;
+font-size: 13px;
+border: 1px solid #bfbfbf;
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none; */
