@@ -15,6 +15,10 @@
   color: #666666;
 }
 
+.name {
+  margin-right: 20px;
+}
+
 span {
   /* border: 1px solid red; */
   margin-left: auto;
@@ -22,8 +26,8 @@ span {
 
 .mat-dialog-actions {
   display: flex;
-  justify-content: space-between;
-  margin: 0;
+  justify-content: space-around;
+  margin: 10px 0 0;
   padding: 0;
 }
 
