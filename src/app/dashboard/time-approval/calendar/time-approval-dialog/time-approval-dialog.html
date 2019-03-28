@@ -1,30 +1,32 @@
 <mat-card>
    <mat-card-header>
-      <mat-card-title>March 3, 2019</mat-card-title>
+      <mat-card-title>{{data.date}}</mat-card-title>
    </mat-card-header>
    <mat-card-content>
       <div fxLayout="row">
          <mat-list role="list">
-            <mat-list-item role="listitem">
-               Project 1 <span>5h 00m</span>
+            <mat-list-item *ngFor="let project of data.projects" role="listitem">
+               {{project.project.name}}<span>{{project.day.hours}}</span>
             </mat-list-item>
-            <mat-list-item role="listitem">Project 2 <span>1h 30m</span></mat-list-item>
-            <mat-list-item role="listitem">Project 3 <span>1h 15m</span></mat-list-item>
          </mat-list>
       </div>
-      <div mat-dialog-actions>
-         <button 
-            mat-button 
-            (click)="onNoClick()"
-         >
+      <div mat-dialog-actions *ngIf="!comments">
+         <button mat-button (click)="onReject()">
             Reject
          </button>
-         <button 
-            mat-button 
-            (click)="decideOnHours()"
-         >
+         <button mat-button (click)="decideOnHours()">
             Approve
          </button>
+      </div>
+      <div *ngIf="comments" class="comments">
+         <mat-form-field appearance="outline">
+            <mat-label>Comments</mat-label>
+            <textarea matInput name="comments" rows="5" ngModel maxlength="500">
+            </textarea>
+         </mat-form-field>
+         <div mat-dialog-actions>
+         <button mat-button type="submit" (click)="finalReject()">Reject</button>
+      </div>
       </div>
    </mat-card-content>
 </mat-card>

@@ -5,9 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { CalendarComponent } from './calendar.component';
 import { CustomMaterialModule } from 'src/app/shared/material/material.module';
 import { TimeApprovalService } from '../time-approval.service';
-import { FullCalendarModule } from 'ng-fullcalendar';
 import { TimeApprovalDialog } from './time-approval-dialog/time-approval-dialog';
 import { MatInputModule } from '@angular/material';
+import { FullCalendarModule } from 'ng-fullcalendar';
 
 @NgModule({
   declarations: [
