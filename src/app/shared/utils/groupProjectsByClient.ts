@@ -1,5 +1,7 @@
-export function groupProjectsByClient(data) {
-  let group_to_values = data.reduce(
+import { ProjectsByClient, Project } from '../../core/models';
+
+export function groupProjectsByClient(data: Array<Project>): Array<ProjectsByClient> {
+  const groupToValues = data.reduce(
     (obj, item) => {
       obj[item.client.name] = obj[item.client.name] || [];
       obj[item.client.name].push(item);
@@ -7,5 +9,5 @@ export function groupProjectsByClient(data) {
     },
     {}
   );
-  return Object.keys(group_to_values).map(key => ({ clientName: key, projects: group_to_values[key] }));
+  return Object.keys(groupToValues).map((key: string) => ({ clientName: key, projects: groupToValues[key] }));
 }

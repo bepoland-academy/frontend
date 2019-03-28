@@ -65,7 +65,6 @@ export class ProjectManagementDialog implements OnInit {
         this.projectManagementService.changeReloadStatus();
       },
       (err) => {
-        console.log(err);
       });
   }
 }

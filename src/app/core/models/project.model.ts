@@ -1,5 +1,4 @@
 import { Client } from './client.model';
-import { Department } from './department.model';
 
 
 export interface Project {
@@ -9,6 +8,7 @@ export interface Project {
   department: string;
   name: string;
   rate: number;
+  projectId: string;
 }
 
 export interface ProjectsResponse {
@@ -20,13 +20,5 @@ export interface ProjectsResponse {
 export interface ProjectsByClient {
   clientName: string;
   projects: Array<Project>;
-}
-
-export interface NewProject {
-  name: string;
-  client: Client['clientId'];
-  department: Department['departmentId'];
-  comments?: string;
-  rate?: number;
 }
 

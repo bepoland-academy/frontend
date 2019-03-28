@@ -1,0 +1,27 @@
+<div class="time-entry-content" *ngFor="let client of projects | groupProjectsByClient">
+  <div [ngStyle]="{'grid-row': '1 / span ' + client.projects.length }" class="project-cell">
+    <h3>{{client.clientName}}</h3>
+  </div>
+  <div 
+    class="project-row" 
+    *ngFor="let project of client.projects" 
+    [ngClass]="{
+      'SUBMITTED': project.weekDays[0].status === 'SUBMITTED',
+      'saved': project.weekDays[0].status === 'SAVED'
+    }"
+  >
+    <div class="project-cell">
+      <h5>{{project.projectInfo.name}}</h5>
+    </div>
+    <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" appWeekend [day]="day">
+    </app-quantity>
+    <div class="project-cell">
+      <button [disabled]="project.weekDays[0].status === 'SUBMITTED'" mat-icon-button (click)="removeProjectHandler(project)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div class="project-cell">
+      <p>{{ sumAllHoursFromWeek(project) }}</p>
+    </div>
+  </div>
+</div>

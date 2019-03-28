@@ -1,0 +1,23 @@
+.time-entry-footer {
+  display: grid;
+  grid-template-columns: 4fr repeat(7, 1fr) 2fr;
+  grid-template-rows: 40px;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.buttons__save {
+  margin-right: 25px;
+}
+
+.project-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

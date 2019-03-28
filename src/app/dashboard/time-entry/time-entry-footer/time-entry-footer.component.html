@@ -1,0 +1,12 @@
+<footer>
+  <div class="time-entry-footer">
+    <div></div>
+    <p class="project-cell" *ngFor="let dayWeek of projects[0].weekDays" appWeekend [day]="dayWeek">
+      {{ sumHoursFromSelectedDay(dayWeek.day) }}
+    </p>
+  </div>
+  <div class="buttons">
+    <button class="buttons__save" mat-stroked-button (click)="saveCurrentEntriesHandler()">Save</button>
+    <button mat-stroked-button (click)="submitCurrentEntriesHandler()">Submit</button>
+  </div>
+</footer>

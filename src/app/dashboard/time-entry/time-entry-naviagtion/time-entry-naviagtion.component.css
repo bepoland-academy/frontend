@@ -1,0 +1,49 @@
+.navigation {
+  display: flex;
+}
+
+.date-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 40px;
+  overflow: hidden;
+}
+
+.date-range {
+  margin-left: 10px;
+  border-radius: 10px;
+}
+
+.mat-h3, .mat-h2 {
+  margin-bottom: 0;
+}
+
+
+.mat-h3 {
+  text-align: center;
+}
+
+.current-title {
+  position: absolute;
+  top: -0.4375em ;
+  left: 0;
+  height: 34px;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1;
+}
+
+.current-date {
+  line-height: 34px;
+  cursor: pointer;
+}
+
+button {
+  background: unset;
+  border: 0;
+  cursor: pointer;
+}
+.add-entry {
+  margin-left: auto;
+}

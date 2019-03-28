@@ -20,7 +20,7 @@ export class TimeApprovalComponent implements OnInit {
   constructor(private timeApprovalService: TimeApprovalService) { }
 
   ngOnInit() {
-    this.timeApprovalService.getUsersTime().then((users: Array<UserTimeMonthlyResponse>) => {
+    this.timeApprovalService.getUsersTime().then((users) => {
       console.log(users);
       this.sortUsersTimeData(users);
     })

@@ -4,3 +4,32 @@
 .drawer-open {
   overflow: hidden;
 }
+
+input {
+  background-color: inherit;
+}
+
+button {
+  color: inherit;
+  background-color: inherit;
+  border: unset;
+  font: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+button:disabled {
+  color: rgb(150, 150, 119);
+}
+
+p {
+  margin: 0;
+}
+
+.fc-content {
+  height: 50px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
