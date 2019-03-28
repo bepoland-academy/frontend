@@ -33,53 +33,12 @@ const convertDataToCalendar = (projects) => {
 export class CalendarComponent implements OnInit {
 
   @Input() toggleButtonVisible: boolean;
-  @Input() currentUser: string;
+  @Input() currentUser: any;
   @Output() listClick = new EventEmitter<null>();
   @ViewChild('fullcalendar') fullcalendar: NgCalendar;
   options: OptionsInput;
   eventsModel: any;
-  projects = [
-    {
-      projectId: '1111',
-      projectInfo: { name: 'Jakis name' },
-      consultantId: '13',
-      month: '2019-03',
-      monthDays: [
-        {
-          date: '2019-03-01',
-          hours: 9,
-          status: 'SAVED',
-          comment: '',
-        },
-        {
-          date: '2019-03-02',
-          hours: 9,
-          status: 'SAVED',
-          comment: '',
-        },
-      ],
-    },
-    {
-      projectId: '222',
-      consultantId: '13',
-      projectInfo: { name: 'Another name' },
-      month: '2019-03',
-      monthDays: [
-        {
-          date: '2019-03-01',
-          hours: 5,
-          status: 'SUBMITTED',
-          comment: '',
-        },
-        {
-          date: '2019-03-02',
-          hours: 9,
-          status: 'SAVED',
-          comment: '',
-        },
-      ],
-    },
-  ];
+
   constructor(
     private timeApprovalService: TimeApprovalService,
     public dialog: MatDialog
@@ -95,7 +54,6 @@ export class CalendarComponent implements OnInit {
       },
       plugins: [dayGridPlugin, interactionPlugin],
       weekNumbers: true,
-      events: convertDataToCalendar(this.projects),
       allDayDefault: true,
     };
   }
@@ -122,6 +80,11 @@ export class CalendarComponent implements OnInit {
   }
   dateClick(model) {
     console.log(model, 'asd');
+  }
+  ngOnChanges(): void {
+    if (this.currentUser) {
+      this.options.events = convertDataToCalendar(this.currentUser.monthTimeSheet);
+    }
   }
 
 }
