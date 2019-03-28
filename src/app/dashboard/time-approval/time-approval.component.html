@@ -1,0 +1,23 @@
+<div *ngIf="errorMessage" class="errorMessage">
+  <p>{{errorMessage}}</p>
+</div>
+<mat-sidenav-container *ngIf="usersTime.length">
+  <mat-sidenav mode="side" [opened]="sidenavOpen">
+    <div class="wrapper">
+      <div class="wrapper2">
+          <app-consultants-list
+            [usersTime]="usersTime"
+            (consultantClick)="hideSidenav()"
+          >
+          </app-consultants-list>
+      </div>    
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-calendar 
+      [toggleButtonVisible]="toggleButtonVisible"
+      (listClick)="showSidenav()"
+    >
+    </app-calendar>
+  </mat-sidenav-content>
+</mat-sidenav-container>

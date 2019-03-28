@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpService } from '../services/http.service';
+import { HttpService } from '../core/services/http.service';
 
 @Component({
   selector: 'app-password',
@@ -43,7 +43,7 @@ export class PasswordComponent implements OnInit {
     }, this.passwordsMatch.bind(this));
     }
 
-  regexValidation(control: FormControl): {[s: string]: boolean} {
+  regexValidation(control: FormControl): {[key: string]: boolean} {
     const lowerCase = /[a-z]/g;
     const upperCase = /[A-Z]/g;
     const digit = /[0-9]/g;

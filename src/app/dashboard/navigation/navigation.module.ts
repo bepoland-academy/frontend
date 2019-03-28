@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { NavigationComponent } from './navigation.component';
-import { CustomMaterialModule } from '../../material/material.module';
+import { CustomMaterialModule } from '../../shared/material/material.module';
 
 @NgModule({
   declarations: [

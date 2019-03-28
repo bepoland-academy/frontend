@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { TimeEntryComponent } from './time-entry.component';
-import { CustomMaterialModule } from '../../material/material.module';
+import { CustomMaterialModule } from '../../shared/material/material.module';
 import { AddEntryComponent } from './add-entry/add-entry.component';
 import { TimeEntryService } from './time-entry.service';
-import { ValidationDirective } from './validation.directive';
-import { QuantityComponent } from './quantity/quantity.component';
+import { ValidationDirective } from './directives/validation.directive';
+import { QuantityComponent } from './time-entry-content/quantity/quantity.component';
+import { WeekendDirective } from './directives/weekend.directive';
+import { GroupProjectsByClientPipe } from './groupProjectsByClient.pipe';
+import { TimeEntryNaviagtionComponent } from './time-entry-naviagtion/time-entry-naviagtion.component';
+import { TimeEntryHeadingComponent } from './time-entry-heading/time-entry-heading.component';
+import { TimeEntryContentComponent } from './time-entry-content/time-entry-content.component';
+import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.component';
 
 @NgModule({
   declarations: [
@@ -16,12 +22,17 @@ import { QuantityComponent } from './quantity/quantity.component';
     ValidationDirective,
     QuantityComponent,
     AddEntryComponent,
+    WeekendDirective,
+    GroupProjectsByClientPipe,
+    TimeEntryNaviagtionComponent,
+    TimeEntryHeadingComponent,
+    TimeEntryContentComponent,
+    TimeEntryFooterComponent,
   ],
   imports: [
     CommonModule,
     CustomMaterialModule,
     FormsModule,
-    ReactiveFormsModule,
   ],
   providers: [TimeEntryService],
 })

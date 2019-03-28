@@ -1,0 +1,11 @@
+<div class="quantity-wrapper">
+  <div class="quantity" (wheel)="onMouseWheel($event)">
+    <div class="quantity__input-wrapper">
+      <input appTimeEntry (checkedValue)="verifiedValue($event)" [ngModel]="inputValue" type='text' class="quantity__input" />
+    </div>
+    <div class="quantity__nav">
+      <button [disabled]="day.status === 'SUBMITTED'" class="quantity__button quantity__up" matRipple (click)="increaseValue()">+</button>
+      <button [disabled]="day.status === 'SUBMITTED'" class="quantity__button quantity__down" matRipple (click)="decreaseValue()">-</button>
+    </div>
+  </div>
+</div>

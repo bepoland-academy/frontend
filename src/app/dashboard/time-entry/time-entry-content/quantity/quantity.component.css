@@ -1,0 +1,59 @@
+button {
+  display: block;
+  width: 100%;
+}
+
+.quantity-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.quantity {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgb(128, 128, 128);
+  outline: none;
+  width: 60px;
+  height: 40px;
+  border-radius: 3px;
+}
+
+.quantity__nav {
+  border-left: 1px solid rgb(128, 128, 128);
+  width: 15px;
+}
+.quantity__input-wrapper {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity__button {
+  text-align: center;
+  cursor: pointer;
+  padding: 0 2px;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+.quantity__input {
+  text-align: center;
+  border: none;
+  width: 100%;
+}
+
+.quantity__input:focus {
+  outline: none;
+}
+
+.quantity__down {
+  border-top: 1px solid #808080;
+}
+
+

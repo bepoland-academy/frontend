@@ -1,0 +1,58 @@
+.mat-sidenav-container {
+  font-family: Roboto,"Helvetica Neue", sans-serif;
+  font-size: 14px;
+  margin: 10px 0;
+  height: 85vh;
+}
+
+.mat-sidenav {
+  width: 200px;
+  padding: 0;
+  background-color: #d9ddf2;
+  border-radius: 4px;
+}
+
+.wrapper {
+ height: 100%;
+ overflow: hidden;
+ box-sizing: border-box;
+ padding: 15px;
+}
+
+.wrapper2 {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.wrapper2::-webkit-scrollbar {
+  width: 5px;
+}
+
+.wrapper2::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.wrapper2::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.wrapper2::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.errorMessage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: red;
+  font-size: 20px;
+  font-weight: bolder;
+  letter-spacing: 2px;
+}
+
+.errorMessage p {
+  height: 300px;
+  text-align: center;
+  line-height: 50px;
+  margin: 100px auto;
+}

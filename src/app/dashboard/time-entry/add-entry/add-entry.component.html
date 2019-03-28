@@ -13,20 +13,22 @@
       <div class="content" [ngClass]="{'moveLeft': isProjectsShown}">
         <p class="mat-title text-center">Select Client</p>
         <div class="content-to-choose">
-          <p
-            class="element mat-body-1"
-            [ngClass]="{'selected': chosenClient === client.name}"
+          <p 
+            class="element mat-body-1" 
+            [ngClass]="{'selected': chosenClient && chosenClient.clientName === client.clientName}"
             *ngFor="let client of clients" 
-            (click)="setClient(client)"
-          >{{client.name}}</p>
+            (click)="setClient(client)">{{client.clientName}}</p>
         </div>
       </div>
       <div class="content content-project" [ngClass]="{'moveUp': isProjectsShown}">
-        <p class="mat-title text-center">Choose {{chosenClient}} project</p>
-        <div class="content-to-choose">
-          <p class="element mat-body-1" *ngFor="let project of projectsToChose" (click)="setProject(project)">
-            {{project}}</p>
+        <div *ngIf="chosenClient">
+          <p class="mat-title text-center">Choose {{chosenClient.clientName}} project</p>
+          <div class="content-to-choose">
+            <p class="element mat-body-1" *ngFor="let project of chosenClient.projects" (click)="setProject(project)">
+              {{project.name}}</p>
+          </div>
         </div>
+
       </div>
     </div>
   </mat-drawer>

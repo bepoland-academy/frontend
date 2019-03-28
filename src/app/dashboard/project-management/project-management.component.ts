@@ -1,9 +1,18 @@
-import { Component, ViewChild, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ProjectManagementService } from './project-management.service';
-import { Department } from '../../models';
+import {
+  Department,
+  DepartmentsResponse,
+  Client,
+  ClientsResponse,
+  Project,
+  ProjectsResponse,
+  ProjectsByClient
+} from '../../core/models';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { ProjectManagementDialog } from './project-management.dialog';
+import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
+import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
 
 export interface DialogData {
   client: string;
@@ -23,20 +32,18 @@ export class ProjectManagementComponent implements OnInit {
 
   @ViewChild('myForm') newProjectForm: NgForm;
 
-  departments: Array<Department>;
-  isDataAvailable = false;
-  isDepartment = false;
-  isProject = false;
-  serverError = false;
-  clientList: any;
-  clients: any;
-  isLoading = false;
+  departments: Array<Department> = [];
+  clients: Array<Client> = [];
+  projectsList1: Array<ProjectsByClient> = [];
+  // Duplicate projectsList for the filter purpose
+  projectsList2: Array<ProjectsByClient> = [];
   isSuccess = false;
   isFail = false;
-  errorMessage: string;
+  errorMessage = '';
+  errorOnCreate = '';
   actualDepartment: string;
   actualClient: string;
-  departmentChosen = false;
+  currentDepartment: Department;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -45,100 +52,92 @@ export class ProjectManagementComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    this.projectManagementService.getDepartments()
-    .subscribe(
-      (data: any) => {
-        this.departments = data._embedded.departmentBodyList;
-        this.isDataAvailable = true;
-        this.isDepartment = true;
-    },
-      () => {
-      this.serverError = true;
-      this.isDepartment = true;
+    this.getDepartments();
+    this.projectManagementService.getReloadStatus().subscribe(() => {
+      if (this.currentDepartment) {
+        this.displayProjects(this.currentDepartment);
+      }
     });
-  }
-
-  setDepartment(event) {
-    this.actualDepartment = event.name;
-    this.departmentChosen = true;
+    this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
+      this.clients = data._embedded.clientBodyList;
+    });
   }
 
   getDepartments() {
-    this.projectManagementService.getDepartments()
-      .subscribe(
-        (data: any) => {
-          this.departments = data._embedded.departmentBodyList;
-          this.isDataAvailable = true;
-          this.isDepartment = true;
-        },
-        () => {
-          this.serverError = true;
-          this.isDepartment = true;
-        });
-  }
-
-  displayProjects(event) {
-    this.projectManagementService.getProjects(event.departmentId).subscribe(
-      data => {
-
-        let group_to_values = data._embedded.projectBodyList.reduce(
-          (obj, item) => {
-            obj[item.client.name] = obj[item.client.name] || [];
-            obj[item.client.name].push(item);
-            return obj;
-          },
-          {}
-        );
-        const groupedData = Object.keys(group_to_values).map(key => {
-          return { clientName: key, projects: group_to_values[key], client: group_to_values[key][0].client };
-        });
-        this.clientList = groupedData;
-        this.clients = groupedData;
-        this.isProject = true;
+    this.projectManagementService.getDepartments().subscribe(
+      (data: DepartmentsResponse) => {
+        this.departments = data._embedded.departmentBodyList;
       },
       () => {
-        this.serverError = true;
+        this.isFail = true;
+        this.errorMessage = 'Ups! Something went wrong :(';
+        setTimeout(() => {
+          this.isFail = false;
+          this.changeDetectorRefs.detectChanges();
+        }, 3000);
+      });
+  }
+
+
+  setDepartment(event: Department) {
+    this.actualDepartment = event.name;
+  }
+
+  displayProjects(event: Department) {
+    this.currentDepartment = event;
+    this.projectManagementService.getProjects(event.departmentId).subscribe(
+      (data: ProjectsResponse) => {
+        const projects = groupProjectsByClient(data._embedded.projectBodyList);
+        this.projectsList1 = projects;
+        this.projectsList2 = projects;
+      },
+      () => {
+        this.isFail = true;
+        this.errorMessage = 'Ups! Something went wrong :(';
+        setTimeout(() => {
+          this.isFail = false;
+          this.changeDetectorRefs.detectChanges();
+        }, 3000);
       }
     );
-
   }
 
   createProject() {
-    const value = this.newProjectForm.value;
+    const value = {
+      ...this.newProjectForm.value,
+      client: {clientId: this.newProjectForm.value.client},
+    };
     this.projectManagementService.sendNewProject(value)
-        .subscribe(
-          () => {
-            this.isLoading = false;
-            this.isSuccess = true;
-            setTimeout(() => {
-              this.isSuccess = false;
-              this.changeDetectorRefs.detectChanges();
-            }, 3000);
-            this.newProjectForm.resetForm();
-          },
-          error => {
-            this.isLoading = false;
-            this.isFail = true;
-            this.errorMessage = 'Ups! Something went wrong :(';
-            setTimeout(() => {
-              this.isFail = false;
-              this.changeDetectorRefs.detectChanges();
-            }, 3000);
-          }
-        );
+      .subscribe(
+        () => {
+          this.isSuccess = true;
+          this.projectManagementService.changeReloadStatus();
+          setTimeout(() => {
+            this.isSuccess = false;
+            this.changeDetectorRefs.detectChanges();
+          }, 3000);
+          this.newProjectForm.resetForm();
+        },
+        () => {
+          this.isFail = true;
+          this.errorOnCreate = 'Ups! Something went wrong :(';
+          setTimeout(() => {
+            this.isFail = false;
+            this.changeDetectorRefs.detectChanges();
+          }, 3000);
+        }
+      );
   }
 
-  openDialog(project): void {
+  openDialog(project: Project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
-      data: {...project, departments: this.departments},
-
+      data: { ...project, departments: this.departments, clients: this.clients },
     });
   }
 
-  filterClients(event) {
-    this.clients = this.clientList.filter(client => client.clientName.toLowerCase().includes(event.target.value));
+  filterClients(event: Event) {
+    this.projectsList2 = this.projectsList1.filter(
+      client => client.clientName.toLowerCase().includes((<HTMLInputElement> event.target).value));
   }
-
 }

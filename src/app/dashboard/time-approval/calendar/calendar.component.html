@@ -1,0 +1,17 @@
+<div class="icon" *ngIf="toggleButtonVisible">
+  <i 
+    class="material-icons" 
+    style="color: red; font-size: 50px; color: white;"
+    (click)=askToShow()
+  >
+    forward
+  </i>
+</div>
+
+<ng-container *ngIf="options">
+  <ng-fullcalendar #fullcalendar (dateClick)="dateClick($event)" (clickButton)="clickButton($event)"
+    (eventDragStop)="eventDragStop($event)" [eventsModel]="eventsModel" [options]="options"
+    (eventClick)="eventClick($event)"></ng-fullcalendar>
+</ng-container>
+
+

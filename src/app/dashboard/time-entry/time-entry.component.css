@@ -3,106 +3,8 @@
   overflow: hidden;
 }
 
-.mat-paginator-outer-container {
-  justify-content: unset;
-}
-
-.header {
-  display: flex;
-}
-
-.date-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-  height: 40px;
-  overflow: hidden;
-}
-
-.date-range {
-  margin-left: 10px;
-  border-radius: 10px;
-}
-
-.mat-h3, .mat-h2 {
-  margin-bottom: 0;
-}
-
-
-.mat-h3 {
-  text-align: center;
-}
-
-
-.mat-form-field-infix {
-  background-color: blue;
-}
-
-.current-title {
-  position: absolute;
-  top: -0.4375em ;
-  left: 0;
-  height: 34px;
-  width: 100%;
-  background-color: #fff;
-  z-index: 1;
-}
-
-.current-date {
-  line-height: 34px;
-  cursor: pointer;
-}
 .main-card {
   min-height: calc(100vh - 140px);
-}
-
-button {
-  background: unset;
-  border: 0;
-  cursor: pointer;
-}
-
-button:focus {
-  outline: none;
-}
-
-.add-entry {
-  margin-left: auto;
-}
-
-
-.day-off {
-  background: rgba(61, 58, 58, 0.466);
-}
-
-.footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
-
-.footer__save {
-  margin-right: 25px;
-}
-
-.time-entry {
-  height: 70px;
-  display: grid;
-  grid-template-columns: 2fr 2fr repeat(9, 1fr);
-  grid-template-rows: 70px;
-  text-align: center;
-}
-
-.time-entry-content {
-  display: grid;
-  grid-template-columns: 2fr 11fr;
-  grid-auto-rows: 70px;
-  border-bottom: 2px solid #f5f5f5;
-}
-
-.project-row {
-  display: grid;
-  grid-template-columns: 2fr repeat(9, 1fr);
 }
 
 .project-cell {
@@ -112,9 +14,10 @@ button:focus {
   text-align: center;
 }
 
-.time-entry-footer {
-  display: grid;
-  grid-template-columns: 4fr repeat(7, 1fr) 2fr;
-  grid-template-rows: 40px;
-  border-bottom: 2px solid #f5f5f5;
+.statements {
+  margin-top: 30px;
+}
+
+.warn {
+  color: red;
 }

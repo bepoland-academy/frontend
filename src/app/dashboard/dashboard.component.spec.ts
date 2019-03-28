@@ -11,7 +11,7 @@ import { TimeApprovalComponent } from './time-approval.component';
 import { NoRoleComponent } from './no-role.component';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NavigationModule } from './navigation/navigation.module';
-import { NavigationService } from './navigation/navigation.service';
+import { NavigationService } from '../core/services/navigation.service';
 import { AuthService } from '../services/auth.service';
 import { HttpService } from '../services/http.service';
 import { of } from 'rxjs';

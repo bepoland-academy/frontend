@@ -1,20 +1,21 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { NgForm } from '@angular/forms';
-import { User } from '../../../models';
+import { User, Department, DepartmentsResponse } from '../../../core/models';
 
 @Component({
-  selector: "app-user-registration",
-  templateUrl: "./user-registration.component.html",
-  styleUrls: ["./user-registration.component.css"]
+  selector: 'app-user-registration',
+  templateUrl: './user-registration.component.html',
+  styleUrls: ['./user-registration.component.css'],
 })
 export class UserRegistrationComponent implements OnInit {
-  @ViewChild("myForm") registrationForm: NgForm;
+
+  @ViewChild('myForm') registrationForm: NgForm;
   isLoading = false;
   isSuccess = false;
   isFail = false;
   errorMessage: string;
-  departments;
+  departments: Array<Department>;
 
   constructor(
     private userManagementService: UserManagementService,
@@ -22,7 +23,7 @@ export class UserRegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userManagementService.getDepartments().subscribe(response => {
+    this.userManagementService.getDepartments().subscribe((response: DepartmentsResponse) => {
       this.departments = response._embedded.departmentBodyList;
     });
   }
@@ -50,15 +51,15 @@ export class UserRegistrationComponent implements OnInit {
       error => {
         this.isLoading = false;
         this.isFail = true;
-        if (
-          error.error.message ===
-          "[username: must be a well-formed email address]"
-        ) {
-          this.errorMessage = "Please enter email address in a valid format";
-        } else if (error.error.message === "USER ALREADY EXISTS") {
-          this.errorMessage = "User with this email already exists";
-        } else if (error.status === 0) {
-          this.errorMessage = "There were problems with the server connection";
+        if (error.status === 409) {
+          if (error.error.message === 'USER ALREADY EXISTS') {
+            this.errorMessage = 'Please check your username(email) or password';
+          }
+        } else if ((/^[5]/g).test(error.status)) {
+          this.errorMessage = `Oh no! Something bad happened.
+          Please come back later when we fixed that problem. Thanks`;
+        } else {
+          this.errorMessage = 'Please check your Internet connection';
         }
         setTimeout(() => {
           this.isFail = false;
