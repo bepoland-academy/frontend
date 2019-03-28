@@ -69,7 +69,10 @@ export class TimeEntryService {
               _links: timeEntriesResponse._links,
             });
           }
-          const weekBefore: number = +week.substr(6, 2) - 1;
+          let weekBefore: any = +week.substr(6, 2) - 1;
+          if (weekBefore < 10) {
+            weekBefore = `0${weekBefore}`;
+          }
           return this.httpService.get(`consultants/${user.userId}/weeks/${week.substring(0, 6)}${weekBefore}`)
             .pipe(
               map((secondResponse: TimeEntryResponse) => {
@@ -95,7 +98,7 @@ export class TimeEntryService {
 
   sendNewEntries(week, body) {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    return this.httpService.post(`consultants/${user.userId}/weeks/${week}?`, body);
+    return this.httpService.post(`consultants/${user.userId}/weeks/${week}`, body);
   }
 
   updateEntries(url, body) {

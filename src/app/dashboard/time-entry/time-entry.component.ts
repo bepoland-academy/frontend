@@ -15,7 +15,7 @@ export class TimeEntryComponent implements OnInit {
   week: Array<Day> = [];
   clientList: any = [];
   currentWeek: number;
-  displayedWeek: number;
+  displayedWeek: any;
   dateCalendar: Date;
   currentYear: number;
   isDrawerOpened: boolean;
@@ -45,7 +45,6 @@ export class TimeEntryComponent implements OnInit {
     this.displayedWeek = +currentWeek.substr(6, 2);
     this.timeEntryService.fetchTracks(currentWeek).subscribe(
       (projects) => {
-        console.log(projects);
         this.projects = projects[0];
         this.clientList = projects[1];
         this._links = projects[2];
@@ -53,7 +52,6 @@ export class TimeEntryComponent implements OnInit {
         this.isError = false;
     },
     (a) => {
-      console.log(a);
       this.isError = true;
       this.isLoading = false;
     });
@@ -117,6 +115,11 @@ export class TimeEntryComponent implements OnInit {
   changeRouteAndSetWeekWithDates(): void {
     this.projects = [];
     this.isLoading = true;
+    if (this.displayedWeek < 10) {
+
+      this.displayedWeek = `0${this.displayedWeek}`;
+    }
+    console.log(this.displayedWeek);
     const param = `${this.currentYear}-W${this.displayedWeek}`;
     this.router.navigate([], { queryParams: { week: param } });
     this.week = this.timeEntryService.getFullWeekDaysWithDate(this.currentYear, this.displayedWeek);
@@ -149,7 +152,8 @@ export class TimeEntryComponent implements OnInit {
     if (!this.projects.length) {
         return ;
       }
-    const dataToSend = this.projects.map(({projectInfo, ...rest}) => rest);
+    const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day, date: moment(day.date, 'DD-MM-YYYY').format('YYYY-MM-DD') })) })) };
+
     if (this._links.self) {
       this.timeEntryService.updateEntries(this._links.self, dataToSend).subscribe((res) => {console.log('poszlos'); });
     } else {
@@ -175,7 +179,7 @@ export class TimeEntryComponent implements OnInit {
     if (!this.projects.length) {
       return;
     }
-    const dataToSend = this.projects.map(({ projectInfo, ...rest }) => rest);
+    const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day, date: moment(day.date, 'DD-MM-YYYY').format('YYYY-MM-DD') })) })) };
     if (this._links.self) {
       this.timeEntryService.updateEntries(this._links.self, dataToSend).subscribe((res) => { console.log('poszlos'); });
     } else {

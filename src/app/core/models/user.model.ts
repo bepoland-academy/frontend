@@ -21,12 +21,25 @@ export interface UsersResponse {
   };
 }
 
-export interface UserTimeMonthly {
-  consultantId: string;
-  month: string;
-  monthDays: Array<Day>;
-  projectId: string;
+export interface UserTimeMonthlyResponse {
+  _embedded: {
+    monthTimeEntryBodyList: Array<MonthTime>
+  };
   firstName?: string;
   lastName?: string;
   overallStatus?: string;
+}
+
+export interface MonthTime {
+  consultantId: string;
+  month: string;
+  monthDays: Array<DayTime>;
+  projectId: string;
+}
+
+export interface DayTime {
+  date: string;
+  hours: number;
+  status: string;
+  comment: string;
 }

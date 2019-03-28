@@ -1,4 +1,7 @@
-<mat-sidenav-container>
+<div *ngIf="errorMessage" class="errorMessage">
+  <p>{{errorMessage}}</p>
+</div>
+<mat-sidenav-container *ngIf="usersTime.length">
   <mat-sidenav mode="side" [opened]="sidenavOpen">
     <div class="wrapper">
       <div class="wrapper2">
