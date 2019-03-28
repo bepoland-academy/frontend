@@ -5,6 +5,8 @@ import { OptionsInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarComponent as NgCalendar } from 'ng-fullcalendar';
+import { MatDialog } from '@angular/material';
+import { TimeApprovalDialog } from './time-approval-dialog/time-approval-dialog';
 
 
 const convertDataToCalendar = (projects) => {
@@ -31,6 +33,7 @@ const convertDataToCalendar = (projects) => {
 export class CalendarComponent implements OnInit {
 
   @Input() toggleButtonVisible: boolean;
+  @Input() currentUser: string;
   @Output() listClick = new EventEmitter<null>();
   @ViewChild('fullcalendar') fullcalendar: NgCalendar;
   options: OptionsInput;
@@ -78,7 +81,8 @@ export class CalendarComponent implements OnInit {
     },
 ];
   constructor(
-    private timeApprovalService: TimeApprovalService
+    private timeApprovalService: TimeApprovalService,
+    public dialog: MatDialog
   ) { }
   ngOnInit() {
     this.options = {
@@ -94,6 +98,7 @@ export class CalendarComponent implements OnInit {
       events: convertDataToCalendar(this.projects),
       allDayDefault: true,
     };
+    this.openDialog();
   }
 
   askToShow() {
@@ -111,6 +116,13 @@ export class CalendarComponent implements OnInit {
   }
   dateClick(model) {
     console.log(model, 'asd');
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(TimeApprovalDialog, {
+      width: '250px',
+      height: '250px',
+      data: {},
+    });
   }
 
 }

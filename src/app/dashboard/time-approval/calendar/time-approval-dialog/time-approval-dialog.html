@@ -1,0 +1,30 @@
+<mat-card>
+   <mat-card-header>
+      <mat-card-title>March 3, 2019</mat-card-title>
+   </mat-card-header>
+   <mat-card-content>
+      <div fxLayout="row">
+         <mat-list role="list">
+            <mat-list-item role="listitem">
+               Project 1 <span>5h 00m</span>
+            </mat-list-item>
+            <mat-list-item role="listitem">Project 2 <span>1h 30m</span></mat-list-item>
+            <mat-list-item role="listitem">Project 3 <span>1h 15m</span></mat-list-item>
+         </mat-list>
+      </div>
+      <div mat-dialog-actions>
+         <button 
+            mat-button 
+            (click)="onNoClick()"
+         >
+            Reject
+         </button>
+         <button 
+            mat-button 
+            (click)="decideOnHours()"
+         >
+            Approve
+         </button>
+      </div>
+   </mat-card-content>
+</mat-card>

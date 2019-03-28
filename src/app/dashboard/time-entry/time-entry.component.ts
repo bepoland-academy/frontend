@@ -155,7 +155,7 @@ export class TimeEntryComponent implements OnInit {
     const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day, date: moment(day.date, 'DD-MM-YYYY').format('YYYY-MM-DD') })) })) };
 
     if (this._links.self) {
-      this.timeEntryService.updateEntries(this._links.self, dataToSend).subscribe((res) => {console.log('poszlos'); });
+      this.timeEntryService.updateEntries(this._links.self.href, dataToSend).subscribe((res) => {console.log('poszlos'); });
     } else {
       this.timeEntryService.sendNewEntries(`${this.currentYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
     }
@@ -179,9 +179,9 @@ export class TimeEntryComponent implements OnInit {
     if (!this.projects.length) {
       return;
     }
-    const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day, date: moment(day.date, 'DD-MM-YYYY').format('YYYY-MM-DD') })) })) };
+    const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day })) })) };
     if (this._links.self) {
-      this.timeEntryService.updateEntries(this._links.self, dataToSend).subscribe((res) => { console.log('poszlos'); });
+      this.timeEntryService.updateEntries(this._links.self.href, dataToSend).subscribe((res) => { console.log('poszlos'); });
     } else {
       this.timeEntryService.sendNewEntries(`${this.currentYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
     }
