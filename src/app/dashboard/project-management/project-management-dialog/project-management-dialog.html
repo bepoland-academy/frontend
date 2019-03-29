@@ -4,8 +4,8 @@
    </mat-card-header>
    <mat-card-content>
       <form class="project-form" (ngSubmit)="updateProject()" #updateForm="ngForm" fxLayout="column">
-         <div fxLayout="row">
-            <div>
+         <div fxLayout="row" class="dialog">
+            <div class="column1">
                <mat-form-field appearance="outline">
                   <mat-label>Project Name</mat-label>
                   <input matInput name="name" ngModel [(ngModel)]="data.name">
@@ -34,50 +34,49 @@
                      maxlength="50"
                   >
                </mat-form-field>
+               <mat-form-field>
+                     <mat-select 
+                        matNativeControl 
+                        placeholder="Active" 
+                        name="active" 
+                        ngModel 
+                        [(ngModel)]="data.active"
+                     >
+                        <mat-option [value]="true">
+                           Yes
+                        </mat-option>
+                        <mat-option [value]="false">
+                           No
+                        </mat-option>
+                     </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                     <mat-select 
+                        placeholder="Department" 
+                        name="department" 
+                        ngModel
+                        [(ngModel)]="data.department"
+                     >
+                        <mat-option 
+                           [value]="department.departmentId" 
+                           *ngFor="let department of data.departments"
+                        >
+                           {{department.name}}
+                        </mat-option>
+                     </mat-select>
+                     </mat-form-field>
             </div>
             <div>
-               <mat-form-field>
-                  <mat-select 
-                     matNativeControl 
-                     placeholder="Active" 
-                     name="active" 
-                     ngModel 
-                     [(ngModel)]="data.active"
-                  >
-                     <mat-option [value]="true">
-                        Yes
-                     </mat-option>
-                     <mat-option [value]="false">
-                        No
-                     </mat-option>
-                  </mat-select>
-               </mat-form-field>
                <mat-form-field appearance="outline">
                   <mat-label>Comments</mat-label>
                   <textarea 
                      matInput 
                      name="comments" 
-                     rows="3" 
+                     rows="18" 
                      ngModel 
                      maxlength="500" 
-                     [(ngModel)]="data.comments"
-                  >
+                     [(ngModel)]="data.comments">
                 </textarea>
-               </mat-form-field>
-               <mat-form-field>
-                  <mat-select 
-                     placeholder="Department" 
-                     name="department" 
-                     ngModel
-                     [(ngModel)]="data.department"
-                  >
-                     <mat-option 
-                        [value]="department.departmentId" 
-                        *ngFor="let department of data.departments"
-                     >
-                        {{department.name}}
-                     </mat-option>
-                  </mat-select>
                </mat-form-field>
             </div>
          </div>

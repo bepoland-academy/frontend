@@ -23,6 +23,8 @@ export interface DialogData {
   styles: [`
   .mat-card-header, .mat-dialog-actions {justify-content: space-around;}
   .mat-card {text-align: center;}
+  .dialog {display: flex; justify-content: space-around;}
+  .column1 {display: flex; flex-direction: column}
   `],
 })
 
