@@ -17,11 +17,12 @@ export class TimeEntryComponent implements OnInit {
   currentWeek: number;
   displayedWeek: any;
   dateCalendar: Date;
-  currentYear: number;
+  displayedYear: number;
   isDrawerOpened: boolean;
   isLoading: boolean;
   isError: boolean;
   _links: any;
+  currentYear: any;
 
   constructor(
     private timeEntryService: TimeEntryService,
@@ -29,16 +30,18 @@ export class TimeEntryComponent implements OnInit {
     private router: Router
   ) {
     if (!activeRoute.snapshot.queryParamMap['params'].week) {
-      this.currentYear = moment().year();
+      this.displayedYear = moment().year();
+
       let currentWeek = moment().week().toString();
       if (currentWeek.length === 1) {
         currentWeek = `0${currentWeek}`;
       }
-      router.navigate([], { queryParams: { week: `${this.currentYear}-W${currentWeek}` } });
+      router.navigate([], { queryParams: { week: `${this.displayedYear}-W${currentWeek}` } });
     }
   }
 
   ngOnInit() {
+    this.currentYear = moment().year();
     this.isLoading = true;
     const currentWeek: string = this.activeRoute.snapshot.queryParamMap['params'].week;
     this.currentWeek = +currentWeek.substr(6, 2);
@@ -56,7 +59,7 @@ export class TimeEntryComponent implements OnInit {
       this.isLoading = false;
     });
 
-    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.currentYear, this.displayedWeek);
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, this.displayedWeek);
     this.dateCalendar = new Date();
   }
 
@@ -65,10 +68,13 @@ export class TimeEntryComponent implements OnInit {
   }
 
   createNewProject(project: Project): void {
+    if (this.projects.some(el => el.projectId === project.projectId && el.weekDays[0].status !== 'SUBMITTED')) {
+      return;
+    }
     const newProject: TimeEntry = this.timeEntryService.createAttributesForNewProject(
       project,
       {
-        year: this.currentYear,
+        year: this.displayedYear,
         week: this.displayedWeek,
       });
 
@@ -85,7 +91,7 @@ export class TimeEntryComponent implements OnInit {
   getPreviousWeek(): void {
     this.displayedWeek = this.displayedWeek - 1;
     if (this.displayedWeek < 1) {
-      this.currentYear -= 1;
+      this.displayedYear -= 1;
       this.displayedWeek = 52;
     }
     this.changeRouteAndSetWeekWithDates();
@@ -93,7 +99,7 @@ export class TimeEntryComponent implements OnInit {
   getNextWeek(): void {
     this.displayedWeek = this.displayedWeek + 1;
     if (this.displayedWeek > 52) {
-      this.currentYear += 1;
+      this.displayedYear += 1;
       this.displayedWeek = 1;
     }
     this.changeRouteAndSetWeekWithDates();
@@ -104,10 +110,10 @@ export class TimeEntryComponent implements OnInit {
     const selectedYear: number = value.year();
     const isDecember: boolean = value.month() === 11;
     this.displayedWeek = selectedWeek;
-    this.currentYear = selectedYear;
+    this.displayedYear = selectedYear;
     // checking if date is between years and taking higher week
     if (isDecember && selectedWeek === 1) {
-      this.currentYear = selectedYear + 1;
+      this.displayedYear = selectedYear + 1;
     }
     this.changeRouteAndSetWeekWithDates();
   }
@@ -119,14 +125,14 @@ export class TimeEntryComponent implements OnInit {
 
       this.displayedWeek = `0${this.displayedWeek}`;
     }
+    const param = `${this.displayedYear}-W${this.displayedWeek}`;
+    this.displayedWeek = +this.displayedWeek;
     console.log(this.displayedWeek);
-    const param = `${this.currentYear}-W${this.displayedWeek}`;
     this.router.navigate([], { queryParams: { week: param } });
-    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.currentYear, this.displayedWeek);
-    this.dateCalendar = moment(this.week[0].date, ['DD-MM-YYYY']).toDate();
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, this.displayedWeek);
+    this.dateCalendar = moment(this.week[0].date, ['YYYY-MM-DD']).toDate();
     this.timeEntryService.fetchTracks(param).subscribe(
       (projects) => {
-        console.log(projects);
         this.projects = projects[0];
         this.clientList = projects[1];
         this._links = {...projects[2]};
@@ -152,12 +158,12 @@ export class TimeEntryComponent implements OnInit {
     if (!this.projects.length) {
         return ;
       }
-    const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day, date: moment(day.date, 'DD-MM-YYYY').format('YYYY-MM-DD') })) })) };
+    const dataToSend = { weekTimeEntryBodyList: this.projects};
 
     if (this._links.self) {
       this.timeEntryService.updateEntries(this._links.self.href, dataToSend).subscribe((res) => {console.log('poszlos'); });
     } else {
-      this.timeEntryService.sendNewEntries(`${this.currentYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
+      this.timeEntryService.sendNewEntries(`${this.displayedYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
     }
   }
 
@@ -179,11 +185,16 @@ export class TimeEntryComponent implements OnInit {
     if (!this.projects.length) {
       return;
     }
-    const dataToSend = { weekTimeEntryBodyList: this.projects.map(({ projectInfo, ...rest }) => ({ ...rest, weekDays: rest.weekDays.map(day => ({ ...day })) })) };
+    const dataToSend = { weekTimeEntryBodyList: this.projects };
     if (this._links.self) {
       this.timeEntryService.updateEntries(this._links.self.href, dataToSend).subscribe((res) => { console.log('poszlos'); });
     } else {
-      this.timeEntryService.sendNewEntries(`${this.currentYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
+      this.timeEntryService.sendNewEntries(`${this.displayedYear}-W${this.displayedWeek}`, dataToSend).subscribe((res) => { console.log('poszlos'); });
     }
+  }
+  setToCurrentDate() {
+    this.displayedWeek = this.currentWeek;
+    this.displayedYear = this.currentYear;
+    this.changeRouteAndSetWeekWithDates();
   }
 }

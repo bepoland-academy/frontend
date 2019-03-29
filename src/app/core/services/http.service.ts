@@ -36,7 +36,6 @@ export class HttpService {
   // }
 
   put(url: string, body: any): Observable<any> {
-    console.log(url);
     return this.http.put(url, body);
   }
 

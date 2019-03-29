@@ -52,3 +52,11 @@ p {
 .fc-scroller.fc-day-grid-container {
   overflow: hidden !important;
 }
+
+.red {
+  background-color: red!important;
+}
+
+.green {
+  background-color: green!important;
+}

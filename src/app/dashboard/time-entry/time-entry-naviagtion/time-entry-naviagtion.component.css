@@ -47,3 +47,7 @@ button {
 .add-entry {
   margin-left: auto;
 }
+
+.currentDate {
+  margin-left: 20px;
+}

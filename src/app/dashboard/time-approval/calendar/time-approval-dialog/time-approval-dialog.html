@@ -22,7 +22,7 @@
                <div *ngIf="comments" class="comments">
                   <mat-form-field appearance="outline">
                      <mat-label>Comments</mat-label>
-                     <textarea matInput name="comments" rows="5" ngModel maxlength="500">
+                     <textarea matInput name="comments" [(ngModel)]="comment" rows="5" ngModel maxlength="500">
                      </textarea>
                   </mat-form-field>
                   <div mat-dialog-actions>

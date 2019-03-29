@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, Subject, BehaviorSubject } from 'rxjs';
 import { HttpService } from '../../core/services/http.service';
 import { User, UsersResponse, UserTimeMonthlyResponse } from '../../core/models';
 import { map, flatMap } from 'rxjs/operators';
@@ -7,8 +7,10 @@ import { map, flatMap } from 'rxjs/operators';
 @Injectable()
 
 export class TimeApprovalService {
+  reload = new BehaviorSubject({});
+  constructor(private httpService: HttpService) {
 
-  constructor(private httpService: HttpService) { }
+  }
 
   getUsersTime(month) {
     const loggedInUser = JSON.parse(localStorage.getItem('user'));
@@ -56,8 +58,8 @@ export class TimeApprovalService {
             })
           ),
           submittedHours: user.monthTimeSheet
-            .flatMap(projectTimeSheet =>
-              projectTimeSheet.monthDays.map(day => day.status === 'SUBMITTED' ? day.hours : 0)
+          .flatMap(projectTimeSheet =>
+            projectTimeSheet.monthDays.map(day => day.status === 'SUBMITTED' ? day.hours : 0).reduce((sum, val) => sum + val, 0)
             )
             .reduce((sum, val) => sum + val, 0),
         }));
@@ -77,6 +79,17 @@ export class TimeApprovalService {
     );
   }
 
+  reloadCalendar(user) {
+    console.log(user);
+    this.reload.next(user);
+  }
+  getReloadStatus() {
+    return this.reload.asObservable();
+  }
+  updateTimeSheet(url, body) {
+    console.log(url);
+    return this.httpService.put(url, body);
+  }
 }
 
 

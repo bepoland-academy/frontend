@@ -13,6 +13,7 @@ export class TimeEntryNaviagtionComponent implements OnInit {
   @Output() setNextWeek: EventEmitter<null> = new EventEmitter();
   @Output() setPreviousWeek: EventEmitter<null> = new EventEmitter();
   @Output() setWeekFromCalendar: EventEmitter<null> = new EventEmitter();
+  @Output() setToCurrentDate: EventEmitter<null> = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
@@ -31,5 +32,8 @@ export class TimeEntryNaviagtionComponent implements OnInit {
 
   setWeekFromCalendarHandler(event) {
     this.setWeekFromCalendar.emit(event.value);
+  }
+  setToCurrentDateHandler() {
+    this.setToCurrentDate.emit();
   }
 }
