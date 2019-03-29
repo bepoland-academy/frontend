@@ -9,14 +9,15 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 export class ConsultantsListComponent implements OnInit {
 
   @Input() usersTime: any;
-  @Output() consultantClick = new EventEmitter<null>();
+  @Output() consultantClick = new EventEmitter<any>();
 
   constructor() {}
 
   ngOnInit() {}
 
-  askToHide() {
-    this.consultantClick.emit();
+  handleClick(user) {
+    console.log(user);
+    this.consultantClick.emit(user);
   }
 
 }

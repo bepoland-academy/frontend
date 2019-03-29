@@ -79,7 +79,7 @@ export class TimeEntryService {
                 if (secondResponse._embedded) {
                   return {
                     timeEntries: secondResponse._embedded.weekTimeEntryBodyList,
-                    _links: secondResponse._links,
+                    _links: '',
                   };
                 }
                 return { timeEntries: [], _links: '' };
@@ -146,7 +146,7 @@ export class TimeEntryService {
     const days: Array<string> = [];
     let day = startOfWeek;
     while (day <= endOfWeek) {
-      days.push(day.format('DD-MM-YYYY'));
+      days.push(day.format('YYYY-MM-DD'));
       day = day.add(1, 'd');
     }
     return days;

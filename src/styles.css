@@ -26,10 +26,37 @@ p {
   margin: 0;
 }
 
-.fc-content {
-  height: 50px;
-  font-size: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.fc-content-skeleton, .fc-content-skeleton > table {
+  height: 100% !important;
+  position: relative !important;
+}
+
+.fc-event {
+  height: 30px !important;
+  width: 30px !important;
+  background-color: #d9ddf2 !important;
+  color:  #737373 !important;
+  padding: 2px !important;
+  border-radius: 5px !important;
+  border: 1px solid #bfbfbf !important;
+  margin-bottom: 5px !important;
+  bottom: 0 !important;
+  position: absolute !important;
+}
+
+.fc-title {
+  font-size: 13px !important;
+  font-weight: bolder;
+}
+
+.fc-scroller.fc-day-grid-container {
+  overflow: hidden !important;
+}
+
+.red {
+  background-color: red!important;
+}
+
+.green {
+  background-color: green!important;
 }

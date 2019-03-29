@@ -1,0 +1,35 @@
+<!-- <div class="dialog"> -->
+      <mat-card>
+            <mat-card-header>
+               <mat-card-title>{{data.date}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+               <div fxLayout="row">
+                  <mat-list role="list">
+                     <mat-list-item *ngFor="let project of data.projects" role="listitem">
+                        <p class="name">{{project.project.name}}</p><span>{{project.day.hours}}</span>
+                     </mat-list-item>
+                  </mat-list>
+               </div>
+               <div mat-dialog-actions *ngIf="!comments">
+                  <button mat-button (click)="onReject()">
+                     Reject
+                  </button>
+                  <button mat-button (click)="decideOnHours()">
+                     Approve
+                  </button>
+               </div>
+               <div *ngIf="comments" class="comments">
+                  <mat-form-field appearance="outline">
+                     <mat-label>Comments</mat-label>
+                     <textarea matInput name="comments" [(ngModel)]="comment" rows="5" ngModel maxlength="500">
+                     </textarea>
+                  </mat-form-field>
+                  <div mat-dialog-actions>
+                  <button mat-button type="submit" (click)="finalReject()">Reject</button>
+                  <button mat-button type="submit" (click)="cancelReject()">Cancel</button>
+               </div>
+               </div>
+            </mat-card-content>
+         </mat-card>
+<!-- </div> -->
