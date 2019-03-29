@@ -3,23 +3,36 @@
       <mat-card-title>Edit the project</mat-card-title>
    </mat-card-header>
    <mat-card-content>
-      <form class="project-form" (ngSubmit)="updateProject()" #updateForm="ngForm" fxLayout="column">
+      <form 
+         class="project-form" 
+         (ngSubmit)="updateProject()" 
+         #updateForm="ngForm" 
+         fxLayout="column"
+      >
          <div fxLayout="row" class="dialog">
             <div class="column1">
                <mat-form-field appearance="outline">
                   <mat-label>Project Name</mat-label>
-                  <input matInput name="name" ngModel [(ngModel)]="data.name">
+                  <input 
+                     matInput 
+                     name="name" 
+                     ngModel 
+                     [(ngModel)]="data.name"
+                  >
                </mat-form-field>
                <mat-form-field>
                   <mat-select 
                      matNativeControl 
                      placeholder="Client" 
                      name="client" 
-                     ngModel
+                     ngModel 
                      [(ngModel)]="data.client"
                      [compareWith]="compareObjects"
                   >
-                     <mat-option *ngFor="let client of data.clients" [value]="client">
+                     <mat-option 
+                        *ngFor="let client of data.clients" 
+                        [value]="client"
+                     >
                         {{client.name}}
                      </mat-option>
                   </mat-select>
@@ -35,36 +48,36 @@
                   >
                </mat-form-field>
                <mat-form-field>
-                     <mat-select 
-                        matNativeControl 
-                        placeholder="Active" 
-                        name="active" 
-                        ngModel 
-                        [(ngModel)]="data.active"
+                  <mat-select 
+                     matNativeControl 
+                     placeholder="Active" 
+                     name="active" 
+                     ngModel 
+                     [(ngModel)]="data.active"
+                  >
+                     <mat-option [value]="true">
+                        Yes
+                     </mat-option>
+                     <mat-option [value]="false">
+                        No
+                     </mat-option>
+                  </mat-select>
+               </mat-form-field>
+               <mat-form-field>
+                  <mat-select 
+                     placeholder="Department" 
+                     name="department" 
+                     ngModel 
+                     [(ngModel)]="data.department"
+                  >
+                     <mat-option 
+                        [value]="department.departmentId" 
+                        *ngFor="let department of data.departments"
                      >
-                        <mat-option [value]="true">
-                           Yes
-                        </mat-option>
-                        <mat-option [value]="false">
-                           No
-                        </mat-option>
-                     </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                     <mat-select 
-                        placeholder="Department" 
-                        name="department" 
-                        ngModel
-                        [(ngModel)]="data.department"
-                     >
-                        <mat-option 
-                           [value]="department.departmentId" 
-                           *ngFor="let department of data.departments"
-                        >
-                           {{department.name}}
-                        </mat-option>
-                     </mat-select>
-                     </mat-form-field>
+                        {{department.name}}
+                     </mat-option>
+                  </mat-select>
+               </mat-form-field>
             </div>
             <div>
                <mat-form-field appearance="outline">
@@ -75,7 +88,8 @@
                      rows="18" 
                      ngModel 
                      maxlength="500" 
-                     [(ngModel)]="data.comments">
+                     [(ngModel)]="data.comments"
+                  >
                 </textarea>
                </mat-form-field>
             </div>

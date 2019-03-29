@@ -13,6 +13,7 @@ import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
+import { DeleteProjectDialog } from './project-management-dialog/delete-project-dialog';
 
 export interface DialogData {
   client: string;
@@ -129,8 +130,17 @@ export class ProjectManagementComponent implements OnInit {
       );
   }
 
-  openDialog(project: Project): void {
+  editProject(project: Project): void {
+    console.log(project);
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
+      width: '600px',
+      data: { ...project, departments: this.departments, clients: this.clients },
+    });
+  }
+
+  deleteProject(project: Project): void {
+    console.log(project);
+    const dialogRef = this.dialog.open(DeleteProjectDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
     });

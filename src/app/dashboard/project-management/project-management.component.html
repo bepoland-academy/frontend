@@ -3,7 +3,10 @@
       <!-- Projects' Options -->
       <div *ngIf="departments.length" fxLayout="row" class="projectOptions">
          <mat-form-field>
-            <mat-select placeholder="Select department" (selectionChange)="displayProjects($event.value)">
+            <mat-select 
+               laceholder="Select department" 
+               (selectionChange)="displayProjects($event.value)"
+            >
                <mat-option *ngFor="let department of departments" [value]="department"
                   (click)="setDepartment(department)">
                   {{department.name}}
@@ -11,16 +14,20 @@
             </mat-select>
          </mat-form-field>
          <mat-form-field>
-            <input matInput placeholder="Filter Clients" (keyup)="filterClients($event)">
+            <input 
+               matInput 
+               placeholder="Filter Clients" 
+               (keyup)="filterClients($event)"
+            >
          </mat-form-field>
          <div class="addClient">
             <button 
                type="submit" 
                mat-raised-button 
-               color="primary"
+               color="primary" 
                [disabled]="!actualDepartment"
-               > 
-                  Add new Client
+            >
+               Add new Client
             </button>
          </div>
       </div>
@@ -60,8 +67,17 @@
                            <h4>{{project.active? 'Yes' : 'No'}}</h4>
                         </div>
                         <div class="grid-item edit">
-                           <button mat-icon-button (click)="openDialog(project)">
+                           <button mat-icon-button (click)="editProject(project)">
                               <mat-icon>edit</mat-icon>
+                           </button>
+                        </div>
+                        <div class="grid-item edit">
+                           <button 
+                              mat-icon-button 
+                              (click)="deleteProject(project)"
+                              [disabled]="project.active === false"
+                           >
+                              <mat-icon>delete</mat-icon>
                            </button>
                         </div>
                      </div>
@@ -77,14 +93,33 @@
          <mat-card-title>Create New Project</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-         <form class="project-form" (ngSubmit)="createProject()" #myForm="ngForm" fxLayout="column">
+         <form 
+            class="project-form" 
+            (ngSubmit)="createProject()" 
+            #myForm="ngForm" 
+            fxLayout="column"
+         >
             <mat-form-field appearance="outline">
                <mat-label>Project Name</mat-label>
-               <input matInput name="name" ngModel required>
+               <input 
+                  matInput 
+                  name="name" 
+                  ngModel 
+                  required
+               >
             </mat-form-field>
             <mat-form-field>
-               <mat-select matNativeControl placeholder="Client" name="client" ngModel required>
-                  <mat-option *ngFor="let client of clients" [value]="client.clientId">
+               <mat-select 
+                  matNativeControl 
+                  placeholder="Client" 
+                  name="client" 
+                  ngModel 
+                  required
+               >
+                  <mat-option 
+                     *ngFor="let client of clients" 
+                     [value]="client.clientId"
+                  >
                      {{client.name}}
                   </mat-option>
                </mat-select>
@@ -95,18 +130,38 @@
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Comments</mat-label>
-               <textarea matInput name="comments" rows="3" ngModel maxlength="500">
+               <textarea 
+                  matInput 
+                  name="comments" 
+                  rows="3" 
+                  ngModel 
+                  maxlength="500"
+               >
             </textarea>
             </mat-form-field>
             <mat-form-field>
-               <mat-select matNativeControl placeholder="Department" name="department" ngModel required>
-                  <mat-option [value]="department.departmentId" *ngFor="let department of departments">
+               <mat-select 
+                  matNativeControl 
+                  placeholder="Department" 
+                  name="department" 
+                  ngModel 
+                  required
+               >
+                  <mat-option 
+                     [value]="department.departmentId" 
+                     *ngFor="let department of departments"
+                  >
                      {{department.name}}
                   </mat-option>
                </mat-select>
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">
-               <button type="submit" mat-raised-button color="primary" [disabled]="!myForm.valid">
+               <button 
+                  type="submit" 
+                  mat-raised-button 
+                  color="primary" 
+                  [disabled]="!myForm.valid"
+               >
                   Create
                </button>
             </mat-card-actions>
