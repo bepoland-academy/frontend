@@ -26,7 +26,13 @@
                </mat-form-field>
                <mat-form-field appearance="outline">
                   <mat-label>Project Rate</mat-label>
-                  <input matInput name="rate" ngModel [(ngModel)]="data.rate">
+                  <input 
+                     matInput 
+                     name="rate" 
+                     ngModel 
+                     [(ngModel)]="data.rate" 
+                     maxlength="50"
+                  >
                </mat-form-field>
             </div>
             <div>
@@ -48,7 +54,14 @@
                </mat-form-field>
                <mat-form-field appearance="outline">
                   <mat-label>Comments</mat-label>
-                  <textarea matInput name="comments" rows="3" ngModel maxlength="500" [(ngModel)]="data.comments">
+                  <textarea 
+                     matInput 
+                     name="comments" 
+                     rows="3" 
+                     ngModel 
+                     maxlength="500" 
+                     [(ngModel)]="data.comments"
+                  >
                 </textarea>
                </mat-form-field>
                <mat-form-field>

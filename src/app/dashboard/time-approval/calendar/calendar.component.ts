@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import { TimeApprovalService } from '../time-approval.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { TimeApprovalDialog } from './time-approval-dialog/time-approval-dialog';
 import { OptionsInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -63,12 +63,15 @@ export class CalendarComponent implements OnInit {
   }
 
   openDialog(model): void {
+    console.log(model, event);
     const dialogRef = this.dialog.open(TimeApprovalDialog, {
-      // width: '250px',
-      // height: '250px',
-      data: {date: model.event.extendedProps.projects[0].day.date, projects: model.event.extendedProps.projects },
+      data: {
+        date: model.event.extendedProps.projects[0].day.date,
+        projects: model.event.extendedProps.projects,
+      },
     });
   }
+
   eventClick(model) {
     this.openDialog(model);
   }
