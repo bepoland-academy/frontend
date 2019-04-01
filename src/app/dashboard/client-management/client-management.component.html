@@ -1,3 +1,34 @@
-<p>
-  client-management works!
-</p>
+<div *ngIf="clients.length" class="clients">
+  <!-- Clients list -->
+  <div class="header">
+    <div class="grid-item">
+      <h4>Client</h4>
+    </div>
+    <div class="grid-item edit"></div>
+  </div>
+  <div *ngFor="let client of clients" class="content">
+    <div class="grid-item truncate">
+      <h4 class="truncate">{{client.clientName}}</h4>
+    </div>
+    <div>
+      <div class="grid-item edit">
+        <button mat-icon-button (click)="editClient(client)" [disabled]="client.active === false">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="button addClient">
+      <div class="grid-item">
+          <button 
+          type="submit" 
+          mat-raised-button 
+          color="primary"
+          (click)="createClient(client)" 
+       >
+          Add new Client
+       </button>
+      </div>
+      <div class="grid-item edit"></div>
+    </div>
+</div>
