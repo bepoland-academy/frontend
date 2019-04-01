@@ -9,6 +9,7 @@ import { TimeApprovalComponent } from '../../dashboard/time-approval/time-approv
 import { ProjectManagementComponent } from '../../dashboard/project-management/project-management.component';
 import { UserManagementComponent } from '../../dashboard/user-management/user-management.component';
 import { NoRoleComponent } from '../../dashboard/no-role.component';
+import { ClientManagementComponent } from 'src/app/dashboard/client-management/client-management.component';
 
 @Injectable()
 export class NavigationService {
@@ -45,6 +46,12 @@ export class NavigationService {
       path: 'users',
       component: UserManagementComponent,
       data: { name: 'User management',
+      forRole: ['ADMINISTRATION'] },
+    },
+    {
+      path: 'clients',
+      component: ClientManagementComponent,
+      data: { name: 'Client management',
       forRole: ['ADMINISTRATION'] },
     },
   ];

@@ -7,6 +7,7 @@ import { TimeApprovalComponent } from './time-approval/time-approval.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { NoRoleComponent } from './no-role.component';
 import { ProjectManagementComponent } from './project-management/project-management.component';
+import { ClientManagementComponent } from './client-management/client-management.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +23,7 @@ import { ProjectManagementComponent } from './project-management/project-managem
     ProjectManagementComponent,
     TimeApprovalComponent,
     UserManagementComponent,
+    ClientManagementComponent,
     NoRoleComponent,
   ],
 })
