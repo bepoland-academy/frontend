@@ -1,71 +1,74 @@
 <div class="user-management">
-    <mat-spinner [ngClass]="{hidden: isResponse === true}"></mat-spinner>
-    <div *ngIf="isDataAvailable && !serverError">
-        <mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="employee">
-                <mat-header-cell *matHeaderCellDef>Employee</mat-header-cell>
-                <mat-cell *matCellDef="let user">
-                    {{ user.firstName || '' }} {{ user.lastName || '' }}
-                </mat-cell>
-            </ng-container>
+  <mat-spinner [ngClass]="{ hidden: isResponse === true }"></mat-spinner>
+  <div *ngIf="isDataAvailable && !serverError">
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="employee">
+        <mat-header-cell *matHeaderCellDef>Employee1</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          {{ user.firstName || "" }} {{ user.lastName || "" }}
+        </mat-cell>
+      </ng-container>
 
-            <ng-container matColumnDef="role">
-                <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
-                <mat-cell *matCellDef="let user">
-                    <mat-checkbox
-                        [checked]="checkRole(user, 'CONSULTANT')"
-                        (change)="updateRole(user, 'CONSULTANT')"
-                    >
-                        Consultant
-                    </mat-checkbox>
-                    <mat-checkbox 
-                        [checked]="checkRole(user, 'ADMINISTRATION')"
-                        (change)="updateRole(user, 'ADMINISTRATION')"
-                    >
-                        Administration
-                    </mat-checkbox>
-                    <mat-checkbox 
-                        [checked]="checkRole(user, 'MANAGER')" 
-                        (change)="updateRole(user, 'MANAGER')"
-                    >
-                        Manager
-                    </mat-checkbox>
-                </mat-cell>
-            </ng-container>
+      <ng-container matColumnDef="role">
+        <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <mat-checkbox
+            [checked]="checkRole(user, 'CONSULTANT')"
+            (change)="updateRole(user, 'CONSULTANT')"
+          >
+            Consultant
+          </mat-checkbox>
+          <mat-checkbox
+            [checked]="checkRole(user, 'ADMINISTRATION')"
+            (change)="updateRole(user, 'ADMINISTRATION')"
+          >
+            Administration
+          </mat-checkbox>
+          <mat-checkbox
+            [checked]="checkRole(user, 'MANAGER')"
+            (change)="updateRole(user, 'MANAGER')"
+          >
+            Manager
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
 
-            <ng-container matColumnDef="department">
-                <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
-                <mat-cell *matCellDef="let user">{{user.department}}</mat-cell>
-            </ng-container>
+      <ng-container matColumnDef="department">
+        <mat-header-cell *matHeaderCellDef>Department</mat-header-cell>
+        <mat-cell *matCellDef="let user">{{ user.department }}</mat-cell>
+      </ng-container>
 
-            <ng-container matColumnDef="active">
-                <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
-                <mat-cell *matCellDef="let user">
-                    <mat-radio-group>
-                        <mat-radio-button 
-                            value="true" 
-                            [checked]="user.active" 
-                            (click)="updateActive(user)"
-                        >
-                            Yes
-                        </mat-radio-button>
-                        <mat-radio-button 
-                            value="false" 
-                            [checked]="!user.active" 
-                            (click)="updateActive(user)"
-                        >
-                            No
-                        </mat-radio-button>
-                    </mat-radio-group>
-                </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-    </div>
-    <div *ngIf="serverError" class="errorMessage">
-        <p>Ups!
-            <br> There were problems with the server connection!
-        </p>
-    </div>
+      <ng-container matColumnDef="active">
+        <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <mat-radio-group>
+            <mat-radio-button
+              value="true"
+              [checked]="user.active"
+              (click)="updateActive(user)"
+            >
+              Yes
+            </mat-radio-button>
+            <mat-radio-button
+              value="false"
+              [checked]="!user.active"
+              (click)="updateActive(user)"
+            >
+              No
+            </mat-radio-button>
+          </mat-radio-group>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row
+        *matHeaderRowDef="displayedColumns; sticky: true"
+      ></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+  <div *ngIf="serverError" class="errorMessage">
+    <p>
+      Ups! <br />
+      There were problems with the server connection!
+    </p>
+  </div>
 </div>
