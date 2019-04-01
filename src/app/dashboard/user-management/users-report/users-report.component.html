@@ -3,7 +3,7 @@
   <div *ngIf="isDataAvailable && !serverError">
     <mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="employee">
-        <mat-header-cell *matHeaderCellDef>Employee1</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>Employee3</mat-header-cell>
         <mat-cell *matCellDef="let user">
           {{ user.firstName || "" }} {{ user.lastName || "" }}
         </mat-cell>
@@ -21,7 +21,7 @@
           <mat-checkbox
             [checked]="checkRole(user, 'ADMINISTRATION')"
             (change)="updateRole(user, 'ADMINISTRATION')"
-          >
+          ></mat-checkbox>
             Administration
           </mat-checkbox>
           <mat-checkbox
