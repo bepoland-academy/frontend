@@ -13,6 +13,7 @@ import { TimeEntryModule } from './time-entry/time-entry.module';
 import { ProjectManagementModule } from './project-management/project-management.module';
 import { TimeApprovalModule } from './time-approval/time-approval.module';
 import { ClientManagementModule } from './client-management/client-management.module';
+import { RoleManagementModule } from './role-management/role-management.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ClientManagementModule } from './client-management/client-management.mo
     ProjectManagementModule,
     TimeApprovalModule,
     ClientManagementModule,
+    RoleManagementModule,
   ],
   exports: [
     DashboardComponent,

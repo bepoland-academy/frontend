@@ -1,8 +1,8 @@
 import { Component, ViewChild, Inject, OnInit } from '@angular/core';
-import { ClientManagementService } from '../client-management.service';
+import { RoleManagementService } from '../../role-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Client } from '../../../core/models';
+// import { Role } from '../../../../core/models';
 import { MatSnackBar } from '@angular/material';
 
 // export interface DialogData {
@@ -18,25 +18,25 @@ import { MatSnackBar } from '@angular/material';
 
 
 @Component({
-  selector: 'app-create-client-dialog',
-  templateUrl: './create-client-dialog.html',
+  selector: 'app-create-role-dialog',
+  templateUrl: './create-role-dialog.html',
   styles: [`
   .mat-card-header {justify-content: center;}
-  .editClient {display: flex; justify-content: space-around;}
+  .createRole {display: flex; justify-content: space-around;}
   .mat-form-field {width: 250px;}
   ::ng-deep .mat-form-field-wrapper {padding: 0; margin: 0;}
   `],
 })
 
-export class CreateClientDialog implements OnInit {
+export class CreateRoleDialog implements OnInit {
 
-  @ViewChild('clientForm') createClientForm: NgForm;
+  @ViewChild('roleForm') createRoleForm: NgForm;
 
 
   constructor(
-    public dialogRef: MatDialogRef<CreateClientDialog>,
+    public dialogRef: MatDialogRef<CreateRoleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private clientManagementService: ClientManagementService,
+    private roleManagementService: RoleManagementService,
     private snackBar: MatSnackBar
   ) {
     }
@@ -48,22 +48,22 @@ export class CreateClientDialog implements OnInit {
     this.dialogRef.close();
   }
 
-  createClient() {
-    console.log(this.createClientForm.value.clientName);
+  createRole() {
+    console.log(this.createRoleForm.value.roleName);
     // this.isLoading = true;
-    const value: any = this.createClientForm.value;
+    const value: any = this.createRoleForm.value;
 
-    this.clientManagementService.createClient(value).subscribe(
+    this.roleManagementService.createRole(value).subscribe(
       () => {
         // this.isLoading = false;
         // this.isSuccess = true;
-        this.clientManagementService.changeReloadStatus();
+        this.roleManagementService.changeReloadStatus();
         // setTimeout(() => {
         //   this.isSuccess = false;
         //   this.changeDetectorRefs.detectChanges();
         // }, 3000);
-        this.createClientForm.resetForm();
-        this.snackBar.open(`New client ${value.clientName} created`, '', {
+        this.createRoleForm.resetForm();
+        this.snackBar.open(`New role ${value.roleName} created`, '', {
           duration: 2000,
           verticalPosition: 'top',
         });

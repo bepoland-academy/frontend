@@ -1,36 +1,36 @@
 <mat-card>
    <mat-card-header>
-      <mat-card-title>Create client</mat-card-title>
+      <mat-card-title>Create role</mat-card-title>
    </mat-card-header>
    <mat-card-content>
       <form 
-         (ngSubmit)="createClient()" 
-         #clientForm="ngForm" 
+         (ngSubmit)="createRole()" 
+         #roleForm="ngForm" 
          fxLayout="column"
       >
          <mat-form-field appearance="outline">
-            <mat-label>Client Name</mat-label>
+            <mat-label>Role Name</mat-label>
             <input 
                matInput 
-               name="clientName" 
+               name="roleName" 
                ngModel 
                required
             >
          </mat-form-field>
-         <div mat-dialog-actions class="editClient">
+         <div mat-dialog-actions class="createRole">
             <button 
-               mat-button 
-               type="submit" 
-               [disabled]="!clientForm.valid"
+               mat-button
+               type="button"
+               (click)="cancelCreate($event)" 
             >
-               Create
+               Cancel
             </button>
             <button 
                mat-button 
                type="submit" 
-               [disabled]="!clientForm.valid"
+               [disabled]="!roleForm.valid"
             >
-               Cancel
+               Create
             </button>
          </div>
       </form>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientManagementService } from './client-management.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateClientDialog } from './client-management-dialog/create-client-dialog';
-import { EditClientDialog } from './client-management-dialog/edit-client-dialog';
+import { CreateClientDialog } from './client-management-dialog/create-client/create-client-dialog';
+import { EditClientDialog } from './client-management-dialog/edit-client/edit-client-dialog';
 
 
 @Component({
@@ -26,7 +26,6 @@ export class ClientManagementComponent implements OnInit {
       });
     });
   }
-
 
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(CreateClientDialog, {

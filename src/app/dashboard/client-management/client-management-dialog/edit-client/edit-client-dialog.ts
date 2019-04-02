@@ -1,8 +1,8 @@
 import { Component, ViewChild, Inject, OnInit } from '@angular/core';
-import { ClientManagementService } from '../client-management.service';
+import { ClientManagementService } from '../../client-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Client } from '../../../core/models';
+import { Client } from '../../../../core/models';
 import { MatSnackBar } from '@angular/material';
 
 // export interface DialogData {
@@ -21,8 +21,10 @@ import { MatSnackBar } from '@angular/material';
   selector: 'app-edit-client-dialog',
   templateUrl: './edit-client-dialog.html',
   styles: [`
+  .mat-card {padding-right: 0;}
   .mat-card-header {justify-content: center;}
-  .editClient {display: flex; justify-content: space-around;}
+  .input {display: flex; justify-content: space-around; align-items: center;}
+  .editClient {width: 250px; display: flex; justify-content: space-around;}
   .mat-form-field {width: 250px;}
   ::ng-deep .mat-form-field-wrapper {padding: 0; margin: 0;}
   `],
@@ -43,6 +45,10 @@ export class EditClientDialog implements OnInit {
 
   ngOnInit() {
     this.client = this.data.clientName;
+  }
+
+  cancelEdit() {
+    this.dialogRef.close();
   }
 
   editClient() {

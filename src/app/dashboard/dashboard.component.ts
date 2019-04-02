@@ -8,6 +8,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { NoRoleComponent } from './no-role.component';
 import { ProjectManagementComponent } from './project-management/project-management.component';
 import { ClientManagementComponent } from './client-management/client-management.component';
+import { RoleManagementComponent } from './role-management/role-management.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,7 @@ import { ClientManagementComponent } from './client-management/client-management
     TimeApprovalComponent,
     UserManagementComponent,
     ClientManagementComponent,
+    RoleManagementComponent,
     NoRoleComponent,
   ],
 })
