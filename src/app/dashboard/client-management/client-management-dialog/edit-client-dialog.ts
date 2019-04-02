@@ -3,7 +3,7 @@ import { ClientManagementService } from '../client-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Client } from '../../../core/models';
-
+import { MatSnackBar } from '@angular/material';
 
 // export interface DialogData {
 //   client: string;
@@ -29,36 +29,45 @@ import { Client } from '../../../core/models';
 })
 
 export class EditClientDialog implements OnInit {
+  client: any;
 
-  @ViewChild('updateForm') updateProjectForm: NgForm;
+  @ViewChild('updateForm') updateClientForm: NgForm;
 
   constructor(
     public dialogRef: MatDialogRef<EditClientDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private clientManagementService: ClientManagementService
+    private clientManagementService: ClientManagementService,
+    private snackBar: MatSnackBar
   ) {
     }
 
   ngOnInit() {
+    this.client = this.data.clientName;
   }
 
   editClient() {
+    this.data.clientName = this.updateClientForm.value.clientName;
+    this.clientManagementService.updateClient(this.data)
+      .subscribe(() => {
+        this.clientManagementService.changeReloadStatus();
+      },
+      (err) => {
+      });
     this.dialogRef.close();
-    console.log('edit client');
-  //   this.dialogRef.close();
-  //   this.updateProjectForm.value.client = this.data.client;
-  //   this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
-  //     .subscribe(() => {
-  //       this.projectManagementService.changeReloadStatus();
-  //     },
-  //     (err) => {
-  //     });
-  // }
-}
+  }
 
 deleteClient() {
+  this.clientManagementService.deleteClient(this.data)
+    .subscribe(() => {
+      this.clientManagementService.changeReloadStatus();
+      this.snackBar.open(`Client ${this.data.clientName} was deleted`, '', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
+    },
+    (err) => {
+    });
   this.dialogRef.close();
-  console.log('delete client');
 }
 }
 

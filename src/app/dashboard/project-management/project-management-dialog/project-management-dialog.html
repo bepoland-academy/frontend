@@ -18,6 +18,7 @@
                      name="name" 
                      ngModel 
                      [(ngModel)]="data.name"
+                     required
                   >
                </mat-form-field>
                <mat-form-field>
@@ -96,7 +97,7 @@
          </div>
          <div mat-dialog-actions>
             <button mat-button (click)="onNoClick()">Cancel</button>
-            <button type="submit" mat-button cdkFocusInitial>Submit</button>
+            <button type="submit" mat-button cdkFocusInitial [disabled]="!updateForm.valid">Submit</button>
          </div>
       </form>
    </mat-card-content>

@@ -12,7 +12,7 @@
     </div>
     <div>
       <div class="grid-item edit">
-        <button mat-icon-button (click)="editClient(client)" [disabled]="client.active === false">
+        <button mat-icon-button (click)="openEditDialog(client)" [disabled]="client.active === false">
           <mat-icon>edit</mat-icon>
         </button>
       </div>
@@ -24,7 +24,7 @@
           type="submit" 
           mat-raised-button 
           color="primary"
-          (click)="createClient(client)" 
+          (click)="openCreateDialog()" 
        >
           Add new Client
        </button>

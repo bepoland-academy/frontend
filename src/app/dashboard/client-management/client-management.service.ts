@@ -27,11 +27,23 @@ export class ClientManagementService {
     return this.httpService.fakeGet('http://localhost:3000/clients');
   }
 
-  createClient(clientRegistrationData: any): Observable<null> {
-    return this.httpService.post(this.endpoint, userRegistrationData);
+  createClient(clientRegistrationData: string): Observable<null> {
+    return this.httpService.fakePost('http://localhost:3000/clients', clientRegistrationData);
   }
 
+  // createClient(clientRegistrationData: string): Observable<null> {
+  //   return this.httpService.post(this.endpoint, userRegistrationData);
+  // }
+
+  // updateClient(client: any): Observable<null> {
+  //   return this.httpService.put(client._links.self.href, client);
+  // }
+
   updateClient(client: any): Observable<null> {
-    return this.httpService.put(user._links.self.href, user);
+    return this.httpService.put(`http://localhost:3000/clients/${client.id}`, client);
+  }
+
+  deleteClient(client: any): Observable<null> {
+    return this.httpService.fakeDelete(`http://localhost:3000/clients/${client.id}`);
   }
 }

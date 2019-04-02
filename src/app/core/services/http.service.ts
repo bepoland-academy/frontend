@@ -43,4 +43,12 @@ export class HttpService {
   fakeGet(url: string): Observable<any> {
     return this.http.get(url);
   }
+
+  fakePost(url: string, body: any): Observable<any> {
+    return this.http.post(url, body);
+  }
+
+  fakeDelete(url: string): Observable<any> {
+    return this.http.delete(url);
+  }
 }

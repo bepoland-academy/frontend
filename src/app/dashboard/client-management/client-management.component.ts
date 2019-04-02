@@ -20,28 +20,23 @@ export class ClientManagementComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.clientManagementService.getClients().subscribe((data) => {
-      this.clients = data;
+    this.clientManagementService.getReloadStatus().subscribe(() => {
+      this.clientManagementService.getClients().subscribe((data) => {
+        this.clients = data;
+      });
     });
   }
 
-  createClient(model): void {
-    console.log('create client');
+
+  openCreateDialog(): void {
     const dialogRef = this.dialog.open(CreateClientDialog, {
-      data: {
-        // date: model.event.extendedProps.projects[0].day.date,
-        // projects: model.event.extendedProps.projects,
-      },
     });
   }
 
-  editClient(model): void {
-    console.log('edit client');
+  openEditDialog(client: any): void {
     const dialogRef = this.dialog.open(EditClientDialog, {
-      data: {
-        // date: model.event.extendedProps.projects[0].day.date,
-        // projects: model.event.extendedProps.projects,
-      },
+      data: client,
     });
   }
+
 }

@@ -6,7 +6,7 @@
       <form class="client-form" (ngSubmit)="editClient()" #updateForm="ngForm" fxLayout="column">
          <mat-form-field appearance="outline">
             <mat-label></mat-label>
-            <input matInput name="name" ngModel>
+            <input matInput name="clientName" [(ngModel)]="client">
          </mat-form-field>
          <div mat-dialog-actions class="editClient">
             <button mat-button type="submit">Save</button>
@@ -17,3 +17,5 @@
       </form>
    </mat-card-content>
 </mat-card>
+
+ 
