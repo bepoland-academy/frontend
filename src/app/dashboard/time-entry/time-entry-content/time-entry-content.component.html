@@ -1,4 +1,4 @@
-<div class="time-entry-content" *ngFor="let client of projects | groupProjectsByClient">
+<div class="time-entry-content" *ngFor="let client of timeEntries | groupProjectsByClient">
   <div [ngStyle]="{'grid-row': '1 / span ' + client.projects.length }" class="project-cell">
     <h3>{{client.clientName}}</h3>
   </div>
@@ -16,7 +16,7 @@
     <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" appWeekend [day]="day">
     </app-quantity>
     <div class="project-cell">
-      <button [disabled]="project.weekDays[0].status === 'SUBMITTED'" mat-icon-button (click)="removeProjectHandler(project)">
+      <button mat-icon-button (click)="removeProjectHandler(project)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

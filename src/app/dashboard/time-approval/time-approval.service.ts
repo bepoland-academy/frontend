@@ -23,20 +23,20 @@ export class TimeApprovalService {
               users.map(user => {
                 return this.httpService
                   .get(`managers/${loggedInUser.department}/consultants/${user.userId}/months/${month}`)
-                .pipe(
-                  map(userTimeSheetResponse => {
-                    let _links = {};
-                    let monthTimeSheet =  [];
-                    if (userTimeSheetResponse._embedded) {
-                      monthTimeSheet = userTimeSheetResponse._embedded.monthTimeEntryBodyList;
-                      _links = userTimeSheetResponse._links;
-                    }
-                    return {
-                      ...user,
-                      monthTimeSheet,
-                      _links,
-                    };
-                  })
+                  .pipe(
+                    map(userTimeSheetResponse => {
+                      let _links = {};
+                      let monthTimeSheet =  [];
+                      if (userTimeSheetResponse._embedded) {
+                        monthTimeSheet = userTimeSheetResponse._embedded.monthTimeEntryBodyList;
+                        _links = userTimeSheetResponse._links;
+                      }
+                      return {
+                        ...user,
+                        monthTimeSheet,
+                        _links,
+                      };
+                    })
                 );
               })
             );

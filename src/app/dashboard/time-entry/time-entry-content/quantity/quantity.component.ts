@@ -24,26 +24,17 @@ export class QuantityComponent implements OnInit {
   }
 
   increaseValue() {
-    if (this.day.status === 'SUBMITTED') {
-      return;
-    }
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 0) {
       this.verifiedValue(+this.inputValue + 0.5);
     }
   }
   decreaseValue() {
-    if (this.day.status === 'SUBMITTED') {
-      return;
-    }
     if (+this.inputValue > 0 && +this.inputValue < 24 || +this.inputValue === 24) {
       this.verifiedValue(+this.inputValue - 0.5);
     }
   }
 
   onMouseWheel(event: WheelEvent) {
-    if (this.day.status === 'SUBMITTED') {
-      return;
-    }
     if (event.deltaY < 0) {
       this.increaseValue();
     } else {

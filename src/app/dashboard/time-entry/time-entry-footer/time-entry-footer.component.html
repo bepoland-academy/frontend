@@ -1,8 +1,17 @@
 <footer>
   <div class="time-entry-footer">
     <div></div>
-    <p class="project-cell" *ngFor="let dayWeek of projects[0].weekDays" appWeekend [day]="dayWeek">
+    <p
+      class="project-cell"
+      *ngFor="let dayWeek of timeEntries[0].weekDays"
+      appWeekend
+      [day]="dayWeek"
+    >
       {{ sumHoursFromSelectedDay(dayWeek.day) }}
+      <span
+        class="tooltipText"
+        [ngClass]="{'visible': daysWithMoreThan24Hours.includes(dayWeek.day)}"
+      >asdasdasd</span>
     </p>
   </div>
   <div class="buttons">

@@ -8,7 +8,7 @@ import { TimeEntry, Day } from '../../../core/models';
   styleUrls: ['./time-entry-content.component.css'],
 })
 export class TimeEntryContentComponent implements OnInit {
-  @Input() projects: TimeEntry;
+  @Input() timeEntries: TimeEntry;
   @Output() removeProject: EventEmitter<TimeEntry> = new EventEmitter();
   constructor() { }
 
@@ -20,7 +20,7 @@ export class TimeEntryContentComponent implements OnInit {
       .map((day: Day) => +day.hours)
       .reduce((sum: number, nextValue: number) => sum + nextValue);
   }
-  removeProjectHandler(project: TimeEntry) {
-    this.removeProject.emit(project);
+  removeProjectHandler(timeEntry: TimeEntry) {
+    this.removeProject.emit(timeEntry);
   }
 }

@@ -8,58 +8,48 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarComponent as NgCalendar } from 'ng-fullcalendar';
 
-const aa = (data) => {
+const groupProjectsAndSumHours = (data) => {
+  const counts = data.reduce((prev, curr) => {
+    const count = prev.get(curr.date) || 0;
+    prev.set(curr.date, curr.hours + count);
+    return prev;
+  }, new Map());
+  let finalArray = [];
+  counts.forEach((title, start) => {
+    const {status, comment} = data.find(el => el.date === start);
+    finalArray = [...finalArray, { title, start, status, comment}];
+  });
 
-  const tmp = {};
-  const a = data.map(function(item) {
-    const tempKey = item.date;
-    if (!tmp.hasOwnProperty(tempKey)) {
-     return  tmp[tempKey] = item;
-    } else {
-      tmp[tempKey].hours += item.hours;
-      return;
-    }
-  }).filter(Boolean);
-  console.log(a);
-  // const results = Object.keys(tmp).map(function(key) {
-  //   return tmp[key];
-  // });
-  return a.map(item => ({
-    title:  item.hours,
-    start: item.date,
-  }));
+  return finalArray;
 };
 
+// converting current data to calendar where start is equal to date and title to hours from day
 const convertDataToCalendar = (projects) => {
-  const projectsWithoutSavedStatus = projects.flatMap(project => project.monthDays)
-    .filter(day => day.status !== 'SAVED');
-
-  const groupedProjects = aa(projectsWithoutSavedStatus);
-
   const getDayStatus = (date) => {
     const status = projects[0].monthDays.find(el => el.date === date).status;
-
-    if (status === 'APPROVED') {
-      return 'green';
-    }
-    if (status === 'REJECTED') {
-      return 'red';
-    }
-    return '';
+    const colorForStatus = {
+      APPROVED: 'green',
+      REJECTED: 'red',
+    };
+    return colorForStatus[status] || '';
   };
 
+  const projectsWithoutSavedStatus = projects
+    .flatMap(project => project.monthDays)
+    .filter(day => day.status !== 'SAVED');
 
-  return groupedProjects.map(entry => {
+  const groupedProjectsByDate = groupProjectsAndSumHours(projectsWithoutSavedStatus);
+
+  return groupedProjectsByDate.map(entry => {
     return {
     ...entry,
-
       className: [getDayStatus(entry.start)],
-    projects: projects.flatMap(project => ({
-      day: project.monthDays.find(el => el.date === entry.start),
-      project: project.projectInfo,
-    })),
-  }; });
-
+      projects: projects.flatMap(project => ({
+        day: project.monthDays.find(el => el.date === entry.start),
+        project: project.projectInfo,
+      })),
+    };
+  });
 };
 @Component({
   selector: 'app-calendar',
@@ -78,8 +68,7 @@ export class CalendarComponent implements OnInit {
 
   constructor(
     private timeApprovalService: TimeApprovalService,
-    public dialog: MatDialog,
-    private ref: ChangeDetectorRef
+    public dialog: MatDialog
   ) {
   }
   ngOnInit() {
@@ -101,7 +90,6 @@ export class CalendarComponent implements OnInit {
         this.fullcalendar.calendar.removeAllEvents();
       }
       this.currentUser = user;
-      console.log(this.currentUser);
       this.eventsModel = convertDataToCalendar(user.monthTimeSheet);
     });
 
@@ -112,20 +100,13 @@ export class CalendarComponent implements OnInit {
   }
 
   openDialog(model): void {
-    const dialogRef = this.dialog.open(TimeApprovalDialog, {
-      // width: '250px',
-      // height: '250px',
-      data: { date: model.event.extendedProps.projects[0].day.date, projects: model.event.extendedProps.projects, currentUser: this.currentUser },
+    const ojb = model.event.extendedProps.projects;
+    this.dialog.open(TimeApprovalDialog, {
+      data: { date: ojb[0].day.date, projects: ojb, currentUser: this.currentUser },
     });
   }
   eventClick(model) {
     this.openDialog(model);
-  }
-  eventDragStop(model) {
-  }
-  clickButton(model) {
-  }
-  dateClick(model) {
   }
   aproveAll() {
     const dataToSend = this.currentUser.monthTimeSheet.map(timeSheet => {
