@@ -87,18 +87,32 @@ export class ProjectManagementComponent implements OnInit {
   displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      (data: ProjectsResponse) => {
-        const projects = groupProjectsByClient(data._embedded.projectBodyList);
-        this.projectsList1 = projects;
-        this.projectsList2 = projects;
+      (data) => {
+        console.log(data);
+        // const projects = groupProjectsByClient(data._embedded.projectBodyList);
+        // this.projectsList1 = projects;
+        // console.log(this.projectsList1);
+        // const projectsModified = this.projectsList1.map(el => {
+        //   el.projects.map((project) => {
+        //     this.projectManagementService.isRemovable(project.projectId).subscribe((response: boolean) => {
+
+        //       project = {...project, removable: response};
+
+        //     });
+        //   });
+        //   console.log(projectsModified);
+        //   this.projectsList2 = this.projectsList1;
+        // });
+
       },
-      () => {
-        this.isFail = true;
-        this.errorMessage = 'Ups! Something went wrong :(';
-        setTimeout(() => {
-          this.isFail = false;
-          this.changeDetectorRefs.detectChanges();
-        }, 3000);
+      (err) => {
+        console.log(err);
+        // this.isFail = true;
+        // this.errorMessage = 'Ups! Something went wrong :(';
+        // setTimeout(() => {
+        //   this.isFail = false;
+        //   this.changeDetectorRefs.detectChanges();
+        // }, 3000);
       }
     );
   }
@@ -106,7 +120,7 @@ export class ProjectManagementComponent implements OnInit {
   createProject() {
     const value = {
       ...this.newProjectForm.value,
-      client: {clientId: this.newProjectForm.value.client},
+      client: { clientId: this.newProjectForm.value.client },
     };
     this.projectManagementService.sendNewProject(value)
       .subscribe(
@@ -131,7 +145,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   editProject(project: Project): void {
-    console.log(project);
+
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
@@ -139,7 +153,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   deleteProject(project: Project): void {
-    console.log(project);
+
     const dialogRef = this.dialog.open(DeleteProjectDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },

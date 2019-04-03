@@ -3,6 +3,7 @@ import { ProjectManagementService } from '../project-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Client } from '../../../core/models';
+import { MatSnackBar } from '@angular/material';
 
 
 export interface DialogData {
@@ -29,45 +30,34 @@ export interface DialogData {
 
 export class DeleteProjectDialog implements OnInit {
 
-  @ViewChild('updateForm') updateProjectForm: NgForm;
-
-  actualDepartment = '';
-
   constructor(
     public dialogRef: MatDialogRef<DeleteProjectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private projectManagementService: ProjectManagementService
+    private projectManagementService: ProjectManagementService,
+    private snackBar: MatSnackBar
   ) {
     }
 
   ngOnInit(): void {
-    this.checkDepartment();
   }
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  compareObjects(client1: Client, client2: Client): boolean {
-    if (client1 && client2) {
-      return client1.clientId === client2.clientId && client1.name === client2.name;
-    }
-  }
-
-  checkDepartment() {
-    this.actualDepartment = this.data.departments.find(
-      el => el.departmentId === this.data.department
-    ).name;
-  }
-
-  deleteProject() {
+  deleteProject(project: any) {
+    this.projectManagementService.deleteProject(this.data)
+      .subscribe(() => {
+        this.projectManagementService.changeReloadStatus();
+        this.snackBar.open(`Client ${this.data.name} was deleted`, '', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
+      },
+      (err) => {
+      });
     this.dialogRef.close();
-    // this.updateProjectForm.value.client = this.data.client;
-    // this.projectManagementService.updateProject(this.data._links.self.href, this.updateProjectForm.value)
-    //   .subscribe(() => {
-    //     this.projectManagementService.changeReloadStatus();
-    //   },
-    //   (err) => {
-    //   });
   }
 }
+
+
 

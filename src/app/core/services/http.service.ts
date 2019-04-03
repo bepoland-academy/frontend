@@ -40,6 +40,10 @@ export class HttpService {
     return this.http.put(url, body);
   }
 
+  delete(endpoint: string): Observable<any> {
+    return this.http.delete(this.url + endpoint);
+  }
+
   fakeGet(url: string): Observable<any> {
     return this.http.get(url);
   }

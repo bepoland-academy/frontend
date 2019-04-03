@@ -75,7 +75,7 @@
                            <button 
                               mat-icon-button 
                               (click)="deleteProject(project)"
-                              [disabled]="project.active === false"
+                              [disabled]="!project.removable"
                            >
                               <mat-icon>delete</mat-icon>
                            </button>

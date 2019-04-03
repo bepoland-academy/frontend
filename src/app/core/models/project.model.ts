@@ -9,6 +9,7 @@ export interface Project {
   name: string;
   rate: number;
   projectId: string;
+  removable?: boolean;
 }
 
 export interface ProjectsResponse {

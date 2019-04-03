@@ -5,7 +5,7 @@
       </mat-card-header>
       <div mat-dialog-actions>
          <button mat-button (click)="onNoClick()">Cancel</button>
-         <button type="submit" mat-button cdkFocusInitial>Delete</button>
+         <button mat-button cdkFocusInitial (click)="deleteProject(data)">Delete</button>
       </div>
    </mat-card-content>
 </mat-card>

@@ -15,6 +15,7 @@ export class ProjectManagementService {
   projects = 'projects';
   projectsByDepartment = 'projects/?department=';
   clients = 'clients';
+  removable = 'timeEntry/projectExist?guid=';
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
@@ -47,6 +48,14 @@ export class ProjectManagementService {
 
   updateProject(url: string, updatedProject: Project) {
     return this.httpService.put(url, updatedProject);
+  }
+// Fix Project Type
+  deleteProject(project: any) {
+    return this.httpService.fakeDelete(project._links.DELETE.href);
+  }
+
+  isRemovable(projectId: any) {
+    return this.httpService.get(`${this.removable}${projectId}`);
   }
 }
 
