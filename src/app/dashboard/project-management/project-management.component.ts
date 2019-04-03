@@ -87,32 +87,29 @@ export class ProjectManagementComponent implements OnInit {
   displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      (data) => {
-        console.log(data);
-        // const projects = groupProjectsByClient(data._embedded.projectBodyList);
-        // this.projectsList1 = projects;
-        // console.log(this.projectsList1);
-        // const projectsModified = this.projectsList1.map(el => {
-        //   el.projects.map((project) => {
-        //     this.projectManagementService.isRemovable(project.projectId).subscribe((response: boolean) => {
-
-        //       project = {...project, removable: response};
-
-        //     });
-        //   });
-        //   console.log(projectsModified);
-        //   this.projectsList2 = this.projectsList1;
-        // });
-
+      (data: ProjectsResponse) => {
+        const projects = groupProjectsByClient(data._embedded.projectBodyList);
+        this.projectsList1 = projects;
+        console.log(this.projectsList1);
+        this.projectsList1.map(el => {
+          el.projects.map((project) => {
+            this.projectManagementService.isRemovable(project.projectId).subscribe((response: boolean) => {
+              console.log(response);
+              project = {...project, removable: response};
+              console.log(project);
+            });
+          });
+          this.projectsList2 = this.projectsList1;
+          console.log(this.projectsList2);
+        });
       },
-      (err) => {
-        console.log(err);
-        // this.isFail = true;
-        // this.errorMessage = 'Ups! Something went wrong :(';
-        // setTimeout(() => {
-        //   this.isFail = false;
-        //   this.changeDetectorRefs.detectChanges();
-        // }, 3000);
+      () => {
+        this.isFail = true;
+        this.errorMessage = 'Ups! Something went wrong :(';
+        setTimeout(() => {
+          this.isFail = false;
+          this.changeDetectorRefs.detectChanges();
+        }, 3000);
       }
     );
   }
@@ -145,7 +142,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   editProject(project: Project): void {
-
+    console.log(project);
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
@@ -153,7 +150,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   deleteProject(project: Project): void {
-
+    console.log(project);
     const dialogRef = this.dialog.open(DeleteProjectDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
