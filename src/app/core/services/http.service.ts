@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
+import { Project, ProjectsResponse } from '../models';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class HttpService {
   url = 'http://beontime.be-academy.pl/gateway/';
 
-  constructor(private http: HttpClient) {}
+  projectsStream: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
+
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar
+  ) {}
 
 
   login(endpoint: string, body: any, option): Observable<any> {
@@ -36,12 +43,11 @@ export class HttpService {
   // }
 
   put(url: string, body: any): Observable<any> {
-    console.log(url);
     return this.http.put(url, body);
   }
 
-  delete(endpoint: string): Observable<any> {
-    return this.http.delete(this.url + endpoint);
+  delete(url: string): Observable<any> {
+    return this.http.delete(url);
   }
 
   fakeGet(url: string): Observable<any> {
@@ -54,5 +60,17 @@ export class HttpService {
 
   fakeDelete(url: string): Observable<any> {
     return this.http.delete(url);
+  }
+
+  fetchProjects(department) {
+    this.http.get(`${this.url}projects?department=${department}`)
+      .subscribe(
+        (projects: ProjectsResponse) => this.projectsStream.next(projects._embedded.projectBodyList),
+        () => this.snackBar.open('Something went wrong, the app would not work correctly')._dismissAfter(5000)
+      );
+  }
+
+  getProjectsStream() {
+    return this.projectsStream.asObservable();
   }
 }

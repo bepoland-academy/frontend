@@ -23,9 +23,28 @@ export class ClientManagementService {
   //   return this.httpService.get('departments');
   // }
 
-  getClients() {
-    return this.httpService.fakeGet('http://localhost:3000/clients');
+  getClients(): Observable<any> {
+    return this.httpService.get('clients');
   }
+
+
+
+  // getProjects(department: string): Observable<any> {
+  //   return this.httpService.get(this.projectsByDepartment + department).pipe(
+  //     map((response) => response._embedded.projectBodyList),
+  //     flatMap((res) => {
+  //       return forkJoin(
+  //         res.map(project => {
+  //           return this.isRemovable(project.projectId).pipe(
+  //             map(removableRes => {
+  //               return {...project, removable: removableRes};
+  //             })
+  //           );
+  //         })
+  //       );
+  //     })
+  //   );
+  // }
 
   createClient(clientRegistrationData: string): Observable<null> {
     return this.httpService.fakePost('http://localhost:3000/clients', clientRegistrationData);

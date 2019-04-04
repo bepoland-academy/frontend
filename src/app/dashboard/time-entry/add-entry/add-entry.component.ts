@@ -12,7 +12,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
   @Input() clients: Array<ProjectsByClient> = [];
   @Input() isOpen: boolean;
   @Output() isOpenChange: EventEmitter<boolean> = new EventEmitter();
-  @Output() createNewProject: EventEmitter<Project> = new EventEmitter();
+  @Output() createNewEntry: EventEmitter<Project> = new EventEmitter();
 
   @ViewChild('drawer') drawer;
   chosenClient: ProjectsByClient;
@@ -51,7 +51,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
   }
 
   setProject(project: Project) {
-    this.createNewProject.emit(project);
+    this.createNewEntry.emit(project);
     this.closeDrawer();
   }
 

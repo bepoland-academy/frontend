@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef } from '@angular/core';
 
 import { TimeApprovalService } from '../time-approval.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,22 +8,48 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarComponent as NgCalendar } from 'ng-fullcalendar';
 
+const groupProjectsAndSumHours = (data) => {
+  const counts = data.reduce((prev, curr) => {
+    const count = prev.get(curr.date) || 0;
+    prev.set(curr.date, curr.hours + count);
+    return prev;
+  }, new Map());
+  let finalArray = [];
+  counts.forEach((title, start) => {
+    const {status, comment} = data.find(el => el.date === start);
+    finalArray = [...finalArray, { title, start, status, comment}];
+  });
 
+  return finalArray;
+};
+
+// converting current data to calendar where start is equal to date and title to hours from day
 const convertDataToCalendar = (projects) => {
-  const dateWithHours = projects
+  const getDayStatus = (date) => {
+    const status = projects[0].monthDays.find(el => el.date === date).status;
+    const colorForStatus = {
+      APPROVED: 'green',
+      REJECTED: 'red',
+    };
+    return colorForStatus[status] || '';
+  };
+
+  const projectsWithoutSavedStatus = projects
     .flatMap(project => project.monthDays)
-    .map((el, i, currentArr) => ({
-      title: currentArr.filter(date => date.date === el.date).reduce((sum, val) => sum + val.hours, 0),
-      start: el.date,
-    }))
-    .filter((el, index, currentArr) => index === currentArr.findIndex((t) => t.title === el.title && t.hours === el.hours));
-  return dateWithHours.map(entry => ({
+    .filter(day => day.status !== 'SAVED');
+
+  const groupedProjectsByDate = groupProjectsAndSumHours(projectsWithoutSavedStatus);
+
+  return groupedProjectsByDate.map(entry => {
+    return {
     ...entry,
-    projects: projects.flatMap(project => ({
-      day: project.monthDays.find(el => el.date === entry.start),
-      project: project.projectInfo,
-    })),
-  }));
+      className: [getDayStatus(entry.start)],
+      projects: projects.flatMap(project => ({
+        day: project.monthDays.find(el => el.date === entry.start),
+        project: project.projectInfo,
+      })),
+    };
+  });
 };
 @Component({
   selector: 'app-calendar',
@@ -32,9 +58,10 @@ const convertDataToCalendar = (projects) => {
 })
 export class CalendarComponent implements OnInit {
 
+  currentUser: any;
   @Input() toggleButtonVisible: boolean;
-  @Input() currentUser: any;
   @Output() listClick = new EventEmitter<null>();
+  @Input() usersTime;
   @ViewChild('fullcalendar') fullcalendar: NgCalendar;
   options: OptionsInput;
   eventsModel: any;
@@ -42,7 +69,8 @@ export class CalendarComponent implements OnInit {
   constructor(
     private timeApprovalService: TimeApprovalService,
     public dialog: MatDialog
-  ) { }
+  ) {
+  }
   ngOnInit() {
     this.options = {
       firstDay: 1,
@@ -55,7 +83,16 @@ export class CalendarComponent implements OnInit {
       plugins: [dayGridPlugin, interactionPlugin],
       weekNumbers: true,
       allDayDefault: true,
+      // events: convertDataToCalendar(this.currentUser.monthTimeSheet),
     };
+    this.timeApprovalService.getReloadStatus().subscribe((user: any) => {
+      if (this.fullcalendar) {
+        this.fullcalendar.calendar.removeAllEvents();
+      }
+      this.currentUser = user;
+      this.eventsModel = convertDataToCalendar(user.monthTimeSheet);
+    });
+
   }
 
   askToShow() {
@@ -63,31 +100,34 @@ export class CalendarComponent implements OnInit {
   }
 
   openDialog(model): void {
-    console.log(model, event);
-    const dialogRef = this.dialog.open(TimeApprovalDialog, {
-      data: {
-        date: model.event.extendedProps.projects[0].day.date,
-        projects: model.event.extendedProps.projects,
-      },
+    const ojb = model.event.extendedProps.projects;
+    this.dialog.open(TimeApprovalDialog, {
+      data: { date: ojb[0].day.date, projects: ojb, currentUser: this.currentUser },
     });
   }
 
   eventClick(model) {
     this.openDialog(model);
   }
-  eventDragStop(model) {
-    console.log(model);
-  }
-  clickButton(model) {
-    console.log(model);
-  }
-  dateClick(model) {
-    console.log(model, 'asd');
-  }
-  ngOnChanges(): void {
-    if (this.currentUser) {
-      this.options.events = convertDataToCalendar(this.currentUser.monthTimeSheet);
-    }
+  aproveAll() {
+    const dataToSend = this.currentUser.monthTimeSheet.map(timeSheet => {
+      const { projectInfo, ...rest } = timeSheet;
+      return {
+        ...rest,
+        monthDays: rest.monthDays.map(item => item.status === 'SUBMITTED' ? { ...item, status: 'APPROVED' } : item),
+      };
+    });
+    const userWithModifiedTimeSheet = {
+      ...this.currentUser,
+      monthTimeSheet: this.currentUser.monthTimeSheet.map(timeSheet => ({ ...timeSheet, monthDays: timeSheet.monthDays.map(item => item.status === 'SUBMITTED' ? { ...item, status: 'APPROVED' } : item) })),
+    };
+    this.timeApprovalService.reloadCalendar(userWithModifiedTimeSheet);
+    // this.timeApprovalService.updateTimeSheet(this.currentUser._links.self.href, { monthTimeEntryBodyList: dataToSend}).subscribe(() => console.log('oposzlo'));
   }
 
+  // ngOnDestroy(): void {
+  //   // Called once, before the instance is destroyed.
+  //   // Add 'implements OnDestroy' to the class.
+  //   console.log('object');
+  // }
 }

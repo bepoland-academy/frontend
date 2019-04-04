@@ -6,21 +6,33 @@ import {
   Client,
   ClientsResponse,
   Project,
-  ProjectsResponse,
   ProjectsByClient
 } from '../../core/models';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
-import { DeleteProjectDialog } from './project-management-dialog/delete-project-dialog';
+
 
 export interface DialogData {
-  client: string;
-  name: string;
-  rate: string;
+  active: boolean;
+  client: Client;
+  clients: Array<Client>;
   comments: string;
-  active: string;
+  department: string;
+  departments: Array<Department>;
+  name: string;
+  projectId: string;
+  rate: number;
+  removable: boolean;
+  _links: {
+    DELETE: {
+      href: string;
+    },
+    self: {
+      href: string;
+    }
+  }
 }
 
 @Component({
@@ -87,21 +99,10 @@ export class ProjectManagementComponent implements OnInit {
   displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      (data: ProjectsResponse) => {
-        const projects = groupProjectsByClient(data._embedded.projectBodyList);
+      (data: Array<Project>) => {
+        const projects = groupProjectsByClient(data);
         this.projectsList1 = projects;
-        console.log(this.projectsList1);
-        this.projectsList1.map(el => {
-          el.projects.map((project) => {
-            this.projectManagementService.isRemovable(project.projectId).subscribe((response: boolean) => {
-              console.log(response);
-              project = {...project, removable: response};
-              console.log(project);
-            });
-          });
-          this.projectsList2 = this.projectsList1;
-          console.log(this.projectsList2);
-        });
+        this.projectsList2 = projects;
       },
       () => {
         this.isFail = true;
@@ -142,16 +143,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   editProject(project: Project): void {
-    console.log(project);
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
-      width: '600px',
-      data: { ...project, departments: this.departments, clients: this.clients },
-    });
-  }
-
-  deleteProject(project: Project): void {
-    console.log(project);
-    const dialogRef = this.dialog.open(DeleteProjectDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
     });

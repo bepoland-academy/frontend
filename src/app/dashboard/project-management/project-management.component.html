@@ -1,14 +1,21 @@
 <div fxLayout="row" class="project-management">
    <div class="projects">
       <!-- Projects' Options -->
-      <div *ngIf="departments.length" fxLayout="row" class="projectOptions">
+      <div 
+         *ngIf="departments.length" 
+         fxLayout="row" 
+         class="projectOptions"
+      >
          <mat-form-field>
             <mat-select 
                laceholder="Select department" 
                (selectionChange)="displayProjects($event.value)"
             >
-               <mat-option *ngFor="let department of departments" [value]="department"
-                  (click)="setDepartment(department)">
+               <mat-option 
+                  *ngFor="let department of departments" 
+                  [value]="department"
+                  (click)="setDepartment(department)"
+               >
                   {{department.name}}
                </mat-option>
             </mat-select>
@@ -49,7 +56,12 @@
          <div *ngFor="let client of projectsList2">
             <div class="client-grid">
                <div class="grid-item truncate">
-                  <h4 class="truncate" title="{{client.clientName}}">{{client.clientName}}</h4>
+                  <h4 
+                     class="truncate" 
+                     title="{{client.clientName}}"
+                  >
+                     {{client.clientName}}
+                  </h4>
                </div>
                <div>
                   <div *ngFor="let project of client.projects; let i = index">
@@ -69,15 +81,6 @@
                         <div class="grid-item edit">
                            <button mat-icon-button (click)="editProject(project)">
                               <mat-icon>edit</mat-icon>
-                           </button>
-                        </div>
-                        <div class="grid-item edit">
-                           <button 
-                              mat-icon-button 
-                              (click)="deleteProject(project)"
-                              [disabled]="!project.removable"
-                           >
-                              <mat-icon>delete</mat-icon>
                            </button>
                         </div>
                      </div>
@@ -126,7 +129,12 @@
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Project Rate</mat-label>
-               <input matInput name="rate" ngModel>
+               <input 
+                  matInput 
+                  name="rate" 
+                  ngModel 
+                  required
+               >
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Comments</mat-label>

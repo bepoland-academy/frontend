@@ -1,20 +1,28 @@
 import { Component, ViewChild, Inject, OnInit } from '@angular/core';
 import { ProjectManagementService } from '../project-management.service';
-import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Client } from '../../../core/models';
 import { MatSnackBar } from '@angular/material';
-
+import { Client, Department } from '../../../core/models';
 
 export interface DialogData {
-  client: string;
-  name: string;
-  rate: string;
+  active: boolean;
+  client: Client;
+  clients: Array<Client>;
   comments: string;
-  active: string;
-  departments: Array<any>;
   department: string;
-  _links: any;
+  departments: Array<Department>;
+  name: string;
+  projectId: string;
+  rate: number;
+  removable: boolean;
+  _links: {
+    DELETE: {
+      href: string;
+    },
+    self: {
+      href: string;
+    }
+  };
 }
 
 
@@ -40,20 +48,23 @@ export class DeleteProjectDialog implements OnInit {
 
   ngOnInit(): void {
   }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  deleteProject(project: any) {
+  deleteProject() {
     this.projectManagementService.deleteProject(this.data)
       .subscribe(() => {
         this.projectManagementService.changeReloadStatus();
-        this.snackBar.open(`Client ${this.data.name} was deleted`, '', {
+        this.snackBar.open(`Project ${this.data.name} was deleted`, '', {
           duration: 2000,
-          verticalPosition: 'top',
         });
       },
       (err) => {
+        this.snackBar.open(`Project ${this.data.name} cannot be deleted because it is active`, '', {
+          duration: 2000,
+        });
       });
     this.dialogRef.close();
   }

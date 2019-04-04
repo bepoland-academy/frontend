@@ -8,7 +8,7 @@ import { AddEntryComponent } from './add-entry/add-entry.component';
 import { TimeEntryService } from './time-entry.service';
 import { ValidationDirective } from './directives/validation.directive';
 import { QuantityComponent } from './time-entry-content/quantity/quantity.component';
-import { WeekendDirective } from './directives/weekend.directive';
+import { DayDirective } from './directives/day.directive';
 import { GroupProjectsByClientPipe } from './groupProjectsByClient.pipe';
 import { TimeEntryNaviagtionComponent } from './time-entry-naviagtion/time-entry-naviagtion.component';
 import { TimeEntryHeadingComponent } from './time-entry-heading/time-entry-heading.component';
@@ -22,7 +22,7 @@ import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.
     ValidationDirective,
     QuantityComponent,
     AddEntryComponent,
-    WeekendDirective,
+    DayDirective,
     GroupProjectsByClientPipe,
     TimeEntryNaviagtionComponent,
     TimeEntryHeadingComponent,

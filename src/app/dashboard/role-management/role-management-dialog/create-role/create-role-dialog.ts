@@ -2,19 +2,8 @@ import { Component, ViewChild, Inject, OnInit } from '@angular/core';
 import { RoleManagementService } from '../../role-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-// import { Role } from '../../../../core/models';
 import { MatSnackBar } from '@angular/material';
-
-// export interface DialogData {
-//   client: string;
-//   name: string;
-//   rate: string;
-//   comments: string;
-//   active: string;
-//   departments: Array<any>;
-//   department: string;
-//   _links: any;
-// }
+import { Role } from '../../../../core/models';
 
 
 @Component({
@@ -35,7 +24,7 @@ export class CreateRoleDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<CreateRoleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: Role,
     private roleManagementService: RoleManagementService,
     private snackBar: MatSnackBar
   ) {
@@ -49,21 +38,12 @@ export class CreateRoleDialog implements OnInit {
   }
 
   createRole() {
-    console.log(this.createRoleForm.value.roleName);
-    // this.isLoading = true;
-    const value: any = this.createRoleForm.value;
-
+    const value = this.createRoleForm.value;
     this.roleManagementService.createRole(value).subscribe(
       () => {
-        // this.isLoading = false;
-        // this.isSuccess = true;
         this.roleManagementService.changeReloadStatus();
-        // setTimeout(() => {
-        //   this.isSuccess = false;
-        //   this.changeDetectorRefs.detectChanges();
-        // }, 3000);
         this.createRoleForm.resetForm();
-        this.snackBar.open(`New role ${value.roleName} created`, '', {
+        this.snackBar.open(`New role ${value.name} created`, '', {
           duration: 2000,
           verticalPosition: 'top',
         });

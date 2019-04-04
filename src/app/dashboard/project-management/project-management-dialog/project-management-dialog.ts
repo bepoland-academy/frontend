@@ -1,19 +1,30 @@
 import { Component, ViewChild, Inject, OnInit } from '@angular/core';
 import { ProjectManagementService } from '../project-management.service';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Client } from '../../../core/models';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { Client, Department, Project } from '../../../core/models';
+import { DeleteProjectDialog } from './delete-project-dialog';
 
 
 export interface DialogData {
-  client: string;
-  name: string;
-  rate: string;
+  active: boolean;
+  client: Client;
+  clients: Array<Client>;
   comments: string;
-  active: string;
-  departments: Array<any>;
   department: string;
-  _links: any;
+  departments: Array<Department>;
+  name: string;
+  projectId: string;
+  rate: number;
+  removable: boolean;
+  _links: {
+    DELETE: {
+      href: string;
+    },
+    self: {
+      href: string;
+    }
+  };
 }
 
 
@@ -35,6 +46,7 @@ export class ProjectManagementDialog implements OnInit {
   actualDepartment = '';
 
   constructor(
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<ProjectManagementDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private projectManagementService: ProjectManagementService
@@ -43,6 +55,7 @@ export class ProjectManagementDialog implements OnInit {
   ngOnInit(): void {
     this.checkDepartment();
   }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -68,6 +81,14 @@ export class ProjectManagementDialog implements OnInit {
       },
       (err) => {
       });
+  }
+
+  deleteProject(project: Project): void {
+    const dialogRef = this.dialog.open(DeleteProjectDialog, {
+      width: '600px',
+      data: { ...project },
+    });
+    this.dialogRef.close();
   }
 }
 

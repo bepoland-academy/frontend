@@ -5,8 +5,6 @@ import { HttpService } from '../../core/services/http.service';
 @Injectable()
 export class RoleManagementService {
 
-  // endpoint = 'users';
-
   private reloadStatus = new BehaviorSubject<null>(null);
 
   constructor(private httpService: HttpService) {}
@@ -19,31 +17,19 @@ export class RoleManagementService {
     return this.reloadStatus.asObservable();
   }
 
-  // getClients(): Observable<ClientsResponse> {
-  //   return this.httpService.get('departments');
-  // }
-
-  getRoles() {
-    return this.httpService.fakeGet('http://localhost:3000/roles');
+  getRoles(): Observable<any> {
+    return this.httpService.get('projects/roles/all');
   }
 
   createRole(roleRegistrationData: string): Observable<null> {
-    return this.httpService.fakePost('http://localhost:3000/roles', roleRegistrationData);
+    return this.httpService.post('projects/roles/', roleRegistrationData);
   }
 
-  // createClient(clientRegistrationData: string): Observable<null> {
-  //   return this.httpService.post(this.endpoint, userRegistrationData);
-  // }
-
-  // updateClient(client: any): Observable<null> {
-  //   return this.httpService.put(client._links.self.href, client);
-  // }
-
   updateRole(role: any): Observable<null> {
-    return this.httpService.put(`http://localhost:3000/roles/${role.id}`, role);
+    return this.httpService.put(role._links.self.href, role);
   }
 
   deleteRole(role: any): Observable<null> {
-    return this.httpService.fakeDelete(`http://localhost:3000/roles/${role.id}`);
+    return this.httpService.delete(`projects/roles/${role.roleId}`);
   }
 }

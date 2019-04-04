@@ -3,6 +3,7 @@ import { RoleManagementService } from './role-management.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateRoleDialog } from './role-management-dialog/create-role/create-role-dialog';
 import { EditRoleDialog } from './role-management-dialog/edit-role/edit-role-dialog';
+import { Role, RolesResponse } from '../../core/models';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { EditRoleDialog } from './role-management-dialog/edit-role/edit-role-dia
 })
 
 export class RoleManagementComponent implements OnInit {
-  roles: Array<any> = [];
+  roles: Array<Role> = [];
 
   constructor(
     private roleManagementService: RoleManagementService,
@@ -21,8 +22,8 @@ export class RoleManagementComponent implements OnInit {
 
   ngOnInit() {
     this.roleManagementService.getReloadStatus().subscribe(() => {
-      this.roleManagementService.getRoles().subscribe((data) => {
-        this.roles = data;
+      this.roleManagementService.getRoles().subscribe((data: RolesResponse) => {
+        this.roles = data._embedded.roleBodyList;
       });
     });
   }
@@ -32,7 +33,7 @@ export class RoleManagementComponent implements OnInit {
     });
   }
 
-  openEditDialog(role: any): void {
+  openEditDialog(role: Role): void {
     const dialogRef = this.dialog.open(EditRoleDialog, {
       data: role,
     });

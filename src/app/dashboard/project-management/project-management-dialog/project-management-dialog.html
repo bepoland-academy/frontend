@@ -97,7 +97,8 @@
          </div>
          <div mat-dialog-actions>
             <button mat-button type="button" (click)="onNoClick()">Cancel</button>
-            <button type="submit" mat-button cdkFocusInitial [disabled]="!updateForm.valid">Submit</button>
+            <button mat-button type="submit"  cdkFocusInitial [disabled]="!updateForm.valid">Submit</button>
+            <button mat-button type="button" (click)="deleteProject(data)" [disabled]="!data.removable">Delete</button>
          </div>
       </form>
    </mat-card-content>

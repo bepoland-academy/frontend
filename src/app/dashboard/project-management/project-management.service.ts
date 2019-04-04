@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../core/services/http.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import {
-  ClientsResponse,
-  DepartmentsResponse,
-  Project,
-  ProjectsResponse,
-} from '../../core/models';
+import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
+import { ClientsResponse, DepartmentsResponse, Project } from '../../core/models';
+import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class ProjectManagementService {
@@ -20,9 +16,9 @@ export class ProjectManagementService {
   private reloadStatus = new BehaviorSubject<null>(null);
 
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService) { }
 
-  changeReloadStatus() {
+  changeReloadStatus(): void {
     this.reloadStatus.next(null);
   }
 
@@ -38,8 +34,21 @@ export class ProjectManagementService {
     return this.httpService.get(this.clients);
   }
 
-  getProjects(department: string): Observable <ProjectsResponse> {
-    return this.httpService.get(this.projectsByDepartment + department);
+  getProjects(department: string): Observable<Array<Project>> {
+    return this.httpService.get(this.projectsByDepartment + department).pipe(
+      map((response) => response._embedded.projectBodyList),
+      flatMap((res) => {
+        return forkJoin(
+          res.map((project: Project) => {
+            return this.isRemovable(project.projectId).pipe(
+              map(removableRes => {
+                return { ...project, removable: !removableRes };
+              })
+            );
+          })
+        );
+      })
+    );
   }
 
   sendNewProject(newProjectData: Project) {
@@ -49,12 +58,12 @@ export class ProjectManagementService {
   updateProject(url: string, updatedProject: Project) {
     return this.httpService.put(url, updatedProject);
   }
-// Fix Project Type
-  deleteProject(project: any) {
-    return this.httpService.fakeDelete(project._links.DELETE.href);
+
+  deleteProject(project: Project) {
+    return this.httpService.delete(project._links.DELETE.href);
   }
 
-  isRemovable(projectId: any) {
+  isRemovable(projectId: string) {
     return this.httpService.get(`${this.removable}${projectId}`);
   }
 }

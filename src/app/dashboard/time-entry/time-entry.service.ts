@@ -5,107 +5,132 @@ import {
   TimeEntryResponse,
   TimeEntry,
   Day,
-  ProjectsResponse,
   ProjectsByClient,
   Project,
+  TimeEntriesWithLinks,
+  TimeEntriesWithLinksAndProjects,
   User
 } from '../../core/models';
 import { HttpService } from '../../core/services/http.service';
 import { map, flatMap } from 'rxjs/operators';
-import { forkJoin, of, Observable } from 'rxjs';
-import { groupProjectsByClient } from '../../shared/utils/groupProjectsByClient';
+import { of, Observable, BehaviorSubject } from 'rxjs';
+import { sortDaysByDate } from '../../shared/utils/sortDaysByDate';
 
-
-
-
-const sortWeekByDate = (weekDays: Array<Day>) => weekDays.sort((first: Day, second: Day) => {
-  const firstEl = moment(first.date, 'DD-MM-YYYY');
-  const secondEl = moment(second.date, 'DD-MM-YYYY');
-  if (firstEl > secondEl) {
-    return 1;
-  }
-  if (firstEl < secondEl) {
-    return -1;
-  }
-  return 0;
-});
 
 @Injectable()
 export class TimeEntryService {
-  constructor(private httpService: HttpService) {}
+  projects: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
 
-  fetchTracks(week: string) {
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    return forkJoin([
-      this.getTimeEntries(week),
-      this.httpService
-        .get(`projects?department=${user.department}`)
-        .pipe(
-          map((projectsResponse: ProjectsResponse) => projectsResponse._embedded.projectBodyList)
-        ),
-    ]).pipe(map((data) => {
-      let timeEntries = data[0].timeEntries || [];
-      const projects = data[1] || [];
-      const links = data[0]._links || {};
-      timeEntries = timeEntries.map((entry) => ({
-        ...entry,
-        weekDays: sortWeekByDate(entry.weekDays),
-        projectInfo: projects.filter(project => entry.projectId === project.projectId)[0],
-      }));
-      const groupedProjects = groupProjectsByClient(projects);
-      return [timeEntries, groupedProjects, {...links}];
-    }));
+  constructor(private httpService: HttpService) {
+    this.httpService.getProjectsStream().subscribe((projects: Array<Project>) => {
+      this.projects.next(projects);
+    });
   }
 
-  getTimeEntries(week) {
+  fetchTracks(week: string): Observable<TimeEntriesWithLinksAndProjects> {
+    return this.getTimeEntries(week)
+      .pipe(
+        map((timeEntriesWithLinks) => {
+          const projectList: Array<Project> = this.projects.getValue();
+
+          // adding projectInfo to time entry array, because it does not exist sorry for no type :)
+          return {
+            ...timeEntriesWithLinks,
+            projectList,
+            timeEntries: timeEntriesWithLinks.timeEntries.map(timeEntry => ({
+              ...timeEntry,
+              projectInfo: projectList.find(o => o.projectId === timeEntry.projectId),
+            })),
+          };
+
+        })
+      );
+  }
+
+  getProjects(): Observable<Array<Project>> {
+    return this.projects.asObservable();
+  }
+
+  getTimeEntries(week): Observable<TimeEntriesWithLinks> {
     const user: User = JSON.parse(localStorage.getItem('user'));
     return this.httpService
       .get(`consultants/${user.userId}/weeks/${week}`)
       .pipe(
         flatMap((timeEntriesResponse: TimeEntryResponse) => {
+
+          // if there is response from backend
           if (timeEntriesResponse._embedded) {
             return of({
               timeEntries: timeEntriesResponse._embedded.weekTimeEntryBodyList,
               _links: timeEntriesResponse._links,
             });
           }
-          let weekBefore: any = +week.substr(6, 2) - 1;
-          if (weekBefore < 10) {
-            weekBefore = `0${weekBefore}`;
-          }
-          return this.httpService.get(`consultants/${user.userId}/weeks/${week.substring(0, 6)}${weekBefore}`)
-            .pipe(
-              map((secondResponse: TimeEntryResponse) => {
-                if (secondResponse._embedded) {
-                  return {
-                    timeEntries: secondResponse._embedded.weekTimeEntryBodyList,
-                    _links: secondResponse._links,
-                  };
-                }
-                return { timeEntries: [], _links: '' };
-              }),
-              map((result) => ({
-                ...result,
-                timeEntries: result.timeEntries.map(project => ({
-                  ...project,
-                  weekDays: project.weekDays.map(day => ({ ...day, status: '' })),
-                })),
-              }))
-            );
+
+          // if there is no response from backend so we fetch previous weekend
+          return this.getTimeEntriesFromPreviousWeek(week);
         })
       );
   }
 
-  sendNewEntries(week, body) {
+  getTimeEntriesFromPreviousWeek(week: string): Observable<TimeEntriesWithLinks> {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    return this.httpService.post(`consultants/${user.userId}/weeks/${week}`, body);
+    const currentYear: number = +week.substring(0, 4);
+    const currentWeek: number = +week.substr(6, 2);
+    let weekBefore: number | string = currentWeek - 1;
+    let yearBefore: number | string = currentYear;
+
+    // adding prefix 0 if week is lower than 10 (only for backend purposes is needed)
+    if (weekBefore < 10) {
+      weekBefore = `0${weekBefore}`;
+    }
+
+    // subtracting one year if current week is lower than one
+    if (+weekBefore < 1) {
+      yearBefore = yearBefore - 1;
+      weekBefore = 52;
+    }
+
+    const finalYearWithWeek = `${yearBefore}-W${weekBefore}`;
+    return this.httpService.get(`consultants/${user.userId}/weeks/${finalYearWithWeek}`)
+      .pipe(
+        map((secondResponse: TimeEntryResponse) => {
+          // returning response if exists
+          if (secondResponse._embedded) {
+            return {
+              timeEntries: secondResponse._embedded.weekTimeEntryBodyList,
+              _links: {},
+            };
+          }
+
+          // default return when there is no response
+          return { timeEntries: [], _links: {} };
+        }),
+        map((result: TimeEntriesWithLinks) => ({
+          ...result,
+          // mapping all entries to fit to current week
+          timeEntries: result.timeEntries.map((timeEntry: TimeEntry) => ({
+            ...timeEntry,
+            // setting status to be empty
+            weekDays: this.setProjectWeekDaysToCurrentDate(timeEntry.weekDays, currentYear, currentWeek),
+            week: finalYearWithWeek,
+          })),
+        }))
+      );
   }
 
-  updateEntries(url, body) {
-    return this.httpService.put(url, body);
+  // reseting status from project and comments
+  setProjectWeekDaysToCurrentDate(weekDays: Array<Day>, year: number, week: number): Array<Day> {
+    const currentWeekDays: Array<Day> = this.getFullWeekDaysWithDate(year, week);
+    const sortedWeekDays: Array<Day> = sortDaysByDate(weekDays);
+    return sortedWeekDays.map((day: Day, index: number) => ({
+      ...day,
+      date: currentWeekDays[index].date,
+      status: '',
+      comment: '',
+    }));
   }
 
-  createAttributesForNewProject(project: Project, { year, week }): TimeEntry {
+  createAttributesForNewEntry(project: Project, { year, week }): TimeEntry {
     return {
       projectInfo: project,
       weekDays: this.getFullWeekDaysWithDate(year, week),
@@ -146,7 +171,7 @@ export class TimeEntryService {
     const days: Array<string> = [];
     let day = startOfWeek;
     while (day <= endOfWeek) {
-      days.push(day.format('DD-MM-YYYY'));
+      days.push(day.format('YYYY-MM-DD'));
       day = day.add(1, 'd');
     }
     return days;

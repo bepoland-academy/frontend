@@ -16,6 +16,7 @@ export class ConsultantsListComponent implements OnInit {
   ngOnInit() {}
 
   handleClick(user) {
+    console.log(user);
     this.consultantClick.emit(user);
   }
 

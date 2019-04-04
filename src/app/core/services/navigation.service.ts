@@ -19,9 +19,6 @@ export class NavigationService {
       path: 'track',
       component: TimeEntryComponent,
       data: { name: 'Time entry', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] },
-      children: [
-        {path: ':week', component: TimeEntryComponent},
-      ],
     },
     {
       path: 'history',
@@ -112,7 +109,7 @@ export class NavigationService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: '/approval', pathMatch: 'full' };
+    return { path: '**', redirectTo: '/projects', pathMatch: 'full' };
   }
 
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {

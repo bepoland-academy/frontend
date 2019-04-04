@@ -2,19 +2,8 @@ import { Component, ViewChild, Inject, OnInit } from '@angular/core';
 import { RoleManagementService } from '../../role-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-// import { Role } from '../../../../core/models';
 import { MatSnackBar } from '@angular/material';
-
-// export interface DialogData {
-//   client: string;
-//   name: string;
-//   rate: string;
-//   comments: string;
-//   active: string;
-//   departments: Array<any>;
-//   department: string;
-//   _links: any;
-// }
+import { Role } from '../../../../core/models';
 
 
 @Component({
@@ -31,20 +20,20 @@ import { MatSnackBar } from '@angular/material';
 })
 
 export class EditRoleDialog implements OnInit {
-  role: any;
+  role: string;
 
   @ViewChild('updateForm') updateRoleForm: NgForm;
 
   constructor(
     public dialogRef: MatDialogRef<EditRoleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: Role,
     private roleManagementService: RoleManagementService,
     private snackBar: MatSnackBar
   ) {
     }
 
   ngOnInit() {
-    this.role = this.data.roleName;
+    this.role = this.data.name;
   }
 
   cancelEdit() {
@@ -52,7 +41,7 @@ export class EditRoleDialog implements OnInit {
   }
 
   editRole() {
-    this.data.roleName = this.updateRoleForm.value.roleName;
+    this.data.name = this.updateRoleForm.value.name;
     this.roleManagementService.updateRole(this.data)
       .subscribe(() => {
         this.roleManagementService.changeReloadStatus();
@@ -66,7 +55,7 @@ deleteRole() {
   this.roleManagementService.deleteRole(this.data)
     .subscribe(() => {
       this.roleManagementService.changeReloadStatus();
-      this.snackBar.open(`Role ${this.data.roleName} was deleted`, '', {
+      this.snackBar.open(`Role ${this.data.name} was deleted`, '', {
         duration: 2000,
         verticalPosition: 'top',
       });

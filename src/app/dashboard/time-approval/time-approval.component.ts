@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { TimeApprovalService } from './time-approval.service';
 import { UserTimeMonthlyResponse } from '../../core/models';
 import * as moment from 'moment';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-time-approval',
@@ -28,16 +29,14 @@ export class TimeApprovalComponent implements OnInit {
     const currentMonth = `${year}-${month}`;
     this.timeApprovalService.getUsersTime(currentMonth).subscribe((users) => {
       this.usersTime = users;
-      console.log(users);
-
     });
   }
 
   handleUserClick(user) {
-    console.log(user);
+    this.timeApprovalService.reloadCalendar(user);
     this.sidenavOpen = false;
     this.toggleButtonVisible = true;
-    this.currentUser = user;
+    this.currentUser = true;
   }
 
   showSidenav() {
