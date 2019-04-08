@@ -28,16 +28,16 @@ export class CreateRoleDialog implements OnInit {
     private roleManagementService: RoleManagementService,
     private snackBar: MatSnackBar
   ) {
-    }
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   cancelCreate(): void {
     this.dialogRef.close();
   }
 
-  createRole() {
+  createRole(): void {
     const value = this.createRoleForm.value;
     this.roleManagementService.createRole(value).subscribe(
       () => {
@@ -45,32 +45,16 @@ export class CreateRoleDialog implements OnInit {
         this.createRoleForm.resetForm();
         this.snackBar.open(`New role ${value.name} created`, '', {
           duration: 2000,
-          verticalPosition: 'top',
         });
       },
       error => {
-        console.log(error);
-        // this.isLoading = false;
-        // this.isFail = true;
-        // if (error.status === 409) {
-        //   if (error.error.message === 'USER ALREADY EXISTS') {
-        //     this.errorMessage = 'Please check your username(email) or password';
-        //   }
-        // } else if ((/^[5]/g).test(error.status)) {
-        //   this.errorMessage = `Oh no! Something bad happened.
-        //   Please come back later when we fixed that problem. Thanks`;
-        // } else {
-        //   this.errorMessage = 'Please check your Internet connection';
-        // }
-        // setTimeout(() => {
-        //   this.isFail = false;
-        //   this.changeDetectorRefs.detectChanges();
-        // }, 3000);
+        this.snackBar.open(`Ups! New role ${value.name} has not been created`, '', {
+          duration: 2000,
+        });
       }
     );
     this.dialogRef.close();
   }
-
 
 }
 

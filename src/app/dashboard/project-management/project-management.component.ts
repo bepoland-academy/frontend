@@ -8,8 +8,8 @@ import {
   Project,
   ProjectsByClient
 } from '../../core/models';
-import { NgForm } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { NgForm, FormControl } from '@angular/forms';
+import { MatDialog, TooltipPosition } from '@angular/material';
 import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
 
@@ -32,7 +32,7 @@ export interface DialogData {
     self: {
       href: string;
     }
-  }
+  };
 }
 
 @Component({

@@ -5,17 +5,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Client } from '../../../../core/models';
 import { MatSnackBar } from '@angular/material';
 
-// export interface DialogData {
-//   client: string;
-//   name: string;
-//   rate: string;
-//   comments: string;
-//   active: string;
-//   departments: Array<any>;
-//   department: string;
-//   _links: any;
-// }
-
 
 @Component({
   selector: 'app-edit-client-dialog',
@@ -31,47 +20,52 @@ import { MatSnackBar } from '@angular/material';
 })
 
 export class EditClientDialog implements OnInit {
-  client: any;
+  client: string;
 
   @ViewChild('updateForm') updateClientForm: NgForm;
 
   constructor(
     public dialogRef: MatDialogRef<EditClientDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: Client,
     private clientManagementService: ClientManagementService,
     private snackBar: MatSnackBar
   ) {
     }
 
   ngOnInit() {
-    this.client = this.data.clientName;
+    this.client = this.data.name;
   }
 
-  cancelEdit() {
+  cancelEdit(): void {
     this.dialogRef.close();
   }
 
-  editClient() {
-    this.data.clientName = this.updateClientForm.value.clientName;
+  editClient(): void {
+    this.data.name = this.updateClientForm.value.name;
     this.clientManagementService.updateClient(this.data)
       .subscribe(() => {
         this.clientManagementService.changeReloadStatus();
       },
       (err) => {
+        this.snackBar.open(`Ups! Changes for client ${this.data.name} have not been saved`, '', {
+          duration: 2000,
+        });
       });
     this.dialogRef.close();
   }
 
-deleteClient() {
+deleteClient(): void {
   this.clientManagementService.deleteClient(this.data)
     .subscribe(() => {
       this.clientManagementService.changeReloadStatus();
-      this.snackBar.open(`Client ${this.data.clientName} was deleted`, '', {
+      this.snackBar.open(`Client ${this.data.name} was deleted`, '', {
         duration: 2000,
-        verticalPosition: 'top',
       });
     },
     (err) => {
+      this.snackBar.open(`Client ${this.data.name} cannot be deleted`, '', {
+        duration: 2000,
+      });
     });
   this.dialogRef.close();
 }

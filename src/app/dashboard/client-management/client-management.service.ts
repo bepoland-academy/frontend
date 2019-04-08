@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpService } from '../../core/services/http.service';
+import { Client, ClientsResponse } from '../../core/models';
 
 @Injectable()
 export class ClientManagementService {
-
-  // endpoint = 'users';
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
@@ -19,15 +18,9 @@ export class ClientManagementService {
     return this.reloadStatus.asObservable();
   }
 
-  // getClients(): Observable<ClientsResponse> {
-  //   return this.httpService.get('departments');
-  // }
-
-  getClients(): Observable<any> {
+  getClients(): Observable<ClientsResponse> {
     return this.httpService.get('clients');
   }
-
-
 
   // getProjects(department: string): Observable<any> {
   //   return this.httpService.get(this.projectsByDepartment + department).pipe(
@@ -47,22 +40,14 @@ export class ClientManagementService {
   // }
 
   createClient(clientRegistrationData: string): Observable<null> {
-    return this.httpService.fakePost('http://localhost:3000/clients', clientRegistrationData);
+    return this.httpService.post('clients', clientRegistrationData);
   }
 
-  // createClient(clientRegistrationData: string): Observable<null> {
-  //   return this.httpService.post(this.endpoint, userRegistrationData);
-  // }
-
-  // updateClient(client: any): Observable<null> {
-  //   return this.httpService.put(client._links.self.href, client);
-  // }
-
-  updateClient(client: any): Observable<null> {
-    return this.httpService.put(`http://localhost:3000/clients/${client.id}`, client);
+  updateClient(client: Client): Observable<null> {
+    return this.httpService.put(client._links.self.href, client);
   }
 
-  deleteClient(client: any): Observable<null> {
-    return this.httpService.fakeDelete(`http://localhost:3000/clients/${client.id}`);
+  deleteClient(client: Client): Observable<null> {
+    return this.httpService.delete(`clients/${client.clientId}`);
   }
 }

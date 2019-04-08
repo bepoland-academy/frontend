@@ -58,7 +58,7 @@
                <div class="grid-item truncate">
                   <h4 
                      class="truncate" 
-                     title="{{client.clientName}}"
+                     matTooltip="{{client.clientName}}"
                   >
                      {{client.clientName}}
                   </h4>
@@ -66,13 +66,19 @@
                <div>
                   <div *ngFor="let project of client.projects; let i = index">
                      <div class="project-grid">
-                        <div class="grid-item truncate" title="{{project.name}}">
+                        <div 
+                           class="grid-item truncate" 
+                           matTooltip="{{project.name}}"
+                        >
                            <h4 class="truncate">{{project.name}}</h4>
                         </div>
                         <div class="grid-item">
                            <h4>{{project.rate}}</h4>
                         </div>
-                        <div class="grid-item truncate" title="{{project.comments}}">
+                        <div 
+                           class="grid-item truncate" 
+                           matTooltip="{{project.comments}}"
+                        >
                            <h4 class="truncate">{{project.comments}}</h4>
                         </div>
                         <div class="grid-item">

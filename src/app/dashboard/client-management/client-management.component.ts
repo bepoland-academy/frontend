@@ -3,6 +3,7 @@ import { ClientManagementService } from './client-management.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateClientDialog } from './client-management-dialog/create-client/create-client-dialog';
 import { EditClientDialog } from './client-management-dialog/edit-client/edit-client-dialog';
+import { Client, ClientsResponse } from '../../core/models';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { EditClientDialog } from './client-management-dialog/edit-client/edit-cl
 })
 
 export class ClientManagementComponent implements OnInit {
-  clients: Array<any> = [];
+  clients: Array<Client> = [];
 
   constructor(
     private clientManagementService: ClientManagementService,
@@ -21,8 +22,8 @@ export class ClientManagementComponent implements OnInit {
 
   ngOnInit() {
     this.clientManagementService.getReloadStatus().subscribe(() => {
-      this.clientManagementService.getClients().subscribe((data) => {
-        this.clients = data;
+      this.clientManagementService.getClients().subscribe((data: ClientsResponse) => {
+        this.clients = data._embedded.clientBodyList;
       });
     });
   }
@@ -32,7 +33,7 @@ export class ClientManagementComponent implements OnInit {
     });
   }
 
-  openEditDialog(client: any): void {
+  openEditDialog(client: Client): void {
     const dialogRef = this.dialog.open(EditClientDialog, {
       data: client,
     });

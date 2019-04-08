@@ -5,17 +5,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Client } from '../../../../core/models';
 import { MatSnackBar } from '@angular/material';
 
-// export interface DialogData {
-//   client: string;
-//   name: string;
-//   rate: string;
-//   comments: string;
-//   active: string;
-//   departments: Array<any>;
-//   department: string;
-//   _links: any;
-// }
-
 
 @Component({
   selector: 'app-create-client-dialog',
@@ -35,7 +24,7 @@ export class CreateClientDialog implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<CreateClientDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: Client,
     private clientManagementService: ClientManagementService,
     private snackBar: MatSnackBar
   ) {
@@ -48,44 +37,22 @@ export class CreateClientDialog implements OnInit {
     this.dialogRef.close();
   }
 
-  createClient() {
-    console.log(this.createClientForm.value.clientName);
-    // this.isLoading = true;
-    const value: any = this.createClientForm.value;
+  createClient(): void {
+    const value = this.createClientForm.value;
 
     this.clientManagementService.createClient(value).subscribe(
       () => {
-        // this.isLoading = false;
-        // this.isSuccess = true;
         this.clientManagementService.changeReloadStatus();
-        // setTimeout(() => {
-        //   this.isSuccess = false;
-        //   this.changeDetectorRefs.detectChanges();
-        // }, 3000);
         this.createClientForm.resetForm();
-        this.snackBar.open(`New client ${value.clientName} created`, '', {
+        this.snackBar.open(`New client ${value.name} created`, '', {
           duration: 2000,
-          verticalPosition: 'top',
         });
       },
       error => {
         console.log(error);
-        // this.isLoading = false;
-        // this.isFail = true;
-        // if (error.status === 409) {
-        //   if (error.error.message === 'USER ALREADY EXISTS') {
-        //     this.errorMessage = 'Please check your username(email) or password';
-        //   }
-        // } else if ((/^[5]/g).test(error.status)) {
-        //   this.errorMessage = `Oh no! Something bad happened.
-        //   Please come back later when we fixed that problem. Thanks`;
-        // } else {
-        //   this.errorMessage = 'Please check your Internet connection';
-        // }
-        // setTimeout(() => {
-        //   this.isFail = false;
-        //   this.changeDetectorRefs.detectChanges();
-        // }, 3000);
+        this.snackBar.open(`Ups! New client ${value.name} has not been created`, '', {
+          duration: 2000,
+        });
       }
     );
     this.dialogRef.close();

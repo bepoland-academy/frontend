@@ -30,39 +30,44 @@ export class EditRoleDialog implements OnInit {
     private roleManagementService: RoleManagementService,
     private snackBar: MatSnackBar
   ) {
-    }
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.role = this.data.name;
   }
 
-  cancelEdit() {
+  cancelEdit(): void {
     this.dialogRef.close();
   }
 
-  editRole() {
+  editRole(): void {
     this.data.name = this.updateRoleForm.value.name;
     this.roleManagementService.updateRole(this.data)
       .subscribe(() => {
         this.roleManagementService.changeReloadStatus();
       },
-      (err) => {
-      });
+        (err) => {
+          this.snackBar.open(`Ups! Changes for the role ${this.data.name} have not been saved`, '', {
+            duration: 2000,
+          });
+        });
     this.dialogRef.close();
   }
 
-deleteRole() {
-  this.roleManagementService.deleteRole(this.data)
-    .subscribe(() => {
-      this.roleManagementService.changeReloadStatus();
-      this.snackBar.open(`Role ${this.data.name} was deleted`, '', {
-        duration: 2000,
-        verticalPosition: 'top',
-      });
-    },
-    (err) => {
-    });
-  this.dialogRef.close();
-}
+  deleteRole(): void {
+    this.roleManagementService.deleteRole(this.data)
+      .subscribe(() => {
+        this.roleManagementService.changeReloadStatus();
+        this.snackBar.open(`Role ${this.data.name} was deleted`, '', {
+          duration: 2000,
+        });
+      },
+        (err) => {
+          this.snackBar.open(`Role ${this.data.name} cannot be deleted`, '', {
+            duration: 2000,
+          });
+        });
+    this.dialogRef.close();
+  }
 }
 

@@ -6,7 +6,7 @@
       <form (ngSubmit)="createClient()" #clientForm="ngForm" fxLayout="column">
          <mat-form-field appearance="outline">
             <mat-label>Client Name</mat-label>
-            <input matInput name="clientName" ngModel required>
+            <input matInput name="name" ngModel required>
          </mat-form-field>
          <div mat-dialog-actions class="createClient">
             <button mat-button type="button" (click)="cancelCreate()">

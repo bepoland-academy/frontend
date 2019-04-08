@@ -27,6 +27,7 @@ export class AuthService {
       .login('auth/login', credentials, { observe: 'response' as 'body' })
       .pipe(
         tap((response: HttpResponse<User>) => {
+          console.log(response);
           localStorage.setItem('user', JSON.stringify(response.body));
           this.navigationService.filterRoutes(response.body.roles);
           this.loggedIn.next(true);

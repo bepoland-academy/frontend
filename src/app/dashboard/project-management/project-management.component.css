@@ -115,3 +115,8 @@ h4 {
 .failMessage mat-card-title {
   color: red;
 }
+
+::ng-deep .mat-tooltip {
+  margin: -25px !important;
+  font-size: 12px !important;
+}
