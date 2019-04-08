@@ -62,7 +62,7 @@ export class DeleteProjectDialog implements OnInit {
         });
       },
       (err) => {
-        this.snackBar.open(`Project ${this.data.name} cannot be deleted because it is active`, '', {
+        this.snackBar.open(`Project ${this.data.name} cannot be deleted`, '', {
           duration: 2000,
         });
       });

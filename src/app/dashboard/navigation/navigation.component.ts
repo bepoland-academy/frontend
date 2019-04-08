@@ -29,7 +29,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.substription.add(
       this.authService.getUserStream().subscribe((user: User) => {
         this.user = user;
-        console.log(this.user);
       })
     );
 

@@ -1,13 +1,6 @@
 .project-management {
-  justify-content: space-between;
-  display: flex;
   padding: 0 30px;
   font-family: Roboto,"Helvetica Neue",sans-serif;
-}
-
-.projects {
-  margin: 40px 0 30px;
-  width: 65%;
 }
 
 .hidden {
@@ -19,7 +12,10 @@
 }
 
 .projectOptions {
-  justify-content: space-between;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .projectOptions .mat-form-field {
@@ -82,14 +78,14 @@ h4 {
   border: none;
 }
 
-.addClient {
+.addClient, .addProject {
   padding: 15px;
 }
 
 .mat-card {
   margin-top: 20px;
-  height: 480px;
-  width: 310px;
+  /* height: 480px;
+  width: 310px; */
   flex-direction: column;
   text-align: center;
 }

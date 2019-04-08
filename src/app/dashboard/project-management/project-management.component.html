@@ -1,9 +1,7 @@
-<div fxLayout="row" class="project-management">
-   <div class="projects">
+<div class="project-management">
       <!-- Projects' Options -->
       <div 
          *ngIf="departments.length" 
-         fxLayout="row" 
          class="projectOptions"
       >
          <mat-form-field>
@@ -29,12 +27,22 @@
          </mat-form-field>
          <div class="addClient">
             <button 
-               type="submit" 
+               type="button" 
                mat-raised-button 
                color="primary" 
                [disabled]="!actualDepartment"
             >
                Add new Client
+            </button>
+         </div>
+         <div class="addProject">
+            <button 
+               type="button" 
+               mat-raised-button 
+               color="primary"
+               (click)="createProject()" 
+            >
+               Add new Project
             </button>
          </div>
       </div>
@@ -95,105 +103,4 @@
             </div>
          </div>
       </div>
-   </div>
-   <!-- Create New Project -->
-   <mat-card [ngClass]="{hidden: isSuccess === true || isFail === true}">
-      <mat-card-header>
-         <mat-card-title>Create New Project</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-         <form 
-            class="project-form" 
-            (ngSubmit)="createProject()" 
-            #myForm="ngForm" 
-            fxLayout="column"
-         >
-            <mat-form-field appearance="outline">
-               <mat-label>Project Name</mat-label>
-               <input 
-                  matInput 
-                  name="name" 
-                  ngModel 
-                  required
-               >
-            </mat-form-field>
-            <mat-form-field>
-               <mat-select 
-                  matNativeControl 
-                  placeholder="Client" 
-                  name="client" 
-                  ngModel 
-                  required
-               >
-                  <mat-option 
-                     *ngFor="let client of clients" 
-                     [value]="client.clientId"
-                  >
-                     {{client.name}}
-                  </mat-option>
-               </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-               <mat-label>Project Rate</mat-label>
-               <input 
-                  matInput 
-                  name="rate" 
-                  ngModel 
-                  required
-               >
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-               <mat-label>Comments</mat-label>
-               <textarea 
-                  matInput 
-                  name="comments" 
-                  rows="3" 
-                  ngModel 
-                  maxlength="500"
-               >
-            </textarea>
-            </mat-form-field>
-            <mat-form-field>
-               <mat-select 
-                  matNativeControl 
-                  placeholder="Department" 
-                  name="department" 
-                  ngModel 
-                  required
-               >
-                  <mat-option 
-                     [value]="department.departmentId" 
-                     *ngFor="let department of departments"
-                  >
-                     {{department.name}}
-                  </mat-option>
-               </mat-select>
-            </mat-form-field>
-            <mat-card-actions fxLayoutAlign="center start">
-               <button 
-                  type="submit" 
-                  mat-raised-button 
-                  color="primary" 
-                  [disabled]="!myForm.valid"
-               >
-                  Create
-               </button>
-            </mat-card-actions>
-         </form>
-      </mat-card-content>
-   </mat-card>
-   <mat-card [ngClass]="{hidden: isSuccess !== true}">
-      <mat-card-header class="successMessage" fxLayoutAlign="center center">
-         <mat-card-title>
-            New Project has been created
-         </mat-card-title>
-      </mat-card-header>
-   </mat-card>
-   <mat-card [ngClass]="{hidden: isFail !== true}">
-      <mat-card-header class="failMessage" fxLayoutAlign="center center">
-         <mat-card-title>
-            {{errorOnCreate}}
-         </mat-card-title>
-      </mat-card-header>
-   </mat-card>
 </div>

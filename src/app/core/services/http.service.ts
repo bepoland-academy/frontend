@@ -18,10 +18,8 @@ export class HttpService {
 
 
   login(endpoint: string, body: any, option): Observable<any> {
-    console.log(body);
     return this.http.post(this.url + endpoint, body, option).pipe(
       tap(response => {
-        console.log(response);
         const token = response.headers.get('Authorization');
         localStorage.setItem('token', JSON.stringify(token));
       })
@@ -48,8 +46,8 @@ export class HttpService {
     return this.http.put(url, body);
   }
 
-  delete(endpoint: string): Observable<any> {
-    return this.http.delete(this.url + endpoint);
+  delete(url: string): Observable<any> {
+    return this.http.delete(url);
   }
 
   fakeGet(url: string): Observable<any> {

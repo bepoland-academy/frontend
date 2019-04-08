@@ -24,6 +24,7 @@ export class ClientManagementComponent implements OnInit {
     this.clientManagementService.getReloadStatus().subscribe(() => {
       this.clientManagementService.getClients().subscribe((data: ClientsResponse) => {
         this.clients = data._embedded.clientBodyList;
+        console.log(this.clients);
       });
     });
   }

@@ -30,7 +30,7 @@ export interface DialogData {
 
 @Component({
   selector: 'app-project-management-dialog',
-  templateUrl: './project-management-dialog.html',
+  templateUrl: './edit-project-dialog.html',
   styles: [`
   .mat-card-header, .mat-dialog-actions {justify-content: space-around;}
   .mat-card {text-align: center;}

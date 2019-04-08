@@ -10,8 +10,9 @@ import {
 } from '../../core/models';
 import { NgForm, FormControl } from '@angular/forms';
 import { MatDialog, TooltipPosition } from '@angular/material';
-import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
+import { ProjectManagementDialog } from './edit-project-dialog/edit-project-dialog';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
+import { CreateProjectDialog } from './create-project-dialog/create-project-dialog';
 
 
 export interface DialogData {
@@ -57,6 +58,7 @@ export class ProjectManagementComponent implements OnInit {
   actualDepartment: string;
   actualClient: string;
   currentDepartment: Department;
+  roles: any;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -73,6 +75,9 @@ export class ProjectManagementComponent implements OnInit {
     });
     this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
       this.clients = data._embedded.clientBodyList;
+    });
+    this.projectManagementService.getRoles().subscribe((data) => {
+      this.roles = data._embedded.roleBodyList;
     });
   }
 
@@ -115,38 +120,45 @@ export class ProjectManagementComponent implements OnInit {
     );
   }
 
-  createProject() {
-    const value = {
-      ...this.newProjectForm.value,
-      client: { clientId: this.newProjectForm.value.client },
-    };
-    this.projectManagementService.sendNewProject(value)
-      .subscribe(
-        () => {
-          this.isSuccess = true;
-          this.projectManagementService.changeReloadStatus();
-          setTimeout(() => {
-            this.isSuccess = false;
-            this.changeDetectorRefs.detectChanges();
-          }, 3000);
-          this.newProjectForm.resetForm();
-        },
-        () => {
-          this.isFail = true;
-          this.errorOnCreate = 'Ups! Something went wrong :(';
-          setTimeout(() => {
-            this.isFail = false;
-            this.changeDetectorRefs.detectChanges();
-          }, 3000);
-        }
-      );
-  }
+  // createProject() {
+  //   const value = {
+  //     ...this.newProjectForm.value,
+  //     client: { clientId: this.newProjectForm.value.client },
+  //   };
+  //   this.projectManagementService.sendNewProject(value)
+  //     .subscribe(
+  //       () => {
+  //         this.isSuccess = true;
+  //         this.projectManagementService.changeReloadStatus();
+  //         setTimeout(() => {
+  //           this.isSuccess = false;
+  //           this.changeDetectorRefs.detectChanges();
+  //         }, 3000);
+  //         this.newProjectForm.resetForm();
+  //       },
+  //       () => {
+  //         this.isFail = true;
+  //         this.errorOnCreate = 'Ups! Something went wrong :(';
+  //         setTimeout(() => {
+  //           this.isFail = false;
+  //           this.changeDetectorRefs.detectChanges();
+  //         }, 3000);
+  //       }
+  //     );
+  // }
 
   editProject(project: Project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
     });
+  }
+
+  createProject(project: Project): void {
+    const dialogRef = this.dialog.open(CreateProjectDialog, {
+      data: { departments: this.departments, clients: this.clients, roles: this.roles },
+    });
+    console.log({ departments: this.departments, clients: this.clients, roles: this.roles });
   }
 
   filterClients(event: Event) {

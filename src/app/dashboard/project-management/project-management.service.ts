@@ -66,5 +66,9 @@ export class ProjectManagementService {
   isRemovable(projectId: string) {
     return this.httpService.get(`${this.removable}${projectId}`);
   }
+
+  getRoles(): Observable<null> {
+    return this.httpService.get('projects/roles/all');
+  }
 }
 
