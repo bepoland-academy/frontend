@@ -12,6 +12,8 @@ import { TimeEntryModule } from './time-entry/time-entry.module';
 import { ProjectManagementModule } from './project-management/project-management.module';
 import { TimeApprovalModule } from './time-approval/time-approval.module';
 import { HistoricalDataModule } from './historical-data/historical-data.module';
+import { ClientManagementModule } from './client-management/client-management.module';
+import { RoleManagementModule } from './role-management/role-management.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { HistoricalDataModule } from './historical-data/historical-data.module';
     ProjectManagementModule,
     TimeApprovalModule,
     HistoricalDataModule,
+    ClientManagementModule,
+    RoleManagementModule,
   ],
   exports: [
     DashboardComponent,

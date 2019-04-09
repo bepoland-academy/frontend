@@ -17,7 +17,7 @@
   <mat-sidenav-content>
     <app-calendar *ngIf="currentUser" [toggleButtonVisible]="toggleButtonVisible" (listClick)="showSidenav()"
       [currentUser]="currentUser" isTimeApproval="true" (setStatusForOneDay)="setStatusForOneDay($event)" #calendar 
-      (nextApproval)="getMoreTimeSheetsToApprove($event)" (approveAll)="approveAll()">
+      (nextApproval)="getMoreTimeSheetsToApprove($event)" (approveAll)="approveAll($event)">
     </app-calendar>
   </mat-sidenav-content>
 </mat-sidenav-container>

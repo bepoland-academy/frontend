@@ -1,0 +1,38 @@
+<mat-card>
+   <mat-card-header>
+      <mat-card-title>Create role</mat-card-title>
+   </mat-card-header>
+   <mat-card-content>
+      <form 
+         (ngSubmit)="createRole()" 
+         #roleForm="ngForm" 
+         fxLayout="column"
+      >
+         <mat-form-field appearance="outline">
+            <mat-label>Role Name</mat-label>
+            <input 
+               matInput 
+               name="name" 
+               ngModel 
+               required
+            >
+         </mat-form-field>
+         <div mat-dialog-actions class="createRole">
+            <button 
+               mat-button
+               type="button"
+               (click)="cancelCreate()" 
+            >
+               Cancel
+            </button>
+            <button 
+               mat-button 
+               type="submit" 
+               [disabled]="!roleForm.valid"
+            >
+               Create
+            </button>
+         </div>
+      </form>
+   </mat-card-content>
+</mat-card>

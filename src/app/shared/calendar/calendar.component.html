@@ -28,7 +28,7 @@
       </div>
       <!-- Approval buttons -->
       <div>
-        <div class="approval" *ngIf="expression">
+        <div class="approval" *ngIf="isTimeApproval">
           <button mat-raised-button color="primary" (click)="nextApprovalHandler()">
             Next Approval
           </button>

@@ -1,0 +1,56 @@
+.roles {
+  margin-top: 5vw;
+  width: 30vw;
+  margin-left: 10vw;
+}
+
+.header, .content {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+
+.grid-item {
+  border: 1px solid rgba(0,0,0,.12);
+  text-align: center;
+  color: rgba(0,0,0,.87);
+  font-size: 14px;
+  height: 30px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  box-sizing: content-box;
+}
+
+.header .grid-item {
+  font-weight: bold;
+  color: rgba(0,0,0,.54);
+  font-size: 12px;
+}
+
+.truncate {
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+
+.edit {
+  border: none;
+}
+
+.addRole {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  padding: 15px;
+}
+
+.addRole .grid-item {
+  border: none;
+}
+
+.addRole button {
+  width: 120px;
+  display: block;
+  margin: auto;
+}

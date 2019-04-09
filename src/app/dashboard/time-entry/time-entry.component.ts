@@ -117,7 +117,6 @@ export class TimeEntryComponent implements OnInit {
   }
 
   removeProject(timeEntry: TimeEntry): void {
-    console.log(timeEntry);
     if (timeEntry._links.DELETE) {
       this.httpService.delete(timeEntry._links.DELETE.href).subscribe(() => {
         this.fetchDataChangeRouteAndGetWeekDates();
@@ -177,7 +176,6 @@ export class TimeEntryComponent implements OnInit {
       && el.weekDays[0].status !== 'SUBMITTED'
     );
     if (isEntryExistsInEntryList) {
-      console.log(project);
       return;
     }
     const newEntry: TimeEntry = this.timeEntryService

@@ -31,7 +31,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   @Input() toggleButtonVisible: boolean;
   @Input() isTimeApproval: boolean;
   @Output() listClick: EventEmitter<null> = new EventEmitter();
-  @Output() approveAll: EventEmitter<null> = new EventEmitter();
+  @Output() approveAll: EventEmitter<UserWithTimeSheet> = new EventEmitter();
   @Output() setStatusForOneDay: EventEmitter<{status: string; date: string, comment?: string}> = new EventEmitter();
   @Output() nextApproval: EventEmitter<string> = new EventEmitter();
   currentDate = new Date();
@@ -114,11 +114,10 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.fetchUserInfo(link);
   }
   approveAllHandler() {
-    this.approveAll.emit();
+    this.approveAll.emit(this.currentUser);
   }
 
   fetchUserInfo(link: string) {
-    console.log(link);
     this.isLoading = true;
     this.httpService.fakeGet(link)
       .pipe(

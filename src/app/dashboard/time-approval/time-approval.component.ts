@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TimeApprovalService } from './time-approval.service';
-import { UserWithTimeSheet, Project, MonthTimeEntry, MonthTimeEntryWithoutProjectInfo } from '../../core/models';
+import { UserWithTimeSheet, Project, MonthTimeEntry, MonthTimeEntryWithoutProjectInfo, User } from '../../core/models';
 import * as moment from 'moment';
 import { MatSnackBar } from '@angular/material';
 import { HttpService } from 'src/app/core/services/http.service';
@@ -65,7 +65,9 @@ export class TimeApprovalComponent implements OnInit {
     this.toggleButtonVisible = false;
   }
 
-  approveAll() {
+  approveAll(currentUser: UserWithTimeSheet) {
+    console.log(currentUser);
+    this.currentUser = currentUser;
     const dataToSend: Array<MonthTimeEntryWithoutProjectInfo> = this.currentUser.monthTimeSheet
       .map((timeSheet: MonthTimeEntry) => {
         const { projectInfo, ...rest } = timeSheet;
@@ -123,11 +125,16 @@ export class TimeApprovalComponent implements OnInit {
   }
 
   getMoreTimeSheetsToApprove(link: string) {
-    this.httpService.fakeGet('http://beontime.be-academy.pl/gateway/consultants/7041cb03-200d-457c-84a9-a4881527448f/months/status/SUBMITTED')
+    const loggedInUser: User = JSON.parse(localStorage.getItem('user'));
+    this.httpService.get(`consultants/${loggedInUser.userId}/months/status/SUBMITTED`)
       .subscribe((response: NextApprovalResponse) => {
+        if (!response._embedded) {
+          this.snackBar.open('There is no more time entries to approve', 'X', { duration: 3000, horizontalPosition: 'left' });
+          return;
+        }
         const date = response._embedded.monthBoList[0].month;
+        this.calendarComponent.currentDate = moment(date, 'YYYY-MM').toDate();
         this.calendarComponent.fetchUserInfo(link + date);
-
       });
   }
 }

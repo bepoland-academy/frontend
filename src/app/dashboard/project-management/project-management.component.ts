@@ -6,20 +6,34 @@ import {
   Client,
   ClientsResponse,
   Project,
-  ProjectsResponse,
   ProjectsByClient
 } from '../../core/models';
-import { NgForm } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { ProjectManagementDialog } from './project-management-dialog/project-management-dialog';
+import { NgForm, FormControl } from '@angular/forms';
+import { MatDialog, TooltipPosition } from '@angular/material';
+import { ProjectManagementDialog } from './edit-project-dialog/edit-project-dialog';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
+import { CreateProjectDialog } from './create-project-dialog/create-project-dialog';
+
 
 export interface DialogData {
-  client: string;
-  name: string;
-  rate: string;
+  active: boolean;
+  client: Client;
+  clients: Array<Client>;
   comments: string;
-  active: string;
+  department: string;
+  departments: Array<Department>;
+  name: string;
+  projectId: string;
+  rate: number;
+  removable: boolean;
+  _links: {
+    DELETE: {
+      href: string;
+    },
+    self: {
+      href: string;
+    }
+  };
 }
 
 @Component({
@@ -44,6 +58,7 @@ export class ProjectManagementComponent implements OnInit {
   actualDepartment: string;
   actualClient: string;
   currentDepartment: Department;
+  roles: any;
 
   constructor(
     private projectManagementService: ProjectManagementService,
@@ -60,6 +75,9 @@ export class ProjectManagementComponent implements OnInit {
     });
     this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
       this.clients = data._embedded.clientBodyList;
+    });
+    this.projectManagementService.getRoles().subscribe((data) => {
+      this.roles = data._embedded.roleBodyList;
     });
   }
 
@@ -86,8 +104,8 @@ export class ProjectManagementComponent implements OnInit {
   displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      (data: ProjectsResponse) => {
-        const projects = groupProjectsByClient(data._embedded.projectBodyList);
+      (data: Array<Project>) => {
+        const projects = groupProjectsByClient(data);
         this.projectsList1 = projects;
         this.projectsList2 = projects;
       },
@@ -102,37 +120,43 @@ export class ProjectManagementComponent implements OnInit {
     );
   }
 
-  createProject() {
-    const value = {
-      ...this.newProjectForm.value,
-      client: {clientId: this.newProjectForm.value.client},
-    };
-    this.projectManagementService.sendNewProject(value)
-      .subscribe(
-        () => {
-          this.isSuccess = true;
-          this.projectManagementService.changeReloadStatus();
-          setTimeout(() => {
-            this.isSuccess = false;
-            this.changeDetectorRefs.detectChanges();
-          }, 3000);
-          this.newProjectForm.resetForm();
-        },
-        () => {
-          this.isFail = true;
-          this.errorOnCreate = 'Ups! Something went wrong :(';
-          setTimeout(() => {
-            this.isFail = false;
-            this.changeDetectorRefs.detectChanges();
-          }, 3000);
-        }
-      );
-  }
+  // createProject() {
+  //   const value = {
+  //     ...this.newProjectForm.value,
+  //     client: { clientId: this.newProjectForm.value.client },
+  //   };
+  //   this.projectManagementService.sendNewProject(value)
+  //     .subscribe(
+  //       () => {
+  //         this.isSuccess = true;
+  //         this.projectManagementService.changeReloadStatus();
+  //         setTimeout(() => {
+  //           this.isSuccess = false;
+  //           this.changeDetectorRefs.detectChanges();
+  //         }, 3000);
+  //         this.newProjectForm.resetForm();
+  //       },
+  //       () => {
+  //         this.isFail = true;
+  //         this.errorOnCreate = 'Ups! Something went wrong :(';
+  //         setTimeout(() => {
+  //           this.isFail = false;
+  //           this.changeDetectorRefs.detectChanges();
+  //         }, 3000);
+  //       }
+  //     );
+  // }
 
-  openDialog(project: Project): void {
+  editProject(project: Project): void {
     const dialogRef = this.dialog.open(ProjectManagementDialog, {
       width: '600px',
       data: { ...project, departments: this.departments, clients: this.clients },
+    });
+  }
+
+  createProject(project: Project): void {
+    const dialogRef = this.dialog.open(CreateProjectDialog, {
+      data: { departments: this.departments, clients: this.clients, roles: this.roles },
     });
   }
 

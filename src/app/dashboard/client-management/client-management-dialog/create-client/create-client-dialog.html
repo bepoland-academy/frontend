@@ -1,0 +1,22 @@
+<mat-card>
+   <mat-card-header>
+      <mat-card-title>Create client</mat-card-title>
+   </mat-card-header>
+   <mat-card-content>
+      <form (ngSubmit)="createClient()" #clientForm="ngForm" fxLayout="column">
+         <mat-form-field appearance="outline">
+            <mat-label>Client Name</mat-label>
+            <input matInput name="name" ngModel required>
+         </mat-form-field>
+         <div mat-dialog-actions class="createClient">
+            <button mat-button type="button" (click)="cancelCreate()">
+               Cancel
+            </button>
+            <button mat-button type="submit" [disabled]="!clientForm.valid">
+               Create
+            </button>
+
+         </div>
+      </form>
+   </mat-card-content>
+</mat-card>

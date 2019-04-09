@@ -1,0 +1,151 @@
+.mat-card-header, .mat-card-actions {
+  display: flex; 
+  justify-content: space-around;
+}
+
+.mat-card {
+  text-align: center;
+  overflow: hidden !important;
+  height: 450px;
+}
+
+/* Step 1 */
+.step1 {
+  width: 300px;
+}
+
+.step1 .mat-form-field {
+  width: 300px;
+}
+
+.roles-header-grid {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr 0.5fr;
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr 0.5fr;
+}
+
+.roles-header-grid .grid-item, .consultants-header-grid .grid-item {
+  font-weight: bolder;
+  color: rgba(0,0,0,.54);
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0,0,0,.12);
+  padding: 0;
+  text-align: center;
+  color: rgba(0,0,0,.87);
+  font-size: 12px;
+  align-items: center;
+  vertical-align: middle;
+}
+
+h4 {
+  font-weight: normal;
+  padding: 0 10px;
+}
+
+.truncate {
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+
+.edit {
+  border: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Step 2 */
+.step2, .step3 {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.step2 .mat-card-content {
+  display: flex;
+}
+
+.editRoles, .editConsultants, .addConsultant {
+  margin: 15px 25px 15px 35px;
+}
+
+.editRoles .mat-card, .editConsultants .mat-card, .addConsultant .mat-card {
+  height: 290px;
+  padding-bottom: 0;
+}
+
+.editRoles .mat-card-title, .editConsultants .mat-card-title, .addConsultant .mat-card-title {
+  font-size: 14px;
+}
+
+.editRoles .mat-card-content, .editConsultants .mat-card-content, .addConsultant .mat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.editRoles .mat-dialog-actions, .editConsultants .mat-dialog-actions, .addConsultant .mat-dialog-actions {
+  padding: 0;
+  margin: 0;
+}
+
+.editRoles button, .editConsultants button, .addConsultant button {
+  margin: 0 auto;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputs::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+  padding-top: 10px;
+  margin: 0;
+}
+
+/* Step 3 */
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.consultants-header-grid {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.5fr;
+}
+
+.consultants-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.5fr;
+}
+
+.editConsultants .mat-card, .addConsultant .mat-card {
+  height: 230px;
+  width: 310px;
+}
+
+button {
+  margin: 0 auto;
+}
+
+.step3 .mat-dialog-actions {
+ margin-top: 15px;
+}
+
+
+

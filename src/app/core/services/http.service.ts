@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Project, ProjectsResponse } from '../models';
 import { MatSnackBar } from '@angular/material';
 
@@ -49,6 +49,15 @@ export class HttpService {
   fakeGet(url: string): Observable<any> {
     return this.http.get(url);
   }
+
+  fakePost(url: string, body: any): Observable<any> {
+    return this.http.post(url, body);
+  }
+
+  fakeDelete(url: string): Observable<any> {
+    return this.http.delete(url);
+  }
+
   fetchProjects(department) {
     this.http.get(`${this.url}projects?department=${department}`)
       .subscribe(

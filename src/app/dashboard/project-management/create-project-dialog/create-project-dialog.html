@@ -1,0 +1,241 @@
+<!-- Create New Project -->
+<mat-card>
+   <mat-card-header>
+      <mat-card-title>Create New Project</mat-card-title>
+   </mat-card-header>
+   <form (ngSubmit)="createProject()" #createForm="ngForm" fxLayout="column">
+      <!-- Step 1 -->
+      <div [ngClass]="{'hidden' : step2 === true || step3 === true, 'step1': step2 !== true && step3 !== true}">
+         <mat-card-content>
+            <mat-form-field appearance="outline">
+               <mat-label>Project Name</mat-label>
+               <input matInput name="name" ngModel required>
+            </mat-form-field>
+            <mat-form-field>
+               <mat-select matNativeControl placeholder="Client" name="client" ngModel required>
+                  <mat-option *ngFor="let client of data.clients" [value]="client.clientId">
+                     {{client.name}}
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+               <mat-select matNativeControl placeholder="On-site/Off-site" name="On-site/Off-site" ngModel required>
+                  <mat-option [value]="true">
+                     Yes
+                  </mat-option>
+                  <mat-option [value]="false">
+                     No
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+               <mat-label>Comments</mat-label>
+               <textarea matInput name="comments" rows="3" ngModel maxlength="500">
+               </textarea>
+            </mat-form-field>
+            <mat-form-field>
+               <mat-select matNativeControl placeholder="Department" name="department" ngModel required>
+                  <mat-option [value]="department.departmentId" *ngFor="let department of data.departments">
+                     {{department.name}}
+                  </mat-option>
+               </mat-select>
+            </mat-form-field>
+            <mat-card-actions>
+               <button type="button" mat-raised-button color="primary" (click)="cancel()">
+                  Cancel
+               </button>
+               <button type="button" mat-raised-button color="primary" [disabled]="!createForm.valid"
+                  (click)="goToStep2()">
+                  Next
+               </button>
+            </mat-card-actions>
+         </mat-card-content>
+      </div>
+      <!-- End of Step 1 -->
+
+      <!-- Step 2 -->
+      <div [ngClass]="{'hidden' : step2 !== true, 'step2': step2 === true}">
+         <mat-card-content>
+            <div class="rolesList">
+               <div class="roles-header-grid">
+                  <div class="grid-item">Role</div>
+                  <div class="grid-item">On-site rate</div>
+                  <div class="grid-item">Off-site rate</div>
+                  <div class="grid-item edit"></div>
+                  <div class="grid-item edit"></div>
+               </div>
+               <div *ngFor="let role of data.roles">
+                  <div class="roles-grid">
+                     <div class="grid-item truncate">
+                        <h4 class="truncate" matTooltip="{{role.name}}">
+                           {{role.name}}
+                        </h4>
+                     </div>
+                     <div class="grid-item truncate">
+                        <h4 class="truncate" matTooltip="{{role.name}}">
+                           200
+                        </h4>
+                     </div>
+                     <div class="grid-item truncate">
+                        <h4 class="truncate" matTooltip="{{role.name}}">
+                           300
+                        </h4>
+                     </div>
+                     <div class="grid-item edit">
+                        <button mat-icon-button (click)="editRole(role)">
+                           <mat-icon>edit</mat-icon>
+                        </button>
+                     </div>
+                     <div class="grid-item edit">
+                        <button mat-icon-button (click)="deleteRole(role)">
+                           <mat-icon>delete</mat-icon>
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Edit roles section -->
+            <div class="editRoles">
+               <mat-card>
+                  <mat-card-content>
+                     <mat-card-header>
+                        <mat-card-title>Edit assigned role</mat-card-title>
+                     </mat-card-header>
+                     <mat-form-field>
+                        <mat-select placeholder="Role" name="role" ngModel [(ngModel)]="data.role">
+                           <mat-option [value]="role.name" *ngFor="let role of data.roles">
+                              {{role.name}}
+                           </mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                     <div class="inputs">
+                        <mat-form-field appearance="outline">
+                           <mat-label>On-site rate</mat-label>
+                           <input matInput name="name" ngModel required>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                           <mat-label>Off-site rate</mat-label>
+                           <input matInput name="name" ngModel required>
+                        </mat-form-field>
+                     </div>
+
+                  </mat-card-content>
+                  <div mat-dialog-actions>
+                     <button mat-raised-button color="primary" (click)="updateRole(role)">Save</button>
+                  </div>
+               </mat-card>
+            </div>
+            <!-- end of Edit roles Section -->
+         </mat-card-content>
+         <mat-card-actions>
+            <button type="button" mat-raised-button color="primary" (click)="backToStep1()">
+               Back
+            </button>
+            <button type="button" mat-raised-button color="primary" (click)="goToStep3()">
+               Next
+            </button>
+         </mat-card-actions>
+      </div>
+
+      <!-- Step 3 -->
+      <div [ngClass]="{'step3': step3 === true, 'hidden' : step3 !== true}">
+         <div class="main">
+            <div class="consultants-list">
+               <div class="consultants-header-grid">
+                  <div class="grid-item">Consultant</div>
+                  <div class="grid-item">Role</div>
+                  <div class="grid-item edit"></div>
+               </div>
+               <div *ngFor="let role of data.roles">
+                  <div class="consultants-grid">
+                     <div class="grid-item truncate">
+                        <h4 class="truncate" matTooltip="{{role.name}}">
+                           {{role.name}}
+                        </h4>
+                     </div>
+                     <div class="grid-item truncate">
+                        <h4 class="truncate" matTooltip="{{role.name}}">
+                           200
+                        </h4>
+                     </div>
+                     <div class="grid-item edit">
+                        <button type="button" mat-icon-button (click)="onEditConsultant(role)">
+                           <mat-icon>edit</mat-icon>
+                        </button>
+                     </div>
+                  </div>
+               </div>
+               <div mat-dialog-actions>
+                  <button type="button" mat-raised-button color="primary" (click)="onAddConsultant()">Add new Consultant</button>
+               </div>
+            </div>
+            <!-- Edit consulants section -->
+            <div [ngClass]="{'editConsultants': editConsultant === true, 'hidden' : editConsultant !== true}">
+               <mat-card>
+                  <mat-card-content>
+                     <mat-card-header>
+                        <mat-card-title>Edit Consultant</mat-card-title>
+                     </mat-card-header>
+                     <mat-form-field>
+                        <mat-select placeholder="Role" name="role" ngModel [(ngModel)]="data.role">
+                           <mat-option [value]="role.name" *ngFor="let role of data.roles">
+                              {{role.name}}
+                           </mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                     <mat-form-field>
+                        <mat-select placeholder="Role" name="role" ngModel [(ngModel)]="data.role">
+                           <mat-option [value]="role.name" *ngFor="let role of data.roles">
+                              {{role.name}}
+                           </mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                  </mat-card-content>
+                  <div mat-dialog-actions>
+                     <button mat-raised-button color="primary" (click)="cancel()">Cancel</button>
+                     <button mat-raised-button color="primary" (click)="Save(role)">Save</button>
+                     <button mat-icon-button (click)="deleteRole(role)">
+                        <mat-icon>delete</mat-icon>
+                     </button>
+                  </div>
+               </mat-card>
+            </div>
+            <!--Add Consultant section -->
+            <div [ngClass]="{'addConsultant': addConsultant === true, 'hidden' : addConsultant !== true}">
+               <mat-card>
+                  <mat-card-content>
+                     <mat-card-header>
+                        <mat-card-title>Add Consultant</mat-card-title>
+                     </mat-card-header>
+                     <mat-form-field>
+                        <mat-select placeholder="Role" name="role" ngModel [(ngModel)]="data.role">
+                           <mat-option [value]="role.name" *ngFor="let role of data.roles">
+                              {{role.name}}
+                           </mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                     <mat-form-field>
+                        <mat-select placeholder="Role" name="role" ngModel [(ngModel)]="data.role">
+                           <mat-option [value]="role.name" *ngFor="let role of data.roles">
+                              {{role.name}}
+                           </mat-option>
+                        </mat-select>
+                     </mat-form-field>
+                  </mat-card-content>
+                  <div mat-dialog-actions>
+                     <button mat-raised-button color="primary" (click)="cancel()">Create</button>
+                  </div>
+               </mat-card>
+            </div>
+         </div>
+
+
+         <div mat-dialog-actions>
+            <button type="button" mat-raised-button color="primary" (click)="cancel()">Cancel</button>
+            <button type="button" mat-raised-button color="primary" (click)="backToStep2()">Back</button>
+            <button type="submit" mat-raised-button color="primary">Submit</button>
+         </div>
+      </div>
+
+   </form>
+</mat-card>

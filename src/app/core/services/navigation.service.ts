@@ -9,6 +9,8 @@ import { TimeApprovalComponent } from '../../dashboard/time-approval/time-approv
 import { ProjectManagementComponent } from '../../dashboard/project-management/project-management.component';
 import { UserManagementComponent } from '../../dashboard/user-management/user-management.component';
 import { NoRoleComponent } from '../../dashboard/no-role.component';
+import { ClientManagementComponent } from 'src/app/dashboard/client-management/client-management.component';
+import { RoleManagementComponent } from 'src/app/dashboard/role-management/role-management.component';
 
 @Injectable()
 export class NavigationService {
@@ -42,6 +44,18 @@ export class NavigationService {
       path: 'users',
       component: UserManagementComponent,
       data: { name: 'User management',
+      forRole: ['ADMINISTRATION'] },
+    },
+    {
+      path: 'clients',
+      component: ClientManagementComponent,
+      data: { name: 'Client management',
+      forRole: ['ADMINISTRATION'] },
+    },
+    {
+      path: 'roles',
+      component: RoleManagementComponent,
+      data: { name: 'Role management',
       forRole: ['ADMINISTRATION'] },
     },
   ];
@@ -95,7 +109,7 @@ export class NavigationService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: '/history', pathMatch: 'full' };
+    return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full' };
   }
 
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {

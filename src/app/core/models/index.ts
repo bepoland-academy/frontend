@@ -13,6 +13,8 @@ import {
   MonthTimeEntryWithoutProjectInfo,
   UserWithTimeSheetWithoutSubbmitedHours
 } from './monthTimeEntry.model';
+import { Role, RolesResponse } from './role.model';
+
 
 export {
   Client,
@@ -25,6 +27,8 @@ export {
   Project,
   ProjectsResponse,
   ProjectsByClient,
+  Role,
+  RolesResponse,
   User,
   UsersResponse,
   TimeEntry,
