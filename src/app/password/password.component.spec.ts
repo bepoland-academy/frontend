@@ -2,15 +2,20 @@ import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testi
 
 import { PasswordComponent } from './password.component';
 import { ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
-import { CustomMaterialModule } from '../material/material.module';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
 import { rootModule } from './password.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { CustomMaterialModule } from '../shared/material/material.module';
+import { HttpService } from '../core/services/http.service';
+import { HttpClientModule } from '@angular/common/http';
+import { of } from 'rxjs';
 
 
 
-fdescribe('PasswordComponent', () => {
+describe('PasswordComponent', () => {
   let component: PasswordComponent;
   let fixture: ComponentFixture<PasswordComponent>;
   const formBuilder: FormBuilder = new FormBuilder();
@@ -25,10 +30,12 @@ fdescribe('PasswordComponent', () => {
         CustomMaterialModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        RouterTestingModule,
+        HttpClientModule,
       ],
       providers: [
-        { provide: FormBuilder,
-          useValue: formBuilder },
+        { provide: FormBuilder, useValue: formBuilder },
+        {provide: HttpService, useValue: {changePassword() {return of(); }}},
       ],
     })
     .compileComponents();
@@ -88,7 +95,6 @@ fdescribe('PasswordComponent', () => {
     expect(component.digit).toBeTruthy();
     expect(component.special).toBeTruthy();
     expect(component.length).toBeTruthy();
-    // console.log(newResult);
   });
 
   it(': passwords match validity', () => {
@@ -102,26 +108,13 @@ fdescribe('PasswordComponent', () => {
     component.setPasswordForm.markAsDirty();
     expect(component.passwordsMatch(component.setPasswordForm)).toEqual({'passwords do not match': true});
     expect(component.isMatch).toBeFalsy();
-    console.log(component.isMatch);
 
     const result = component.passwordsMatch(component.setPasswordForm);
-    console.log(result);
 
 
     newPassword.setValue('123qW*');
     expect(component.passwordsMatch(component.setPasswordForm)).toBeNull();
     const newResult = component.passwordsMatch(component.setPasswordForm);
-    console.log(newResult);
-  });
-
-  it(': "Confirm" button click sends new password grabbed from the setPasswordForm', () => {
-    expect(component.setPasswordForm.valid).toBeFalsy();
-    const testPassword = {newPassword: '123qW!', confirmPassword: '123qW!'};
-    component.setPasswordForm.controls.newPassword.setValue('123qW!');
-    component.setPasswordForm.controls.confirmPassword.setValue('123qW!');
-
-    component.sendPassword();
-    expect(component.password).toEqual(testPassword);
   });
 
   });

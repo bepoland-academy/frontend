@@ -5,10 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 
+import { AuthService } from '../core/services/auth.service';
 import { LoginComponent } from './login.component';
-import { CustomMaterialModule } from '../material/material.module';
 import { rootModule } from '../app.routing';
-import { AuthService } from '../services/auth.service';
+import { CustomMaterialModule } from '../shared/material/material.module';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,7 +17,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async (() => {
     const authServiceSpy = {
-      login: () => {},
+      login() {},
       loggedIn: of(false),
     };
     TestBed.configureTestingModule({
@@ -40,21 +40,11 @@ describe('LoginComponent', () => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     service = TestBed.get(AuthService);
-    component.username = 'test123@test.pl';
-    component.password = 'test123!';
     fixture.detectChanges();
   });
 
   it('should be defined', () => {
    expect(component).toBeDefined();
-  });
-
-  it('simulating click on Login button', () => {
-    spyOn(service, 'login').and.returnValue(of());
-    const loginButton = fixture.debugElement.query(By.css('button[type="submit"]'));
-    loginButton.triggerEventHandler('click', null);
-    expect(service.login).toHaveBeenCalledWith({ username: 'test123@test.pl', password: 'test123!' });
-    expect(component.isLoading).toBeTruthy();
   });
 
  });

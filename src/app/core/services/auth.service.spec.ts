@@ -1,17 +1,18 @@
 import { TestBed, async } from '@angular/core/testing';
+import { HttpResponse, HttpHeaders } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
-import { NavigationService } from '../dashboard/navigation/navigation.service';
+import { NavigationService } from './navigation.service';
 import { of } from 'rxjs';
 import { HttpService } from './http.service';
 import { Credentials, User } from '../models/index';
 
 
 const user: User = {
-  userId: 1,
+  userId: '1',
   active: true,
   department: 'bank',
-  username: 'test@test.com',
+  email: 'test@test.com',
   firstName: 'Testname',
   lastName: 'Testlastname',
   roles: ['testRole'],
@@ -32,10 +33,14 @@ describe('AuthService', () => {
   let localStorageMock = {};
   beforeEach(async(() => {
     navigationSpy = jasmine.createSpyObj('NavigationService', {
-      filterRoutes() {},
+      filterRoutes() { },
     });
     httpSpy = jasmine.createSpyObj('HttpService', {
-      post: of(user),
+      login: of(new HttpResponse({
+        body: user,
+        headers: new HttpHeaders().set('Authorization', 'key'),
+      })),
+      fetchProjects() {},
     });
     TestBed.configureTestingModule({
       providers: [
@@ -44,8 +49,6 @@ describe('AuthService', () => {
         { provide: HttpService, useValue: httpSpy },
       ],
     });
-
-
 
 
     spyOn(localStorage, 'getItem').and.callFake((key: string): string => {
@@ -73,15 +76,17 @@ describe('AuthService', () => {
   });
 
   it('calling login method', () => {
+    console.log(navigationService);
     service.login(credentials).subscribe(
-      (mockedUser: User) => {
-        expect(mockedUser).toBe(user);
-        expect(navigationService.filterRoutes).toHaveBeenCalledWith(mockedUser.roles);
+      (mockedUser: any) => {
+        console.log(mockedUser);
+        expect(mockedUser.body).toBe(user);
         expect(service.loggedIn.getValue()).toBeTruthy();
         expect(localStorage.setItem).toHaveBeenCalled();
+        expect(navigationService.filterRoutes).toHaveBeenCalledWith(user.roles);
       }
     );
-    expect(httpService.post).toHaveBeenCalledWith('users/login', credentials);
+    expect(httpService.login).toHaveBeenCalledWith('auth/login', credentials, { observe: 'response' as 'body' });
   });
 
   it('should get user from localStorage ', () => {
