@@ -23,11 +23,10 @@
 
     <!-- footer time entry -->
     <app-time-entry-footer
-      *ngIf="timeEntries.length"
+      *ngIf="timeEntries.length && clientList.length && !isLoading"
       [timeEntries]="timeEntries"
       (saveCurrentEntries)="saveCurrentEntries()"
       (submitCurrentEntries)="submitCurrentEntries()"
-      (enteredHoursIsMoreThan24)="enteredHoursIsMoreThan24($event)"
     ></app-time-entry-footer>
     <div class="project-cell" *ngIf="!timeEntries.length && !isError && !isLoading">
       <p class="mat-display-1">Choose project and then you can enter your time</p>

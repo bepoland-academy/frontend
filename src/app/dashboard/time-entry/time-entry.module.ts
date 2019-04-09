@@ -14,6 +14,8 @@ import { TimeEntryNaviagtionComponent } from './time-entry-naviagtion/time-entry
 import { TimeEntryHeadingComponent } from './time-entry-heading/time-entry-heading.component';
 import { TimeEntryContentComponent } from './time-entry-content/time-entry-content.component';
 import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.component';
+import { FooterDirective } from './directives/footer.directive';
+import { DialogDeleteComponent } from './time-entry-content/dialog/time-entry-content-dialog';
 
 @NgModule({
   declarations: [
@@ -23,11 +25,13 @@ import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.
     QuantityComponent,
     AddEntryComponent,
     DayDirective,
+    FooterDirective,
     GroupProjectsByClientPipe,
     TimeEntryNaviagtionComponent,
     TimeEntryHeadingComponent,
     TimeEntryContentComponent,
     TimeEntryFooterComponent,
+    DialogDeleteComponent,
   ],
   imports: [
     CommonModule,
@@ -35,5 +39,8 @@ import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.
     FormsModule,
   ],
   providers: [TimeEntryService],
+  entryComponents: [
+    DialogDeleteComponent,
+  ],
 })
 export class TimeEntryModule {}

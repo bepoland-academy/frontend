@@ -1,4 +1,6 @@
-<div class="quantity-wrapper">
+<div
+  class="quantity-wrapper"  appWeekend [day]="day"
+>
   <div class="quantity" (wheel)="onMouseWheel($event)">
     <div class="quantity__input-wrapper">
       <input appTimeEntry (checkedValue)="verifiedValue($event)" [ngModel]="inputValue" type='text' class="quantity__input" />

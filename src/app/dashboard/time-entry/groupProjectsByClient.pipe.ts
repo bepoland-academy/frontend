@@ -5,6 +5,9 @@ export class GroupProjectsByClientPipe implements PipeTransform {
   transform(value: any): any {
     const groupToValues = value.reduce(
       (obj, item) => {
+        if (!item.projectInfo) {
+          return {};
+        }
         obj[item.projectInfo.client.name] = obj[item.projectInfo.client.name] || [];
         obj[item.projectInfo.client.name].push(item);
         return obj;

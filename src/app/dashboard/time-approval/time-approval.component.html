@@ -1,26 +1,23 @@
 <div *ngIf="errorMessage" class="errorMessage">
   <p>{{errorMessage}}</p>
 </div>
-<mat-sidenav-container *ngIf="usersTime.length">
-<!-- <mat-sidenav-container> -->
+<div *ngIf="!usersWithTimeEntries.length" class="spinner-overlay">
+  <mat-spinner></mat-spinner>
+</div>
+<mat-sidenav-container *ngIf="usersWithTimeEntries.length">
+  <!-- <mat-sidenav-container> -->
   <mat-sidenav mode="side" [opened]="sidenavOpen">
     <div class="wrapper">
       <div class="wrapper2">
-          <app-consultants-list
-            [usersTime]="usersTime"
-            (consultantClick)="handleUserClick($event)"
-          >
-          </app-consultants-list>
-      </div>    
+        <app-consultants-list [usersTime]="usersWithTimeEntries" (setCurrentUser)="setCurrentUser($event)">
+        </app-consultants-list>
+      </div>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-calendar
-      *ngIf="currentUser"
-      [toggleButtonVisible]="toggleButtonVisible"
-      (listClick)="showSidenav()"
-      [usersTime]="usersTime"
-    >
+    <app-calendar *ngIf="currentUser" [toggleButtonVisible]="toggleButtonVisible" (listClick)="showSidenav()"
+      [currentUser]="currentUser" isTimeApproval="true" (setStatusForOneDay)="setStatusForOneDay($event)" #calendar 
+      (nextApproval)="getMoreTimeSheetsToApprove($event)" (approveAll)="approveAll()">
     </app-calendar>
   </mat-sidenav-content>
 </mat-sidenav-container>

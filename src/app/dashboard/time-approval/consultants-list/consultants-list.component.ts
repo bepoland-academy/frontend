@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { UserWithTimeSheet } from 'src/app/core/models';
 
 @Component({
   selector: 'app-consultants-list',
@@ -8,16 +9,15 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 export class ConsultantsListComponent implements OnInit {
 
-  @Input() usersTime: any;
-  @Output() consultantClick = new EventEmitter<any>();
+  @Input() usersTime: Array<UserWithTimeSheet>;
+  @Output() setCurrentUser: EventEmitter<UserWithTimeSheet> = new EventEmitter();
 
   constructor() {}
 
-  ngOnInit() {}
-
-  handleClick(user) {
-    console.log(user);
-    this.consultantClick.emit(user);
+  ngOnInit() {
   }
 
+  handleClick(user: UserWithTimeSheet) {
+    this.setCurrentUser.emit(user);
+  }
 }

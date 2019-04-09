@@ -1,18 +1,17 @@
 <footer>
   <div class="time-entry-footer">
     <div></div>
-    <p
+    <div
       class="project-cell"
       *ngFor="let dayWeek of timeEntries[0].weekDays"
       appWeekend
+      appFooter
       [day]="dayWeek"
+      [allEntries]="timeEntries"
     >
-      {{ sumHoursFromSelectedDay(dayWeek.day) }}
-      <span
-        class="tooltipText"
-        [ngClass]="{'visible': daysWithMoreThan24Hours.includes(dayWeek.day)}"
-      >asdasdasd</span>
-    </p>
+      <p class="sum">jakis tekst do replace</p>
+      <span class="tooltipText">You can&apos;t fill more than 24 hours per day</span>
+  </div>
   </div>
   <div class="buttons">
     <button class="buttons__save" mat-stroked-button (click)="saveCurrentEntriesHandler()">Save</button>

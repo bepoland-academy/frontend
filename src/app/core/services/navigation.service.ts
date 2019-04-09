@@ -3,7 +3,7 @@ import { Routes, Route, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
 import { TimeEntryComponent } from '../../dashboard/time-entry/time-entry.component';
-import { HistoricalDataComponent } from '../../dashboard/historical-data.component';
+import { HistoricalDataComponent } from '../../dashboard/historical-data/historical-data.component';
 import { ReportsComponent } from '../../dashboard/reports.component';
 import { TimeApprovalComponent } from '../../dashboard/time-approval/time-approval.component';
 import { ProjectManagementComponent } from '../../dashboard/project-management/project-management.component';
@@ -95,7 +95,7 @@ export class NavigationService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: '/track', pathMatch: 'full' };
+    return { path: '**', redirectTo: '/history', pathMatch: 'full' };
   }
 
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {

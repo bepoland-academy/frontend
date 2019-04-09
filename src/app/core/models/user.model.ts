@@ -1,4 +1,4 @@
-import { Day } from './day.model';
+import { Links } from '.';
 
 export interface User {
   active: boolean;
@@ -8,38 +8,11 @@ export interface User {
   lastName: string;
   roles: Array<string>;
   userId: string;
-  _links?: {
-    self: {
-      href: string;
-    }
-  };
+  _links?: Links;
 }
 
 export interface UsersResponse {
   _embedded: {
     userBodyList: Array<User>
   };
-}
-
-export interface UserTimeMonthlyResponse {
-  _embedded: {
-    monthTimeEntryBodyList: Array<MonthTime>
-  };
-  firstName?: string;
-  lastName?: string;
-  overallStatus?: string;
-}
-
-export interface MonthTime {
-  consultantId: string;
-  month: string;
-  monthDays: Array<DayTime>;
-  projectId: string;
-}
-
-export interface DayTime {
-  date: string;
-  hours: number;
-  status: string;
-  comment: string;
 }

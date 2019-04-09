@@ -7,6 +7,11 @@ export interface TimeEntry {
   week: string;
   weekDays: Array<Day>;
   projectInfo: Project;
+  _links?: {
+    DELETE: {
+      href: string;
+    }
+  };
 }
 
 export interface TimeEntryResponse {

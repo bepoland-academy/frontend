@@ -38,9 +38,9 @@ export class HttpService {
     return this.http.get(this.url + endpoint);
   }
 
-  // get(endpoint: string): Observable<any> {
-  //   return this.http.get(endpoint);
-  // }
+  delete(url: string) {
+    return this.http.delete(url);
+  }
 
   put(url: string, body: any): Observable<any> {
     return this.http.put(url, body);
@@ -58,6 +58,6 @@ export class HttpService {
   }
 
   getProjectsStream() {
-    return this.projectsStream.asObservable();
+    return this.projectsStream;
   }
 }

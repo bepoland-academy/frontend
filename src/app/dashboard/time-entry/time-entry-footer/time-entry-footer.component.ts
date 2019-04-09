@@ -10,31 +10,11 @@ import { MatTooltip, MatSnackBar } from '@angular/material';
 })
 export class TimeEntryFooterComponent implements OnInit {
   @Input() timeEntries: Array<TimeEntry>;
-  @Output() enteredHoursIsMoreThan24: EventEmitter<boolean> = new EventEmitter();
   @Output() saveCurrentEntries: EventEmitter<null> = new EventEmitter();
   @Output() submitCurrentEntries: EventEmitter<null> = new EventEmitter();
-  daysWithMoreThan24Hours: Array<string> = [];
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
-
-  }
-  sumHoursFromSelectedDay(day: string): number {
-    this.daysWithMoreThan24Hours = this.daysWithMoreThan24Hours.filter(el => el !== day);
-    this.enteredHoursIsMoreThan24.emit(false);
-    const sum: number = this.timeEntries
-      .map((project: TimeEntry) =>
-        project.weekDays.map((weekDay: Day) =>
-          weekDay.day === day ? weekDay.hours : 0
-        ).reduce((sum: number, val: number) => sum + val)
-      ).reduce((allDaySum: number, val: number) => allDaySum + val);
-    if (sum >= 24) {
-      if (!this.daysWithMoreThan24Hours.includes(day)) {
-        this.daysWithMoreThan24Hours = [...this.daysWithMoreThan24Hours, day];
-      }
-      this.enteredHoursIsMoreThan24.emit(true);
-    }
-    return sum;
   }
 
   saveCurrentEntriesHandler() {

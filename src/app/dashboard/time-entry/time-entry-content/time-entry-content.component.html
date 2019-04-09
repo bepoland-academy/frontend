@@ -4,16 +4,13 @@
   </div>
   <div 
     class="project-row" 
-    *ngFor="let project of client.projects" 
-    [ngClass]="{
-      'SUBMITTED': project.weekDays[0].status === 'SUBMITTED',
-      'saved': project.weekDays[0].status === 'SAVED'
-    }"
+    *ngFor="let project of client.projects; let i = index;"
+    [ngClass]="{'manyProjects': check(client, i) }"
   >
     <div class="project-cell">
-      <h5>{{project.projectInfo.name}}</h5>
+      <h5 class="projectTitle">{{project.projectInfo.name}}</h5>
     </div>
-    <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" appWeekend [day]="day">
+    <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" [day]="day" class="{{day.status}}">
     </app-quantity>
     <div class="project-cell">
       <button mat-icon-button (click)="removeProjectHandler(project)">

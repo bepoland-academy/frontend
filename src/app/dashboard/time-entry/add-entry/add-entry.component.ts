@@ -28,7 +28,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
 
   ngOnChanges() {
     if (this.isOpen) {
-      this.renderer.addClass(document.body, 'drawer-open');
+      this.renderer.setStyle(document.body, 'overflow', 'hidden');
     }
   }
 
@@ -36,8 +36,8 @@ export class AddEntryComponent implements OnChanges, OnInit {
     this.drawer.close();
     setTimeout(() => {
       this.isOpenChange.emit(false);
+      this.renderer.setStyle(document.body, 'overflow', 'auto');
     }, 200);
-    this.renderer.removeClass(document.body, 'drawer-open');
     this.chosenClient = null;
     this.isProjectsShown = false;
   }

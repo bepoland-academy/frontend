@@ -1,13 +1,18 @@
 <!-- Navigation Bar -->
-<div class="calendarComponent" >
-<!-- <div class="calendarComponent"> -->
-  <div class="icon" *ngIf="toggleButtonVisible">
-    <i class="material-icons" (click)=askToShow()>
+
+<div class="calendarComponent">
+
+  <!-- <div class="calendarComponent"> -->
+  <div class="icon" *ngIf="toggleButtonVisible && isTimeApproval" (click)=askToShow()>
+    <i class="material-icons">
       forward
     </i>
   </div>
   <!-- Above Header -->
   <div class="calendarWrapper" *ngIf="currentUser">
+    <div *ngIf="isLoading" class="spinner-overlay">
+      <mat-spinner class="calendar__spinner"></mat-spinner>
+    </div>
     <div class="aboveHeader">
       <!-- User Info -->
       <div class="userInfo">
@@ -22,29 +27,24 @@
         </div>
       </div>
       <!-- Approval buttons -->
-      <div class="approval">
-        <button 
-          mat-raised-button 
-          color="primary"
-          (click)="openDialog()"
-        >
-          Next Approval
-        </button>
-        <button (click)="aproveAll()" mat-raised-button color="primary">Approve All</button>
+      <div>
+        <div class="approval" *ngIf="expression">
+          <button mat-raised-button color="primary" (click)="nextApprovalHandler()">
+            Next Approval
+          </button>
+          <button (click)="approveAllHandler()" mat-raised-button color="primary">Approve All</button>
+        </div>
       </div>
+
     </div>
     <!-- end of Above Header -->
     <!-- Calendar -->
     <div class="calendar">
+
       <ng-container *ngIf="options">
-        <ng-fullcalendar #fullcalendar (dateClick)="dateClick($event)" (clickButton)="clickButton($event)"
-          (eventDragStop)="eventDragStop($event)" [eventsModel]="eventsModel" [options]="options"
-          (eventClick)="eventClick($event)"></ng-fullcalendar>
+        <ng-fullcalendar #fullcalendar (clickButton)="showAnotherMonth($event)" [eventsModel]="eventsModel"
+          [options]="options" (eventClick)="eventClick($event)"></ng-fullcalendar>
       </ng-container>
     </div>
   </div>
-
-
-
-
 </div>

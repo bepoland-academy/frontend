@@ -5,7 +5,6 @@ import {
   TimeEntryResponse,
   TimeEntry,
   Day,
-  ProjectsByClient,
   Project,
   TimeEntriesWithLinks,
   TimeEntriesWithLinksAndProjects,
