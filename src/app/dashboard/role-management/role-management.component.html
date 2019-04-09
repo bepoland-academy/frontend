@@ -1,0 +1,38 @@
+<div *ngIf="roles.length" class="roles">
+  <!-- Roles list -->
+  <div class="header">
+    <div class="grid-item">
+      <h4>Role</h4>
+    </div>
+    <div class="grid-item edit"></div>
+  </div>
+  <div *ngFor="let role of roles" class="content">
+    <div class="grid-item truncate">
+      <h4 class="truncate">{{role.name}}</h4>
+    </div>
+    <div>
+      <div class="grid-item edit">
+        <button 
+          mat-icon-button
+          [disabled]="role.active === false" 
+          (click)="openEditDialog(role)" 
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="button addRole">
+      <div class="grid-item">
+          <button 
+            type="submit" 
+            mat-raised-button 
+            color="primary"
+            (click)="openCreateDialog()" 
+       >
+          Add new Role
+       </button>
+      </div>
+      <div class="grid-item edit"></div>
+    </div>
+</div>

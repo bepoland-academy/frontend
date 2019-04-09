@@ -1,4 +1,4 @@
-<app-add-entry [clients]="clientList" (createNewProject)="createNewProject($event)" [(isOpen)]="isDrawerOpened">
+<app-add-entry [clients]="showingClientList" (createNewEntry)="createNewEntry($event)" [(isOpen)]="isDrawerOpened">
 </app-add-entry>
 <div class="container">
   <mat-card class="main-card">
@@ -19,16 +19,16 @@
 
 
     <!-- content time entry -->
-    <app-time-entry-content *ngIf="!isLoading" [projects]="projects" (removeProject)="removeProject($event)"></app-time-entry-content>
+    <app-time-entry-content *ngIf="!isLoading" [timeEntries]="timeEntries" (removeProject)="removeProject($event)"></app-time-entry-content>
 
     <!-- footer time entry -->
     <app-time-entry-footer
-      *ngIf="projects.length"
-      [projects]="projects"
+      *ngIf="timeEntries.length && clientList.length && !isLoading"
+      [timeEntries]="timeEntries"
       (saveCurrentEntries)="saveCurrentEntries()"
       (submitCurrentEntries)="submitCurrentEntries()"
     ></app-time-entry-footer>
-    <div class="project-cell" *ngIf="!projects.length && !isError && !isLoading">
+    <div class="project-cell" *ngIf="!timeEntries.length && !isError && !isLoading">
       <p class="mat-display-1">Choose project and then you can enter your time</p>
     </div>
 

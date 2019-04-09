@@ -9,6 +9,15 @@ export interface Project {
   name: string;
   rate: number;
   projectId: string;
+  removable?: boolean;
+  _links?: {
+    DELETE: {
+      href: string;
+    },
+    self: {
+      href: string;
+    }
+  };
 }
 
 export interface ProjectsResponse {

@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectorRef, ViewChildren } from '@angular/core';
 
 import { TimeEntry, Day } from '../../../core/models';
+import { MatTooltip, MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-time-entry-footer',
@@ -8,20 +9,12 @@ import { TimeEntry, Day } from '../../../core/models';
   styleUrls: ['./time-entry-footer.component.css'],
 })
 export class TimeEntryFooterComponent implements OnInit {
-  @Input() projects;
+  @Input() timeEntries: Array<TimeEntry>;
   @Output() saveCurrentEntries: EventEmitter<null> = new EventEmitter();
   @Output() submitCurrentEntries: EventEmitter<null> = new EventEmitter();
-  constructor() { }
+  constructor(private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
-  }
-  sumHoursFromSelectedDay(day: string): number {
-    return this.projects
-      .map((project: TimeEntry) =>
-        project.weekDays.map((weekDay: Day) =>
-          weekDay.day === day ? weekDay.hours : 0
-        ).reduce((sum: number, val: number) => sum + val)
-      ).reduce((allDaySum: number, val: number) => allDaySum + val);
   }
 
   saveCurrentEntriesHandler() {

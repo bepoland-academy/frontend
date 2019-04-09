@@ -3,12 +3,14 @@ import { Routes, Route, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
 import { TimeEntryComponent } from '../../dashboard/time-entry/time-entry.component';
-import { HistoricalDataComponent } from '../../dashboard/historical-data.component';
+import { HistoricalDataComponent } from '../../dashboard/historical-data/historical-data.component';
 import { ReportsComponent } from '../../dashboard/reports.component';
 import { TimeApprovalComponent } from '../../dashboard/time-approval/time-approval.component';
 import { ProjectManagementComponent } from '../../dashboard/project-management/project-management.component';
 import { UserManagementComponent } from '../../dashboard/user-management/user-management.component';
 import { NoRoleComponent } from '../../dashboard/no-role.component';
+import { ClientManagementComponent } from 'src/app/dashboard/client-management/client-management.component';
+import { RoleManagementComponent } from 'src/app/dashboard/role-management/role-management.component';
 
 @Injectable()
 export class NavigationService {
@@ -17,9 +19,6 @@ export class NavigationService {
       path: 'track',
       component: TimeEntryComponent,
       data: { name: 'Time entry', forRole: ['CONSULTANT', 'MANAGER', 'ADMINISTRATION'] },
-      children: [
-        {path: ':week', component: TimeEntryComponent},
-      ],
     },
     {
       path: 'history',
@@ -45,6 +44,18 @@ export class NavigationService {
       path: 'users',
       component: UserManagementComponent,
       data: { name: 'User management',
+      forRole: ['ADMINISTRATION'] },
+    },
+    {
+      path: 'clients',
+      component: ClientManagementComponent,
+      data: { name: 'Client management',
+      forRole: ['ADMINISTRATION'] },
+    },
+    {
+      path: 'roles',
+      component: RoleManagementComponent,
+      data: { name: 'Role management',
       forRole: ['ADMINISTRATION'] },
     },
   ];
@@ -98,7 +109,7 @@ export class NavigationService {
     } else {
       pathToRedirect = '/track';
     }
-    return { path: '**', redirectTo: '/approval', pathMatch: 'full' };
+    return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full' };
   }
 
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {

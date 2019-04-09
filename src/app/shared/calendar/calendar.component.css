@@ -5,26 +5,24 @@
 .icon {
   width: 100px;
   background-color: #d9ddf2;
+  cursor: pointer;
 }
 
 .material-icons {
   margin-top: 30px;
   font-size: 80px; 
   color: white;
-  cursor: pointer;
 }
 
 .aboveHeader {
   display: flex;
   margin: 20px 30px;
-  /* border: 1px solid red; */
   justify-content: space-around;
   align-items: center;
 }
 
 .userInfo {
   display: flex;
-  /* border: 1px solid yellow; */
 }
 
 img {
@@ -58,7 +56,25 @@ img {
 	-moz-box-shadow: none;
 	box-shadow: none;
 }
+.calendarWrapper {
+  position: relative;
+}
 
 .calendar {
   margin: 20px 20px 0;
+}
+
+.spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(240, 240, 240, .5);
+  z-index: 10000;
+}
+.calendar__spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
 }

@@ -31,6 +31,7 @@ export class AuthService {
           this.navigationService.filterRoutes(response.body.roles);
           this.loggedIn.next(true);
           this.user.next(response.body);
+          this.http.fetchProjects(response.body.department);
         })
       );
   }
@@ -49,11 +50,15 @@ export class AuthService {
   }
 
   getUser(): void {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      return;
+    }
     if (user) {
       this.loggedIn.next(true);
       this.navigationService.filterRoutes(user.roles);
       this.user.next(user);
+      this.http.fetchProjects(user.department);
     }
   }
 }

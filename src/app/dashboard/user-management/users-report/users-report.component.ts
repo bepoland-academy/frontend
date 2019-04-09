@@ -37,7 +37,6 @@ import { UsersResponse } from 'src/app/core/models/user.model';
     this.userManagementService.getUsers()
     .subscribe(
       (response: UsersResponse) => {
-        console.log(response);
         let data = response._embedded.userBodyList;
         data = data.map(el => ({...el, department: this.departments.find(a => a.departmentId === el.department).name}));
         this.users = data;

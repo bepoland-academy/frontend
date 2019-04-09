@@ -1,3 +1,13 @@
+.spinner-overlay {
+  position: fixed;
+  left: 0;
+  height: 85%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .mat-sidenav-container {
   font-family: Roboto,"Helvetica Neue", sans-serif;
   font-size: 14px;

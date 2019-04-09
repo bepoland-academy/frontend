@@ -1,0 +1,26 @@
+.fc-content-skeleton, .fc-content-skeleton > table {
+  height: 100% ;
+  position: relative ;
+}
+
+.fc-event {
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #d9ddf2;
+  color:  #737373;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid #bfbfbf;
+  margin-bottom: 5px;
+  bottom: 0;
+  position: absolute;
+}
+
+
+.fc-scroller.fc-day-grid-container {
+  overflow: hidden!important;
+}

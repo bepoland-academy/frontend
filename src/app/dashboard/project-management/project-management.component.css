@@ -1,13 +1,6 @@
 .project-management {
-  justify-content: space-between;
-  display: flex;
   padding: 0 30px;
   font-family: Roboto,"Helvetica Neue",sans-serif;
-}
-
-.projects {
-  margin: 40px 0 30px;
-  width: 65%;
 }
 
 .hidden {
@@ -19,7 +12,14 @@
 }
 
 .projectOptions {
-  justify-content: space-between;
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.projectOptions .mat-form-field {
+  width: 200px;
 }
 
 .errorMessage {
@@ -32,6 +32,7 @@
 }
 
 .main-grid {
+  margin-top: 15px;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 2fr 1fr 1fr;
 }
@@ -49,30 +50,42 @@
 .main-grid .grid-item {
   font-weight: bolder;
   color: rgba(0,0,0,.54);
-  font-size: 14px;
+  vertical-align: middle;
 }
 
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0,0,0,.12);
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   color: rgba(0,0,0,.87);
-  font-size: 14px;
+  font-size: 12px;
+  align-items: center;
+  vertical-align: middle;
 }
 
-.comments {
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+h4 {
+  font-weight: normal;
 }
 
-.addClient {
+.truncate {
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+
+.edit {
+  border: none;
+}
+
+.addClient, .addProject {
   padding: 15px;
 }
 
 .mat-card {
   margin-top: 20px;
-  height: 480px;
-  width: 310px;
+  /* height: 480px;
+  width: 310px; */
   flex-direction: column;
   text-align: center;
 }
@@ -97,4 +110,9 @@
 
 .failMessage mat-card-title {
   color: red;
+}
+
+::ng-deep .mat-tooltip {
+  margin: -25px !important;
+  font-size: 12px !important;
 }

@@ -1,0 +1,15 @@
+.SUBMITTED {
+  background: rgb(173, 216, 230);
+}
+
+.SAVED {
+  background: rgb(190,190,190);
+}
+
+.APPROVED {
+  background: green;
+}
+
+.REJECTED {
+  background: lightcoral;
+}

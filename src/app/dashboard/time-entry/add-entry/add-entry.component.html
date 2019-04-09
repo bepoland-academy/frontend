@@ -17,7 +17,8 @@
             class="element mat-body-1" 
             [ngClass]="{'selected': chosenClient && chosenClient.clientName === client.clientName}"
             *ngFor="let client of clients" 
-            (click)="setClient(client)">{{client.clientName}}</p>
+            (click)="setClient(client)"
+          >{{client.clientName}}</p>
         </div>
       </div>
       <div class="content content-project" [ngClass]="{'moveUp': isProjectsShown}">
