@@ -3,20 +3,24 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DashboardComponent } from './dashboard.component';
-import { TimeTrackingComponent } from './time-tracking.component';
-import { HistoricalDataComponent } from './historical-data.component';
 import { ReportsComponent } from './reports.component';
-import { ProjectManagmentComponent } from './project-managment.component';
-import { TimeApprovalComponent } from './time-approval.component';
 import { NoRoleComponent } from './no-role.component';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NavigationModule } from './navigation/navigation.module';
 import { NavigationService } from '../core/services/navigation.service';
-import { AuthService } from '../services/auth.service';
-import { HttpService } from '../services/http.service';
 import { of } from 'rxjs';
+import { TimeEntryComponent } from './time-entry/time-entry.component';
+import { HistoricalDataComponent } from './historical-data/historical-data.component';
+import { ProjectManagementComponent } from './project-management/project-management.component';
+import { TimeApprovalComponent } from './time-approval/time-approval.component';
+import { AuthService } from '../core/services/auth.service';
+import { HttpService } from '../core/services/http.service';
+import { ClientManagementComponent } from './client-management/client-management.component';
+import { RoleManagementComponent } from './role-management/role-management.component';
+import { AddEntryComponent } from './time-entry/add-entry/add-entry.component';
+import { TimeEntryModule } from './time-entry/time-entry.module';
 
-describe('DashboardComponent', () => {
+fdescribe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
@@ -24,18 +28,21 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         DashboardComponent,
-        TimeTrackingComponent,
+        TimeEntryComponent,
         HistoricalDataComponent,
         ReportsComponent,
-        ProjectManagmentComponent,
+        ProjectManagementComponent,
         TimeApprovalComponent,
         NoRoleComponent,
+        ClientManagementComponent,
+        RoleManagementComponent,
        ],
        imports: [
          RouterTestingModule,
          UserManagementModule,
          NavigationModule,
          HttpClientTestingModule,
+         TimeEntryModule,
        ],
        providers: [
          NavigationService,

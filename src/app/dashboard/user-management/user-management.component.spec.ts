@@ -1,46 +1,46 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+// import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+// import { HttpClientModule } from '@angular/common/http';
+// import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { UserManagementComponent } from './user-management.component';
-import { UserRegistrationModule } from './user-registration/user-registration.module';
-import { UsersReportModule } from './users-report/users-report.module';
-import { UserManagementService } from './user-management.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpService } from 'src/app/services/http.service';
+// import { UserManagementComponent } from './user-management.component';
+// import { UserRegistrationModule } from './user-registration/user-registration.module';
+// import { UsersReportModule } from './users-report/users-report.module';
+// import { UserManagementService } from './user-management.service';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { HttpService } from 'src/app/services/http.service';
 
-describe('UserManagementComponent', () => {
-  let component: UserManagementComponent;
-  let fixture: ComponentFixture<UserManagementComponent>;
+// describe('UserManagementComponent', () => {
+//   let component: UserManagementComponent;
+//   let fixture: ComponentFixture<UserManagementComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        UserManagementComponent,
-      ],
-      imports: [
-        UserRegistrationModule,
-        UsersReportModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-      ],
-      providers: [
-        UserManagementService,
-        HttpService,
-      ],
-    })
-      .compileComponents();
-  }));
+//   beforeEach(async(() => {
+//     TestBed.configureTestingModule({
+//       declarations: [
+//         UserManagementComponent,
+//       ],
+//       imports: [
+//         UserRegistrationModule,
+//         UsersReportModule,
+//         HttpClientModule,
+//         BrowserAnimationsModule,
+//         HttpClientTestingModule,
+//       ],
+//       providers: [
+//         UserManagementService,
+//         HttpService,
+//       ],
+//     })
+//       .compileComponents();
+//   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(UserManagementComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(UserManagementComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should be defined', () => {
-    expect(component).toBeTruthy();
-  });
+//   it('should be defined', () => {
+//     expect(component).toBeTruthy();
+//   });
 
-});
+// });
