@@ -3,6 +3,7 @@ import { ProjectManagementService } from '../project-management.service';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Client, Department, Project } from '../../../core/models';
+import { MatSnackBar } from '@angular/material';
 
 
 export interface DialogData {
@@ -36,16 +37,33 @@ export interface DialogData {
 export class CreateProjectDialog implements OnInit {
 
   @ViewChild('createForm') createProjectForm: NgForm;
+  @ViewChild('assignRoleForm') assignRoleForm: NgForm;
+  @ViewChild('editRoleForm') editRoleForm: NgForm;
+  @ViewChild('addConsultantForm') addConsultantForm: NgForm;
+  @ViewChild('editConsultantForm') editConsultantForm: NgForm;
+
+
+  onsiteOffsite: boolean;
+  usersByDepartment;
   step2 = false;
+  assignRole = false;
+  rolesSaved = [];
+  editRole = true;
+  roleToEdit;
+
   step3 = false;
-  editConsultant = false;
   addConsultant = false;
+  consultantsSaved = [];
+  editConsultant = false;
+  consultantToEdit;
+
 
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<CreateProjectDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private projectManagementService: ProjectManagementService
+    private projectManagementService: ProjectManagementService,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -56,8 +74,75 @@ export class CreateProjectDialog implements OnInit {
     this.dialogRef.close();
   }
 
+  selectSite(event) {
+    this.rolesSaved = [];
+    this.consultantsSaved = [];
+    this.onsiteOffsite = event.checked;
+  }
+
+  departmentChosen(event) {
+    this.consultantsSaved = [];
+    this.rolesSaved = [];
+    this.projectManagementService.getUsersByDepartment(event.value).subscribe((data) => {
+      this.usersByDepartment = data._embedded.userBodyList;
+      this.usersByDepartment = this.usersByDepartment.map((user) => {
+        return user = {...user, name: user.firstName + ' ' + user.lastName};
+      });
+    });
+
+  }
+
+
+  // Step 2
   goToStep2() {
     this.step2 = true;
+  }
+
+  onAssignRole(event) {
+    this.assignRole = true;
+    this.editRole = false;
+  }
+
+  createRole() {
+    const role = this.assignRoleForm.value;
+    const isRolePresent = this.rolesSaved.some((el) => role.role === el.role);
+    if (isRolePresent) {
+      this.snackBar.open(`Role ${role.role} already exists`, '', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    const newRole = {...this.assignRoleForm.value, id: this.rolesSaved.length};
+    this.rolesSaved.push(newRole);
+    this.assignRoleForm.reset();
+    this.assignRole = false;
+  }
+
+  onEditRole(role) {
+    this.editRole = true;
+    this.assignRole = false;
+    this.roleToEdit = role;
+  }
+
+  saveRole() {
+    this.assignRole = false;
+    this.assignRoleForm.reset();
+    const editedRole = this.editRoleForm.value;
+    const role = this.roleToEdit;
+    this.rolesSaved = this.rolesSaved.map((el) => role.id === el.id ? editedRole : el);
+    this.editRole = false;
+    return this.rolesSaved;
+  }
+
+  deleteRole(role) {
+    this.editRole = false;
+    this.rolesSaved = this.rolesSaved.filter((el) => el.id !== role.id);
+    return this.rolesSaved;
+  }
+
+  backToStep1() {
+    this.step2 = false;
   }
 
   goToStep3() {
@@ -65,8 +150,46 @@ export class CreateProjectDialog implements OnInit {
     this.step3 = true;
   }
 
-  backToStep1() {
-    this.step2 = false;
+  // Step 3
+  onAddConsultant() {
+    this.addConsultant = true;
+    this.editConsultant = false;
+  }
+
+  createConsultant() {
+    const consultant = this.addConsultantForm.value;
+    const isConsultantPresent = this.consultantsSaved.some((el) => consultant.name === el.name);
+    if (isConsultantPresent) {
+      this.snackBar.open(`Consultant ${consultant.name} already exists`, '', {
+        duration: 2000,
+      });
+      return;
+    }
+
+    const newConsultant = {...this.addConsultantForm.value, id: this.consultantsSaved.length};
+    this.consultantsSaved.push(newConsultant);
+    this.addConsultantForm.reset();
+    this.addConsultant = false;
+  }
+
+  onEditConsultant(consultant) {
+    this.editConsultant = true;
+    this.addConsultant = false;
+    this.consultantToEdit = consultant;
+  }
+
+  saveConsultant() {
+    const editedConsultant = this.editConsultantForm.value;
+    const consultant = this.consultantToEdit;
+    this.consultantsSaved = this.consultantsSaved.map((el) => consultant.id === el.id ? editedConsultant : el);
+    this.editConsultant = false;
+    return this.consultantsSaved;
+  }
+
+  deleteConsultant(consultant) {
+    this.editConsultant = false;
+    this.consultantsSaved = this.consultantsSaved.filter((el) => el.id !== consultant.id);
+    return this.rolesSaved;
   }
 
   backToStep2() {
@@ -74,38 +197,7 @@ export class CreateProjectDialog implements OnInit {
     this.step2 = true;
   }
 
-  onEditConsultant() {
-    this.editConsultant = true;
-    this.addConsultant = false;
-  }
-
-  onAddConsultant() {
-    this.addConsultant = true;
-    this.editConsultant = false;
-  }
-
-  // editRole(role: any): void {
-  //   const dialogRef = this.dialog.open(EditRoleDialog, {
-  //     width: '600px',
-  //     data: { ...project, departments: this.departments, clients: this.clients },
-  //   });
-  // }
-
   createProject() {
-    const value = {
-      ...this.createProjectForm.value,
-      client: { clientId: this.createProjectForm.value.client },
-    };
-    this.projectManagementService.sendNewProject(value)
-      .subscribe(
-        () => {
-          console.log(value);
-          this.projectManagementService.changeReloadStatus();
-          this.createProjectForm.resetForm();
-        },
-        () => {
-        }
-      );
     this.dialogRef.close();
   }
 }
