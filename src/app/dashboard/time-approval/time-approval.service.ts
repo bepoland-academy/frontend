@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject, of } from 'rxjs';
 import { HttpService } from '../../core/services/http.service';
 import {
   User,
