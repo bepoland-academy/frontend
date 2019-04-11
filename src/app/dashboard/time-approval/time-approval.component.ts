@@ -66,7 +66,6 @@ export class TimeApprovalComponent implements OnInit {
   }
 
   approveAll(currentUser: UserWithTimeSheet) {
-    console.log(currentUser);
     this.currentUser = currentUser;
     const dataToSend: Array<MonthTimeEntryWithoutProjectInfo> = this.currentUser.monthTimeSheet
       .map((timeSheet: MonthTimeEntry) => {

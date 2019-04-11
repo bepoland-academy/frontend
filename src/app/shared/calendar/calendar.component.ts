@@ -47,6 +47,7 @@ export class CalendarComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.eventsModel = convertDataToCalendar(this.currentUser.monthTimeSheet);
     this.options = {
       firstDay: 1,
       editable: true,
@@ -55,11 +56,18 @@ export class CalendarComponent implements OnInit, OnChanges {
         center: 'title',
         right: '',
       },
-      plugins: [dayGridPlugin, interactionPlugin],
+
+      plugins: [dayGridPlugin],
       weekNumbers: true,
       allDayDefault: true,
+      eventRender({el, event, ...rest}) {
+        if (el.classList.contains('REJECTED')) {
+          el.setAttribute('title', `REJECTION NOTICE: ${event.extendedProps.comment}`);
+
+
+        }
+      },
     };
-    this.eventsModel = convertDataToCalendar(this.currentUser.monthTimeSheet);
   }
 
   ngOnChanges(): void {

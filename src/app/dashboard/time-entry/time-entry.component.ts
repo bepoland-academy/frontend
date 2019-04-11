@@ -15,6 +15,7 @@ import {
   User
 } from '../../core/models';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
+import { forkJoin, of } from 'rxjs';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class TimeEntryComponent implements OnInit {
   isLoading: boolean;
   isError: boolean;
   _links: Links;
+  doUsunieciaNapewno: boolean;
 
   constructor(
     private timeEntryService: TimeEntryService,
@@ -193,54 +195,65 @@ export class TimeEntryComponent implements OnInit {
   }
 
   saveCurrentEntries() {
-    this.timeEntries = this.timeEntries
-      .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
-      .map((project: TimeEntry) => (
-        {
-          ...project,
-          weekDays: project.weekDays.map((day: Day) => (
-            {
-              ...day,
-              status: day.status !== 'SAVED' ? 'SAVED' : day.status,
-              comment: '',
-            }
-          )),
-        })
-      );
+    this.checkForNewEntries().subscribe(() => {
+      this.timeEntries = this.timeEntries
+        .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
+        .map((project: TimeEntry) => (
+          {
+            ...project,
+            weekDays: project.weekDays.map((day: Day) => (
+              {
+                ...day,
+                status: day.status !== 'SAVED' ? 'SAVED' : day.status,
+                comment: '',
+              }
+            )),
+          })
+        );
 
-    this.sendData();
+      this.sendData();
+    });
+
   }
 
   submitCurrentEntries() {
-    this.timeEntries = this.timeEntries
-      .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
-      .map((project: TimeEntry) => (
-        {
-          ...project,
-          weekDays: project.weekDays.map((day: Day) => (
-            {
-              ...day,
-              status: day.status !== 'SUBMITTED' ? 'SUBMITTED' : day.status,
-              comment: '',
-            })
-          ),
-        })
-      );
+    this.checkForNewEntries().subscribe(() => {
+      console.log('usuniete');
+      this.timeEntries = this.timeEntries
+        .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
+        .map((project: TimeEntry) => (
+          {
+            ...project,
+            weekDays: project.weekDays.map((day: Day) => (
+              {
+                ...day,
+                status: day.status !== 'SUBMITTED' ? 'SUBMITTED' : day.status,
+                comment: '',
+              })
+            ),
+          })
+        );
 
-    this.sendData();
+      this.sendData();
+    });
+
   }
 
   sendData() {
     if (!this.timeEntries.length) {
-      this.snackBar.open('Data can not be send to server', '', { duration: 3000, horizontalPosition: 'left' });
+      this.snackBar.open('You need to add project to send it to the server', '', {
+        duration: 3000,
+        horizontalPosition: 'left',
+      });
       return;
     }
+
     this.isLoading = true;
     const param = `${this.displayedYear}-W${this.displayedWeek}`;
     const dataToSend = { weekTimeEntryBodyList: this.timeEntries.map(({ projectInfo, ...rest }) => rest) };
 
     // if there are links update current week
-    if (this._links.self) {
+    if (this._links.self && !this.doUsunieciaNapewno) {
       this.httpService.put(this._links.self.href, dataToSend)
         .subscribe(
           () => {
@@ -262,6 +275,7 @@ export class TimeEntryComponent implements OnInit {
     this.httpService.post(`consultants/${user.userId}/weeks/${param}`, dataToSend)
       .subscribe(
         () => {
+          this.doUsunieciaNapewno = false;
           this.fetchDataChangeRouteAndGetWeekDates();
           this.snackBar.open('Data has been successfully sended', 'X', {
             duration: 3000,
@@ -272,5 +286,20 @@ export class TimeEntryComponent implements OnInit {
           this.snackBar.open('Data has not been sent', 'X', { duration: 3000, horizontalPosition: 'left' });
         }
       );
+  }
+
+  checkForNewEntries() {
+    const isAnyNewProject = this.timeEntries.some(o => !o.weekDays[0].status);
+    const isAnyAddedProject = this.timeEntries.some(o => !!o.weekDays[0].status);
+    if (isAnyNewProject && isAnyAddedProject) {
+      this.doUsunieciaNapewno = true;
+      const doUsuniecia = this.timeEntries.filter(el => el._links);
+      return forkJoin(
+        doUsuniecia.map(el => {
+          return this.httpService.delete(el._links.DELETE.href);
+        })
+      );
+    }
+    return of(null);
   }
 }
