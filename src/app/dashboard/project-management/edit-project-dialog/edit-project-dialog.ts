@@ -120,7 +120,6 @@ export class ProjectManagementDialog implements OnInit {
     this.rolesSaved = [];
     this.consultantsSaved = [];
     this.onsiteOffsite = event.checked;
-    console.log(this.onsiteOffsite);
   }
 
   // departmentChosen(event) {
@@ -142,13 +141,11 @@ export class ProjectManagementDialog implements OnInit {
   }
 
   onAssignRole(event) {
-    console.log(this.rolesSaved);
     this.assignRole = true;
     this.editRole = false;
   }
 
   createRole() {
-    console.log(this.assignRoleForm.value);
     const role = this.assignRoleForm.value;
     const isRolePresent = this.rolesSaved.some((el) => role.role === el.role);
     if (isRolePresent) {

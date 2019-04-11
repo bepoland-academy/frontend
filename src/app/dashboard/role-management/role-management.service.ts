@@ -54,6 +54,6 @@ export class RoleManagementService {
   }
 
   deleteRole(role: any): Observable<null> {
-    return this.httpService.delete(`projects/roles/${role.roleId}`);
+    return this.httpService.delete(`http://beontime.be-academy.pl/gateway/projects/roles/${role.roleId}`);
   }
 }

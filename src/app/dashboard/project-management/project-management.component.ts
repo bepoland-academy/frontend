@@ -77,9 +77,11 @@ export class ProjectManagementComponent implements OnInit {
     });
     this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
       this.clients = data._embedded.clientBodyList;
+      console.log(this.clients);
     });
     this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
       this.roles = data._embedded.roleBodyList;
+      console.log(this.roles);
     });
   }
 
@@ -109,6 +111,7 @@ export class ProjectManagementComponent implements OnInit {
         const projects = groupProjectsByClient(data);
         this.projectsList1 = projects;
         this.projectsList2 = projects;
+        console.log(projects);
       },
       () => {
         this.isFail = true;
@@ -164,13 +167,6 @@ export class ProjectManagementComponent implements OnInit {
         clients: this.clients,
         usersByDepartment: this.usersByDepartment,
       },
-    });
-    console.log({
-      ...project,
-      departments: this.departments,
-      clients: this.clients,
-      roles: this.roles,
-      usersByDepartment: this.usersByDepartment,
     });
   }
 

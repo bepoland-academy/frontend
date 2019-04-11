@@ -48,6 +48,6 @@ export class ClientManagementService {
   }
 
   deleteClient(client: Client): Observable<null> {
-    return this.httpService.delete(`clients/${client.clientId}`);
+    return this.httpService.delete(`http://beontime.be-academy.pl/gateway/clients/${client.clientId}`);
   }
 }
