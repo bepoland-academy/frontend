@@ -34,7 +34,11 @@ export class ProjectManagementService {
     return this.httpService.get(this.clients);
   }
 
-  getProjects(department: string) {
+  getUsers() {
+    return this.httpService.get('users');
+  }
+
+  getProjects(department: string): Observable<Array<Project>> {
     return this.httpService.get(this.projectsByDepartment + department).pipe(
       map((response) => response._embedded.projectBodyList),
       flatMap((res) => {
@@ -69,6 +73,10 @@ export class ProjectManagementService {
 
   getRoles(): Observable<any> {
     return this.httpService.get('projects/roles/all');
+  }
+
+  getUsersByDepartment(department) {
+    return this.httpService.get(`users?department=${department}`);
   }
 }
 

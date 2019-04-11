@@ -23,15 +23,15 @@ export class RoleManagementService {
     return this.httpService.get('projects/roles/all');
   }
 
-  createRole(roleRegistrationData: string): Observable<null> {
+  createRole(roleRegistrationData: string): Observable<any> {
     return this.httpService.post('projects/roles/', roleRegistrationData);
   }
 
-  updateRole(role: any): Observable<null> {
+  updateRole(role: any): Observable<any> {
     return this.httpService.put(role._links.self.href, role);
   }
 
   deleteRole(role: any): Observable<any> {
-    return this.httpService.delete(`projects/roles/${role.roleId}`);
+    return this.httpService.delete(`http://beontime.be-academy.pl/gateway/projects/roles/${role.roleId}`);
   }
 }

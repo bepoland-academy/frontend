@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProjectManagementComponent } from './project-management.component';
 import { CustomMaterialModule } from '../../shared/material/material.module';
 import { ProjectManagementService } from './project-management.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ProjectManagementDialog } from './edit-project-dialog/edit-project-dialog';
 import { DeleteProjectDialog } from './edit-project-dialog/delete-project-dialog';
@@ -21,6 +21,7 @@ import { CreateProjectDialog } from './create-project-dialog/create-project-dial
     CustomMaterialModule,
     FormsModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
   ],
   exports: [
     ProjectManagementComponent,

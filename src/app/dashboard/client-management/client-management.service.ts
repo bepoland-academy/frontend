@@ -22,32 +22,15 @@ export class ClientManagementService {
     return this.httpService.get('clients');
   }
 
-  // getProjects(department: string): Observable<any> {
-  //   return this.httpService.get(this.projectsByDepartment + department).pipe(
-  //     map((response) => response._embedded.projectBodyList),
-  //     flatMap((res) => {
-  //       return forkJoin(
-  //         res.map(project => {
-  //           return this.isRemovable(project.projectId).pipe(
-  //             map(removableRes => {
-  //               return {...project, removable: removableRes};
-  //             })
-  //           );
-  //         })
-  //       );
-  //     })
-  //   );
-  // }
-
-  createClient(clientRegistrationData: string): Observable<null> {
+  createClient(clientRegistrationData: string): Observable<any> {
     return this.httpService.post('clients', clientRegistrationData);
   }
 
-  updateClient(client: Client): Observable<null> {
+  updateClient(client: Client): Observable<any> {
     return this.httpService.put(client._links.self.href, client);
   }
 
-  deleteClient(client: Client) {
-    return this.httpService.delete(`clients/${client.clientId}`);
+  deleteClient(client: Client): Observable<any> {
+    return this.httpService.delete(`http://beontime.be-academy.pl/gateway/clients/${client.clientId}`);
   }
 }
