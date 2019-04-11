@@ -2,6 +2,7 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import './app/shared/calendar/ng-calendar.style.css';
 @import './app/shared/css/statuses.css';
+@import './app/shared/css//tooltip.css';
 
 input {
   background-color: inherit;
@@ -22,14 +23,4 @@ button:disabled {
 
 p {
   margin: 0;
-}
-
-
-
-.red {
-  background-color: red;
-}
-
-.green {
-  background-color: green;
 }

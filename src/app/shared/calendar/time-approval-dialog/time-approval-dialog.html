@@ -26,8 +26,8 @@
       <div *ngIf="data.isTimeApproval">
          <div mat-dialog-actions *ngIf="!comments">
             <button mat-button (click)="closeDialog()">Cancel</button>
-            <button mat-button (click)="onReject()">Reject</button>
-            <button mat-button [mat-dialog-close]="true">
+            <button mat-button *ngIf="data.projects[0].day.status === 'SUBMITTED'" (click)="onReject()">Reject</button>
+            <button mat-button [mat-dialog-close]="true" *ngIf="data.projects[0].day.status === 'SUBMITTED'">
                Approve
             </button>
          </div>

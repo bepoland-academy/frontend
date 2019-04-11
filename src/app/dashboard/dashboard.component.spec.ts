@@ -17,7 +17,6 @@ import { AuthService } from '../core/services/auth.service';
 import { HttpService } from '../core/services/http.service';
 import { ClientManagementComponent } from './client-management/client-management.component';
 import { RoleManagementComponent } from './role-management/role-management.component';
-import { AddEntryComponent } from './time-entry/add-entry/add-entry.component';
 import { TimeEntryModule } from './time-entry/time-entry.module';
 
 fdescribe('DashboardComponent', () => {
@@ -28,7 +27,6 @@ fdescribe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         DashboardComponent,
-        TimeEntryComponent,
         HistoricalDataComponent,
         ReportsComponent,
         ProjectManagementComponent,

@@ -19,7 +19,7 @@ export class FooterDirective {
     this.sumHoursFromSelectedDay();
   }
   sumHoursFromSelectedDay() {
-    const tooltipElement = this.element.querySelector('.tooltipText');
+    const tooltipElement = this.element.querySelector('.tooltip');
     tooltipElement.classList.remove('visible');
     const sum = this.allEntries.map((timeEntry: TimeEntry) =>
       timeEntry.weekDays.map((weekDay: Day) =>
