@@ -38,7 +38,7 @@ export class ProjectManagementService {
     return this.httpService.get('users');
   }
 
-  getProjects(department: string): Observable<Array<Project>> {
+  getProjects(department: string) {
     return this.httpService.get(this.projectsByDepartment + department).pipe(
       map((response) => response._embedded.projectBodyList),
       flatMap((res) => {
