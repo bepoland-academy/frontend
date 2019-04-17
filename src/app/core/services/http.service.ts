@@ -61,7 +61,32 @@ export class HttpService {
   fetchProjects(department) {
     this.http.get(`${this.url}projects?department=${department}`)
       .subscribe(
-        (projects: ProjectsResponse) => this.projectsStream.next(projects._embedded.projectBodyList),
+        (response: ProjectsResponse) => {
+
+          const rates =  [
+            {
+              role_id: 1,
+              rate: 100,
+              onSiteRate: 150,
+              consultants: [
+                '7041cb03-200d-457c-84a9-a4881527448f',
+              ],
+            },
+            {
+              role_id: 2,
+              role: {},
+              rate: 200,
+              onSiteRate: 150,
+              allUsers: [],
+              consultants: [
+                '7bb710ee-c16c-4c58-8343-73854a461160',
+                'af197078-ef3e-46e6-893f-e016e05c895f',
+              ],
+            },
+          ];
+          // const a = response._embedded.projectBodyList.map(el => )
+          this.projectsStream.next(response._embedded.projectBodyList);
+        },
         () => this.snackBar.open('Something went wrong, the app would not work correctly')._dismissAfter(5000)
       );
   }

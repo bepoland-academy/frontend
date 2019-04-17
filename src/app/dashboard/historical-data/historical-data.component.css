@@ -1,0 +1,7 @@
+.wrapper {
+  height: calc(100vh - 57px);
+  overflow: hidden;
+}
+.wrapper__calendar {
+  height: 99%;
+}

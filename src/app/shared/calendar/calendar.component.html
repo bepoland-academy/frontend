@@ -42,7 +42,7 @@
     <div class="calendar">
 
       <ng-container *ngIf="options">
-        <ng-fullcalendar #fullcalendar (clickButton)="showAnotherMonth($event)" [eventsModel]="eventsModel"
+        <ng-fullcalendar style="margin-bottom: 20px" #fullcalendar (clickButton)="showAnotherMonth($event)" [eventsModel]="eventsModel"
           [options]="options" (eventClick)="eventClick($event)"></ng-fullcalendar>
       </ng-container>
     </div>

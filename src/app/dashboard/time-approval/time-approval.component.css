@@ -11,8 +11,7 @@
 .mat-sidenav-container {
   font-family: Roboto,"Helvetica Neue", sans-serif;
   font-size: 14px;
-  margin: 10px 0;
-  height: 85vh;
+  height: 100%;
 }
 
 .mat-sidenav {
@@ -21,10 +20,16 @@
   background-color: #d9ddf2;
   border-radius: 4px;
 }
-
+.main-wrapper {
+  height: calc(100vh - 57px);
+  overflow: auto;
+}
+.mat-sidenav-content {
+  height: 100%;
+}
 .wrapper {
  height: 100%;
- overflow: hidden;
+ overflow: auto;
  box-sizing: border-box;
  padding: 15px;
 }
