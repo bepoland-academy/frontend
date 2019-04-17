@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
 import { Project, ProjectsResponse } from '../models';
-import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class HttpService {
+  // I'd move it to config file and import it above
   url = 'http://beontime.be-academy.pl/gateway/';
 
   projectsStream: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);

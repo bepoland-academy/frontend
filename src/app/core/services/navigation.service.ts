@@ -14,6 +14,7 @@ import { RoleManagementComponent } from 'src/app/dashboard/role-management/role-
 
 @Injectable()
 export class NavigationService {
+  // I'd move it to config / routes.ts file
   routes: Routes = [
     {
       path: 'track',
@@ -112,6 +113,7 @@ export class NavigationService {
     return { path: '**', redirectTo: pathToRedirect, pathMatch: 'full' };
   }
 
+  // Method is returning boolean, it should be renamed, for example CHECK ROLE VALIDITY
   setRoutesForRole(arr1: Array<string>, arr2: Array<string>): boolean {
     return arr1.some(r => arr2.includes(r));
   }

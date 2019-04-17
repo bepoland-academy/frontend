@@ -94,6 +94,8 @@ export class TimeApprovalService {
         map((afterMergingResponse: Array<UserWithTimeSheet>) => {
           // sorting all users by lastname
           afterMergingResponse.sort((a: UserWithTimeSheet, b: UserWithTimeSheet) => {
+            // Or ternary operator:
+            // return a.lastName < b.lastName ? -1 : 1;
             if (a.lastName < b.lastName) { return -1; }
             if (a.lastName > b.lastName) { return 1; }
             return 0;

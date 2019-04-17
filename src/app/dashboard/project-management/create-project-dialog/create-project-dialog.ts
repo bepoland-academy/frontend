@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Client, Department, Project } from '../../../core/models';
 
-
+// Move interface to external file
 export interface DialogData {
   active: boolean;
   client: Client;

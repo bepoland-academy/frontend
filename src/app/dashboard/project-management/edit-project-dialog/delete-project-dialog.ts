@@ -47,6 +47,7 @@ export class DeleteProjectDialog implements OnInit {
     }
 
   ngOnInit(): void {
+    // delete onInit + implements if not used
   }
 
   onNoClick(): void {

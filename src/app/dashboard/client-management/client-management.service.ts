@@ -22,6 +22,11 @@ export class ClientManagementService {
     return this.httpService.get('clients');
   }
 
+  // Leave comment if should be deleted, is waiting for backend, should be refactored?
+
+  // TODO : refactor 
+  // TODO : wait for backend
+  // or just delete
   // getProjects(department: string): Observable<any> {
   //   return this.httpService.get(this.projectsByDepartment + department).pipe(
   //     map((response) => response._embedded.projectBodyList),

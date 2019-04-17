@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 import { NavigationService } from './navigation.service';
 import { HttpService } from './http.service';
 import { User, Credentials } from '../../core/models';
+import { DashboardComponent } from 'src/app/dashboard/dashboard.component';
 
 const defaultUser = {} as User;
 
@@ -49,11 +50,13 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
 
-  getUser(): void {
+  getUser(condition): void 
+
     const user: User = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      return;
-    }
+    // no need for below lines
+    // if (!user) {
+    //   return;
+    // }
     if (user) {
       this.loggedIn.next(true);
       this.navigationService.filterRoutes(user.roles);

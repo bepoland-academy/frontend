@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpService } from 'src/app/core/services/http.service';
+// Break lines
 import { User, Links, MonthTimeEntry, MonthTimeEntryResponse, UserWithTimeSheetWithoutSubbmitedHours, MonthTimeEntryWithoutProjectInfo, Project } from 'src/app/core/models';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -54,6 +55,8 @@ export class HistoricalDataService {
             _links,
           };
         }),
+
+        // move it to other method (for example - getSubmittedHours) to break the function to smaller one
         map((usersWithTimeSheets) => {
           return {
             ...usersWithTimeSheets,

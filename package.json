@@ -9,6 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+  // I'd use specific versions of dependencies instead of ^/~ operator
   "private": true,
   "dependencies": {
     "@angular/animations": "~7.2.5",

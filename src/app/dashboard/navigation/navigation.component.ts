@@ -12,6 +12,11 @@ import { User } from '../../core/models';
   styleUrls: ['./navigation.component.css'],
 })
 export class NavigationComponent implements OnInit, OnDestroy {
+
+  // Another approach to subscribtion + comments below
+  // userSubstription: Subscription;
+  // roleSubscription: Subscription;
+
   substription: Subscription = new Subscription();
   currentUrl: string;
   links: Routes;
@@ -25,7 +30,13 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // no need for comment below 
+    // create seperate subscribtions, userSubscription, navigationSubscription
     // taking user information
+
+    // this.userSubstription = this.authService.getUserStream().subscribe((user: User) => {
+    //   this.user = user;
+    // })
     this.substription.add(
       this.authService.getUserStream().subscribe((user: User) => {
         this.user = user;
@@ -67,5 +78,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.substription.unsubscribe();
+
+    // this.userSubstription.unsubscribe();
+    // this.roleSubscription.unsubscribe();
   }
 }

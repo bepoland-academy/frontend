@@ -52,6 +52,7 @@ export class ProjectManagementDialog implements OnInit {
     private projectManagementService: ProjectManagementService
   ) {
     }
+
   ngOnInit(): void {
     this.checkDepartment();
   }
@@ -61,6 +62,7 @@ export class ProjectManagementDialog implements OnInit {
   }
 
   compareObjects(client1: Client, client2: Client): boolean {
+    // or use lodash isEqual
     if (client1 && client2) {
       return client1.clientId === client2.clientId && client1.name === client2.name;
     }

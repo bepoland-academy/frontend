@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-create-client-dialog',
   templateUrl: './create-client-dialog.html',
+  // I'd move it to stylesheet
   styles: [`
   .mat-card-header {justify-content: center;}
   .createClient {display: flex; justify-content: space-around;}

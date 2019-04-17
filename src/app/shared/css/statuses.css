@@ -1,3 +1,11 @@
+/* 
+
+lowercase css class names
+use enum and ng-class or class directive if needed to conditionally add class
+eventually add class.prop.toLowerCase() to match the case of css class
+
+*/
+
 .SUBMITTED {
   background: rgb(173, 216, 230);
 }
