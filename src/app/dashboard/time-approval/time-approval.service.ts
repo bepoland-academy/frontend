@@ -48,7 +48,8 @@ export class TimeApprovalService {
                   map((userTimeSheetResponse: MonthTimeEntryResponse): UserWithTimeSheetWithoutSubbmitedHours => {
                     let _links: Links = {
                       self: {
-                        href: `${this.httpService.url}managers/${loggedInUser.department}/consultants/${user.userId}/months/${month}`,
+                        href: `${this.httpService.url}managers/${loggedInUser.department}/
+                        consultants/${user.userId}/months/${month}`,
                       },
                     };
                     let monthTimeSheet: MonthTimeEntry[] = [];

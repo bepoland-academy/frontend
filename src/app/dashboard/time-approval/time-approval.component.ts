@@ -128,7 +128,8 @@ export class TimeApprovalComponent implements OnInit {
     this.httpService.get(`consultants/${loggedInUser.userId}/months/status/SUBMITTED`)
       .subscribe((response: NextApprovalResponse) => {
         if (!response._embedded) {
-          this.snackBar.open('There is no more time entries to approve', 'X', { duration: 3000, horizontalPosition: 'left' });
+          this.snackBar.open('There is no more time entries to approve', 'X',
+          { duration: 3000, horizontalPosition: 'left' });
           return;
         }
         const date = response._embedded.monthBoList[0].month;

@@ -1,0 +1,81 @@
+<!-- Create New Project -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Create New Project</mat-card-title>
+  </mat-card-header>
+  <form (ngSubmit)="createProject()" [formGroup]="mainForm" fxLayout="column">
+    <!-- Step 1 -->
+    <mat-card-content [ngClass]="{
+          hidden: step2 === true || step3 === true,
+          createStep1: step2 !== true && step3 !== true
+        }">
+      <mat-form-field appearance="outline">
+        <mat-label>Project Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select matNativeControl placeholder="Client" formControlName="client">
+          <mat-option *ngFor="let client of data.clients" [value]="client.clientId">
+            {{ client.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="checkbox">
+        <mat-checkbox (change)="selectSite($event)">
+          On-site/Off-site Project
+        </mat-checkbox>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Comments</mat-label>
+        <textarea matInput rows="3" formControlName="comments"> </textarea>
+      </mat-form-field>
+      <!-- <mat-form-field>
+        <mat-select matNativeControl placeholder="Department" formControlName="department"
+          (selectionChange)="departmentChosen($event)">
+          <mat-option [value]="department.departmentId" *ngFor="let department of data.departments">
+            {{ department.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
+      <mat-card-actions>
+        <button type="button" mat-raised-button color="primary" (click)="cancel()">
+          Cancel
+        </button>
+        <button type="button" mat-raised-button color="primary" (click)="goToStep2()">
+          Next
+        </button>
+      </mat-card-actions>
+    </mat-card-content>
+    <!-- End of Step 1 -->
+
+    <!-- Step 2 -->
+    <app-project-dialog-step2 
+      [ngClass]="{ hidden: step2 !== true, step2: step2 === true }"
+      [onsiteOffsite]="onsiteOffsite" 
+      (pushRole)="roleCreated($event)"
+      (roleDeleted)="roleDeleted($event)"
+      (enableStep1)="enableStep1()"
+      (enableStep3)="enableStep3()"
+      [step2]="step2"
+      [rolesSaved]="rolesSaved"
+      (roleAdded)="roleAdded($event)"
+    >
+    </app-project-dialog-step2>
+    <!-- End of Step 2 -->
+    <!-- Step 3 -->
+    <app-project-dialog-step3 
+      [ngClass]="{ hidden: step3 !== true, step3: step3 === true }"
+      [siteOffsite]="onsiteOffsite" 
+      (pushConsultant)="consultantCreated($event)"
+      (consultantDeleted)="consultantDeleted($event)"
+      [step3]="step3"
+      (enableStep2)="enableStep2()"
+      [consultantsSaved]="consultantsSaved"
+      (consultantAdded)="consultantAdded($event)"
+      [rolesSaved]="rolesSaved"
+    >
+    </app-project-dialog-step3>
+    <!-- End of step 3 -->
+    <button (click)="createProject()">Submit</button>
+  </form>
+</mat-card>

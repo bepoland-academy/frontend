@@ -5,16 +5,20 @@ import { CustomMaterialModule } from '../../shared/material/material.module';
 import { ProjectManagementService } from './project-management.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ProjectManagementDialog } from './edit-project-dialog/edit-project-dialog';
-import { DeleteProjectDialog } from './edit-project-dialog/delete-project-dialog';
-import { CreateProjectDialog } from './create-project-dialog/create-project-dialog';
+import { ProjectDialogStep1 } from './project-dialog/project-dialog-step1';
+import { ProjectDialogStep2 } from './project-dialog/step 2/project-dialog-step2';
+import { EditCreateRole } from './project-dialog/step 2/edit-create-role/edit-create-role';
+import { ProjectDialogStep3 } from './project-dialog/step 3/project-dialog-step3';
+import { ConsultantAssignment } from './project-dialog/step 3/consultant-assignment/consultant-assignment';
 
 @NgModule({
   declarations: [
     ProjectManagementComponent,
-    ProjectManagementDialog,
-    DeleteProjectDialog,
-    CreateProjectDialog,
+    ProjectDialogStep1,
+    ProjectDialogStep2,
+    EditCreateRole,
+    ProjectDialogStep3,
+    ConsultantAssignment,
   ],
   imports: [
     CommonModule,
@@ -23,16 +27,14 @@ import { CreateProjectDialog } from './create-project-dialog/create-project-dial
     FlexLayoutModule,
     ReactiveFormsModule,
   ],
-  exports: [
-    ProjectManagementComponent,
-  ],
-  providers: [
-    ProjectManagementService,
-  ],
+  exports: [ProjectManagementComponent],
+  providers: [ProjectManagementService],
   entryComponents: [
-    ProjectManagementDialog,
-    DeleteProjectDialog,
-    CreateProjectDialog,
+    ProjectDialogStep1,
+    ProjectDialogStep2,
+    EditCreateRole,
+    ProjectDialogStep3,
+    ConsultantAssignment,
   ],
 })
-export class ProjectManagementModule { }
+export class ProjectManagementModule {}

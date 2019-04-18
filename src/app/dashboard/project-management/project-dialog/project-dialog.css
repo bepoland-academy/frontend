@@ -1,5 +1,6 @@
-.mat-card-header, .mat-card-actions {
-  display: flex; 
+.mat-card-header,
+.mat-card-actions {
+  display: flex;
   justify-content: space-around;
 }
 
@@ -18,8 +19,8 @@
 }
 
 .checkbox {
-margin: 15px;
-text-align: left;
+  margin: 15px;
+  text-align: left;
 }
 
 .roles-header-grid1 {
@@ -44,19 +45,21 @@ text-align: left;
   grid-template-columns: 2fr 1fr 50px 50px;
 }
 
-.roles-header-grid1 .grid-item, .roles-header-grid2 .grid-item, .consultants-header-grid .grid-item {
+.roles-header-grid1 .grid-item,
+.roles-header-grid2 .grid-item,
+.consultants-header-grid .grid-item {
   font-weight: bolder;
-  color: rgba(0,0,0,.54);
+  color: rgba(0, 0, 0, 0.54);
   vertical-align: middle;
   padding: 10px;
 }
 
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0,0,0,.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   padding: 0;
   text-align: center;
-  color: rgba(0,0,0,.87);
+  color: rgba(0, 0, 0, 0.87);
   font-size: 12px;
   align-items: center;
   vertical-align: middle;
@@ -68,8 +71,8 @@ h4 {
 }
 
 .truncate {
-  overflow: hidden; 
-  white-space: nowrap; 
+  overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
@@ -82,7 +85,8 @@ h4 {
 }
 
 /* Step 2 */
-.step2, .step3 {
+.step2,
+.step3 {
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 350px;
@@ -90,38 +94,55 @@ h4 {
   flex-direction: column;
 }
 
-.step2 .mat-card-content, .step3 .mat-card-content {
+.step2 .mat-card-content,
+.step3 .mat-card-content {
   display: flex;
 }
 
-.editRoles, .assignRole, .editConsultants, .addConsultant {
+.editRoles,
+.assignRole,
+.editConsultants,
+.addConsultant {
   /* margin: 15px 25px 15px 35px; */
 }
 
-.editRoles .mat-card, .assignRole .mat-card, .editConsultants .mat-card, .addConsultant .mat-card {
+.editRoles .mat-card,
+.assignRole .mat-card,
+.editConsultants .mat-card,
+.addConsultant .mat-card {
   /* height: 290px; */
   padding-bottom: 0;
 }
 
-.editRoles .mat-card-title, .assignRole .mat-card-title, .editConsultants .mat-card-title, .addConsultant .mat-card-title {
+.editRoles .mat-card-title,
+.assignRole .mat-card-title,
+.editConsultants .mat-card-title,
+.addConsultant .mat-card-title {
   font-size: 14px;
 }
 
-.editRoles .mat-card-content, .assignRole .mat-card-content, .editConsultants .mat-card-content, .addConsultant .mat-card-content {
+.editRoles .mat-card-content,
+.assignRole .mat-card-content,
+.editConsultants .mat-card-content,
+.addConsultant .mat-card-content {
   display: flex;
   flex-direction: column;
 }
 
-.editRoles .mat-dialog-actions, .assignRole .mat-dialog-actions, .editConsultants .mat-dialog-actions, .addConsultant .mat-dialog-actions {
+.editRoles .mat-dialog-actions,
+.assignRole .mat-dialog-actions,
+.editConsultants .mat-dialog-actions,
+.addConsultant .mat-dialog-actions {
   padding: 0;
   margin: 0;
 }
 
-.editRoles button, .assignRole button, .editConsultants button, .addConsultant button {
+.editRoles button,
+.assignRole button,
+.editConsultants button,
+.addConsultant button {
   margin: 0 auto;
 }
-
-
 
 .inputs {
   display: flex;
@@ -151,7 +172,8 @@ h4 {
   grid-template-columns: 1fr 1fr 50px 50px;
 }
 
-.editConsultants .mat-card, .addConsultant .mat-card {
+.editConsultants .mat-card,
+.addConsultant .mat-card {
   height: 230px;
   width: 310px;
 }
@@ -161,13 +183,12 @@ button {
 }
 
 .step3 .mat-dialog-actions {
- margin: 20px;
+  margin: 20px;
 }
 
 .assignRoleButton {
   margin-top: 20px;
 }
-
 
 .editStep1 {
   width: 520px;
@@ -190,5 +211,3 @@ button {
 .column2 {
   margin-left: 20px;
 }
-
-

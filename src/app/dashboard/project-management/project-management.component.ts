@@ -11,10 +11,8 @@ import {
 } from '../../core/models';
 import { NgForm, FormControl } from '@angular/forms';
 import { MatDialog, TooltipPosition } from '@angular/material';
-import { ProjectManagementDialog } from './edit-project-dialog/edit-project-dialog';
+import { ProjectDialogStep1 } from './project-dialog/project-dialog-step1';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
-import { CreateProjectDialog } from './create-project-dialog/create-project-dialog';
-
 
 export interface DialogData {
   active: boolean;
@@ -30,10 +28,10 @@ export interface DialogData {
   _links: {
     DELETE: {
       href: string;
-    },
+    };
     self: {
       href: string;
-    }
+    };
   };
 }
 
@@ -42,9 +40,7 @@ export interface DialogData {
   templateUrl: './project-management.component.html',
   styleUrls: ['./project-management.component.css'],
 })
-
 export class ProjectManagementComponent implements OnInit {
-
   @ViewChild('myForm') newProjectForm: NgForm;
 
   departments: Array<Department> = [];
@@ -56,7 +52,8 @@ export class ProjectManagementComponent implements OnInit {
   isFail = false;
   errorMessage = '';
   errorOnCreate = '';
-  actualDepartment: string;
+  actualDepartmentName: string;
+  actualDepartmentId: string;
   actualClient: string;
   currentDepartment: Department;
   roles: any;
@@ -66,7 +63,7 @@ export class ProjectManagementComponent implements OnInit {
     private projectManagementService: ProjectManagementService,
     private changeDetectorRefs: ChangeDetectorRef,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.getDepartments();
@@ -75,14 +72,18 @@ export class ProjectManagementComponent implements OnInit {
         this.displayProjects(this.currentDepartment);
       }
     });
-    this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
-      this.clients = data._embedded.clientBodyList;
-      console.log(this.clients);
-    });
-    this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
-      this.roles = data._embedded.roleBodyList;
-      console.log(this.roles);
-    });
+    this.projectManagementService
+      .getClientsList()
+      .subscribe((data: ClientsResponse) => {
+        this.clients = data._embedded.clientBodyList;
+        console.log(this.clients);
+      });
+    this.projectManagementService
+      .getRoles()
+      .subscribe((data: RolesResponse) => {
+        this.roles = data._embedded.roleBodyList;
+        console.log(this.roles);
+      });
   }
 
   getDepartments() {
@@ -97,11 +98,13 @@ export class ProjectManagementComponent implements OnInit {
           this.isFail = false;
           this.changeDetectorRefs.detectChanges();
         }, 3000);
-      });
+      }
+    );
   }
 
   setDepartment(event: Department) {
-    this.actualDepartment = event.name;
+    this.actualDepartmentName = event.name;
+    this.actualDepartmentId = event.departmentId;
   }
 
   displayProjects(event: Department) {
@@ -122,9 +125,11 @@ export class ProjectManagementComponent implements OnInit {
         }, 3000);
       }
     );
-    this.projectManagementService.getUsersByDepartment(event.departmentId).subscribe((data) => {
-      this.usersByDepartment = data._embedded.userBodyList;
-    });
+    this.projectManagementService
+      .getUsersByDepartment(event.departmentId)
+      .subscribe(data => {
+        this.usersByDepartment = data._embedded.userBodyList;
+      });
   }
 
   // createProject() {
@@ -154,34 +159,54 @@ export class ProjectManagementComponent implements OnInit {
   //     );
   // }
 
-  editProject(project: Project): void {
-    this.usersByDepartment = this.usersByDepartment.map((user) => {
-      return user = { ...user, name: user.firstName + ' ' + user.lastName };
-    });
+  // editProject(project: Project): void {
+  //   this.usersByDepartment = this.usersByDepartment.map((user) => {
+  //     return user = { ...user, name: user.firstName + ' ' + user.lastName };
+  //   });
 
-    const dialogRef = this.dialog.open(ProjectManagementDialog, {
-      data: {
-        ...project,
-        departments: this.departments,
-        roles: this.roles,
-        clients: this.clients,
-        usersByDepartment: this.usersByDepartment,
-      },
-    });
-  }
+  //   const dialogRef = this.dialog.open(ProjectManagementDialog, {
+  //     data: {
+  //       ...project,
+  //       departments: this.departments,
+  //       roles: this.roles,
+  //       clients: this.clients,
+  //       usersByDepartment: this.usersByDepartment,
+  //     },
+  //   });
+  // }
 
   createProject(project: Project): void {
-    const dialogRef = this.dialog.open(CreateProjectDialog, {
+    this.roles = this.roles.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+    this.usersByDepartment = this.usersByDepartment.map((user) => {
+      return user = {...user, name: user.firstName + ' ' + user.lastName};
+    });
+    this.usersByDepartment = this.usersByDepartment.sort((a, b) => (a.name > b.name) ? 1
+    : ((b.name > a.name) ? -1 : 0));
+
+    const dialogRef = this.dialog.open(ProjectDialogStep1, {
       data: {
-        departments: this.departments,
+        department: this.actualDepartmentId,
         clients: this.clients,
         roles: this.roles,
+        allRoles: this.roles,
+        usersByDepartment: this.usersByDepartment,
+        allUsersByDepartment: this.usersByDepartment,
       },
+    });
+    console.log({
+      department: this.actualDepartmentId,
+      clients: this.clients,
+      roles: this.roles,
+      allRoles: this.roles,
+      usersByDepartment: this.usersByDepartment,
     });
   }
 
   filterClients(event: Event) {
-    this.projectsList2 = this.projectsList1.filter(
-      client => client.clientName.toLowerCase().includes((<HTMLInputElement> event.target).value));
+    this.projectsList2 = this.projectsList1.filter(client =>
+      client.clientName
+        .toLowerCase()
+        .includes((<HTMLInputElement> event.target).value)
+    );
   }
 }

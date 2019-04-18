@@ -1,0 +1,63 @@
+<div>
+  <form
+    [formGroup]="editCreateRoleForm"
+    (ngSubmit)="createEditRole(editCreateRoleForm.value)"
+  >
+    <mat-card>
+      <mat-card-content>
+        <mat-card-header>
+          <mat-card-title>{{ title }}</mat-card-title>
+        </mat-card-header>
+        <mat-form-field>
+          <mat-select placeholder="Role" formControlName="role">
+            <div *ngIf="roleToEdit">
+              <mat-option
+                [value]="role.name"
+                *ngFor="let role of data.allRoles"
+              >
+                {{ role.name }}
+              </mat-option>
+            </div>
+            <div *ngIf="!roleToEdit">
+              <mat-option [value]="role.name" *ngFor="let role of data.roles">
+                {{ role.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+        <div class="inputs">
+          <mat-form-field appearance="outline" *ngIf="siteOffsite">
+            <mat-label>On-site rate</mat-label>
+            <input
+              input
+              type="number"
+              min="0"
+              matInput
+              formControlName="onSiteRate"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label *ngIf="siteOffsite">Off-site rate</mat-label>
+            <mat-label *ngIf="!siteOffsite">Rate</mat-label>
+            <input
+              input
+              type="number"
+              min="0"
+              matInput
+              formControlName="rate"
+            />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <div mat-dialog-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!editCreateRoleForm.valid"
+        >
+          Save
+        </button>
+      </div>
+    </mat-card>
+  </form>
+</div>
