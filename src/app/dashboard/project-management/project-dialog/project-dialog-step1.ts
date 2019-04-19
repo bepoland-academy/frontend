@@ -18,6 +18,7 @@ export interface DialogData {
   removable: boolean;
   roles;
   allRoles;
+  usersByDepartment;
   _links: {
     DELETE: {
       href: string;
@@ -57,10 +58,17 @@ export class ProjectDialogStep1 implements OnInit {
       comments: new FormControl(null, Validators.required),
       department: new FormControl(this.data.department, Validators.required),
       rates: new FormArray([]),
-      consultants: new FormArray([]),
     });
   }
 
+  // Navigation
+  selectSite(event) {
+    this.onsiteOffsite = event.checked;
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
 
   goToStep2() {
     this.step2 = true;
@@ -81,36 +89,39 @@ export class ProjectDialogStep1 implements OnInit {
   }
 
   // Add role to project
-  roleCreated(rate) {
-    this.addRate(rate);
+  roleAdded(role) {
+    this.addRoleToForm(role);
+    this.addRoleToList(role);
   }
 
-  addRate(rate): void {
+  addRoleToForm(role): void {
     this.rates = this.mainForm.get('rates') as FormArray;
-    const isRatePresent = this.rates.value.some(el => rate.role === el.role);
-    if (isRatePresent) {
+    const isRolePresent = this.rates.value.some(el => role.role === el.role);
+
+    if (isRolePresent) {
       this.rates
-        .at(this.rates.value.findIndex(el => el.role === rate.role))
-        .setValue(rate);
+        .at(this.rates.value.findIndex(el => el.role === role.role))
+        .get('rate')
+        .setValue(role.rate);
+      this.rates
+        .at(this.rates.value.findIndex(el => el.role === role.role))
+        .get('onSiteRate')
+        .setValue(role.onSiteRate);
     } else {
-      this.rates.push(this.createRate(rate));
+      this.rates.push(this.createRole(role));
     }
   }
 
-  createRate(rate): FormGroup {
+  createRole(role): FormGroup {
     return new FormGroup({
-      role: new FormControl(rate.role),
-      rate: new FormControl(rate.rate),
-      onSiteRate: new FormControl(rate.onSiteRate),
+      role: new FormControl(role.role),
+      rate: new FormControl(role.rate),
+      onSiteRate: new FormControl(role.onSiteRate),
+      consultants: new FormArray([]),
     });
   }
 
-  roleDeleted(role) {
-    this.rates.removeAt(this.rates.value.findIndex(el => el.role === role.role));
-  }
-
-  roleAdded(role) {
-    console.log(role);
+  addRoleToList(role) {
     const isRolePresent = this.rolesSaved.some(el => role.role === el.role);
     if (isRolePresent) {
       this.rolesSaved = this.rolesSaved.map(el =>
@@ -126,36 +137,47 @@ export class ProjectDialogStep1 implements OnInit {
     }
   }
 
-  // Add consultant to project
-  consultantCreated(consultant) {
-    this.addConsultant(consultant);
+  roleDeleted(role) {
+    // Remove role from Form
+    this.rates.removeAt(
+      this.rates.value.findIndex(el => el.role === role.role)
+    );
+
+    // Remove role from the list of saved roles
+    this.rolesSaved = this.rolesSaved.filter(el => el.role !== role.role);
+    const roleRestored = { name: role.role };
+    this.data.roles = this.data.roles.concat(roleRestored);
+    this.data.roles.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
   }
 
-  addConsultant(consultant): void {
-    this.consultants = this.mainForm.get('consultants') as FormArray;
-    const isConsultantPresent = this.consultants.value.some(el => consultant.consultant === el.consultant);
-    if (isConsultantPresent) {
-      this.consultants
-        .at(this.consultants.value.findIndex(el => el.consultant === consultant.role))
-        .setValue(consultant);
-    } else {
-      this.consultants.push(this.createConsultant(consultant));
-    }
-  }
 
-  createConsultant(consultant): FormGroup {
-    return new FormGroup({
-      consultant: new FormControl(consultant.consultant),
-      role: new FormControl(consultant.role),
-    });
-  }
-
-  consultantDeleted(consultant) {
-    this.consultants.removeAt(this.consultants.value.findIndex(el => el.consultant === consultant.consultant));
-  }
-
+  // Assign consultant to a project
   consultantAdded(consultant) {
-    const isConsultantPresent = this.consultantsSaved.some(el => consultant.consultant === el.consultant);
+    this.addConsultantToForm(consultant);
+    this.addConsultantToList(consultant);
+  }
+
+  addConsultantToForm(consultant): void {
+    this.rates = this.mainForm.get('rates') as FormArray;
+
+    for (let i = 0; i < this.rates.length; i++) {
+      if (this.rates.at(i).get('consultants').value.some(
+        el => consultant.consultant === el)) {
+        this.rates.at(i).get('consultants').value
+          .splice(this.rates.at(i).get('consultants').value.findIndex(el => el === consultant.consultant), 1);
+      }
+    }
+
+    this.rates.at(this.rates.value.findIndex(el => el.role === consultant.role))
+      .get('consultants').value.push(consultant.consultant);
+  }
+
+  addConsultantToList(consultant) {
+    const isConsultantPresent = this.consultantsSaved.some(
+      el => consultant.consultant === el.consultant
+    );
     if (isConsultantPresent) {
       this.consultantsSaved = this.consultantsSaved.map(el =>
         consultant.consultant === el.consultant ? consultant : el
@@ -170,19 +192,26 @@ export class ProjectDialogStep1 implements OnInit {
     }
   }
 
+  consultantDeleted(consultant) {
+    // Remove consultant from Form
+    this.consultants = this.rates
+      .at(this.rates.value.findIndex(el => el.role === consultant.role))
+      .get('consultants') as FormArray;
 
-  cancel(): void {
-    this.dialogRef.close();
+    this.consultants.value.splice(this.consultants.value.findIndex(el => el === consultant.consultant), 1);
+
+    // Remove consultant from the list of saved consultants
+    this.consultantsSaved = this.consultantsSaved.filter(
+      el => el.consultant !== consultant.consultant
+    );
+    const consultantRestored = { name: consultant.consultant };
+    this.data.usersByDepartment = this.data.usersByDepartment.concat(
+      consultantRestored
+    );
+    this.data.usersByDepartment.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
   }
-
-  selectSite(event) {
-    this.onsiteOffsite = event.checked;
-  }
-
-  departmentChosen(event) {
-    this.departmentSelected = event.value;
-  }
-
 
   createProject() {
     this.dialogRef.close();

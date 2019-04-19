@@ -42,12 +42,11 @@ export interface DialogData {
 })
 export class ProjectDialogStep2 implements OnInit {
   @Input() step2;
+  @Input() onsiteOffsite;
+  @Input() rolesSaved;
+
   @Output() enableStep1 = new EventEmitter<any>();
   @Output() enableStep3 = new EventEmitter<any>();
-
-  @Input() onsiteOffsite;
-  @Output() pushRole = new EventEmitter<any>();
-  @Input() rolesSaved;
   @Output() roleAdded = new EventEmitter<any>();
   @Output() roleDeleted = new EventEmitter<any>();
 
@@ -63,7 +62,6 @@ export class ProjectDialogStep2 implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.rolesSaved);
   }
 
   backToStep1() {
@@ -88,7 +86,6 @@ export class ProjectDialogStep2 implements OnInit {
   }
 
   roleCreated(role) {
-    this.pushRole.emit(role);
     this.roleAdded.emit(role);
     this.createEditRole = false;
   }
@@ -97,23 +94,7 @@ export class ProjectDialogStep2 implements OnInit {
     this.roleDeleted.emit(role);
     this.roleToEdit = null;
     this.createEditRole = false;
-    this.rolesSaved = this.rolesSaved.filter(el => el.role !== role.role);
-    const roleRestored = { name: role.role };
-    this.data.roles = this.data.roles.concat(roleRestored);
-    this.data.roles.sort((a, b) =>
-      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-    );
-    return this.rolesSaved, this.data.roles;
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   const currentSiteModel: SimpleChange = changes.onsiteOffsite;
-  //   if (currentSiteModel.currentValue !== currentSiteModel.previousValue) {
-  //     this.rolesSaved = [];
-  //     this.data.roles = this.data.allRoles;
-  //     this.onsiteOffsite = currentSiteModel.currentValue;
-  //   }
-  // }
-
-
 }
+
+

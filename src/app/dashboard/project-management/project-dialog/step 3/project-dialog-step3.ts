@@ -5,12 +5,9 @@ import {
   Output,
   EventEmitter,
   Input,
-  SimpleChanges,
-  SimpleChange
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { Client, Department, Project } from '../../../../core/models';
-import { FormGroup } from '@angular/forms';
 
 export interface DialogData {
   active: boolean;
@@ -42,20 +39,19 @@ export interface DialogData {
   templateUrl: './project-dialog-step3.html',
   styleUrls: ['../project-dialog.css'],
 })
+
 export class ProjectDialogStep3 implements OnInit {
-  // @Output() stepChange = new EventEmitter<any>();
+
   @Input() step3;
-  @Output() enableStep2 = new EventEmitter<any>();
   @Input() siteOffsite;
-  @Output() consultantDeleted = new EventEmitter<any>();
-  @Output() consultantAdded = new EventEmitter<any>();
-  @Output() pushConsultant = new EventEmitter<any>();
-  @Input()  consultantsSaved;
   @Input() rolesSaved;
+  @Input() consultantsSaved;
+
+  @Output() consultantAdded = new EventEmitter<any>();
+  @Output() consultantDeleted = new EventEmitter<any>();
+  @Output() enableStep2 = new EventEmitter<any>();
 
   title;
-
-  usersByDepartment;
   createEditConsultant = false;
   consultantToEdit;
 
@@ -65,8 +61,7 @@ export class ProjectDialogStep3 implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   backToStep2() {
     this.enableStep2.emit();
@@ -85,8 +80,6 @@ export class ProjectDialogStep3 implements OnInit {
   }
 
   consultantCreated(consultant) {
-    console.log(consultant);
-    this.pushConsultant.emit(consultant);
     this.consultantAdded.emit(consultant);
     this.createEditConsultant = false;
   }
@@ -95,21 +88,6 @@ export class ProjectDialogStep3 implements OnInit {
     this.consultantDeleted.emit(consultant);
     this.consultantToEdit = null;
     this.createEditConsultant = false;
-    this.consultantsSaved = this.consultantsSaved.filter(el => el.consultant !== consultant.consultant);
-    const consultantRestored = { consultant: consultant.consultant };
-    this.data.usersByDepartment = this.data.usersByDepartment.concat(consultantRestored);
-    this.data.usersByDepartment.sort((a, b) =>
-      a.consultant > b.consultant ? 1 : b.consultant > a.consultant ? -1 : 0
-    );
-    return this.consultantsSaved, this.data.usersByDepartment;
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   const currentSiteModel: SimpleChange = changes.siteOffsite;
-  //   if (currentSiteModel.currentValue !== currentSiteModel.previousValue) {
-  //     this.rolesSaved = [];
-  //     this.data.roles = this.data.allRoles;
-  //     this.siteOffsite = currentSiteModel.currentValue;
-  //   }
-  // }
 }

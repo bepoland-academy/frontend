@@ -43,11 +43,10 @@ export interface DialogData {
 })
 export class ConsultantAssignment implements OnInit {
   @Input() title: string;
-  @Output() consultantCreated = new EventEmitter<any>();
   @Input() consultantToEdit: any;
   @Input() rolesSaved;
   @Input() siteOffsite;
-
+  @Output() consultantCreated = new EventEmitter<any>();
 
   assignRoleForm: FormGroup;
 
@@ -55,7 +54,7 @@ export class ConsultantAssignment implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ConsultantAssignment>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.assignRoleForm = new FormGroup(

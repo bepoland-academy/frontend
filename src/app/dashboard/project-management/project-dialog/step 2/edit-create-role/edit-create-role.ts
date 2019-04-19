@@ -85,8 +85,8 @@ export class EditCreateRole implements OnInit {
     }
   }
 
-  createEditRole(event) {
-    this.roleCreated.emit(event);
+  createEditRole(role) {
+    this.roleCreated.emit(role);
     // Check if the newly created role doesn't already exist
     this.data.roles = this.data.roles.filter(
       el => el.name !== this.editCreateRoleForm.value.role
@@ -97,6 +97,7 @@ export class EditCreateRole implements OnInit {
     return this.data.roles;
   }
 
+  // Update the Form dynamically
   ngOnChanges() {
     if (this.editCreateRoleForm) {
       this.editCreateRoleForm.reset();
