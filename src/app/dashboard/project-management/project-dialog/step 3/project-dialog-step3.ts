@@ -50,6 +50,7 @@ export class ProjectDialogStep3 implements OnInit {
   @Output() consultantAdded = new EventEmitter<any>();
   @Output() consultantDeleted = new EventEmitter<any>();
   @Output() enableStep2 = new EventEmitter<any>();
+  @Output() projectSubmitted = new EventEmitter<any>();
 
   title;
   createEditConsultant = false;
@@ -88,6 +89,10 @@ export class ProjectDialogStep3 implements OnInit {
     this.consultantDeleted.emit(consultant);
     this.consultantToEdit = null;
     this.createEditConsultant = false;
+  }
+
+  createProject() {
+    this.projectSubmitted.emit();
   }
 
 }

@@ -33,7 +33,7 @@ export class NavigationService {
     {
       path: 'projects',
       component: ProjectManagementComponent,
-      data: { name: 'Project management', forRole: ['MANAGER', 'ADMINISTRATION'] },
+      data: { name: 'Project management', forRole: ['ADMINISTRATION'] },
     },
     {
       path: 'approval',

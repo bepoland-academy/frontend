@@ -4,13 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateClientDialog } from './client-management-dialog/create-client/create-client-dialog';
 import { EditClientDialog } from './client-management-dialog/edit-client/edit-client-dialog';
 import { Client, ClientsResponse } from '../../core/models';
-import { normalize } from 'path';
 
-export enum ClientType {
-  Normal,
-  Super,
-  SuperDuper,
-}
 
 @Component({
   selector: 'app-client-management',
@@ -20,8 +14,6 @@ export enum ClientType {
 
 export class ClientManagementComponent implements OnInit {
   clients: Array<Client> = [];
-
-  type: ClientType = ClientType.Normal;
 
   constructor(
     private clientManagementService: ClientManagementService,

@@ -3,7 +3,7 @@
   <mat-card-header>
     <mat-card-title>Create New Project</mat-card-title>
   </mat-card-header>
-  <form (ngSubmit)="createProject()" [formGroup]="mainForm" fxLayout="column">
+  <form [formGroup]="mainForm" fxLayout="column">
     <!-- Step 1 -->
     <mat-card-content [ngClass]="{
           hidden: step2 === true || step3 === true,
@@ -64,10 +64,8 @@
       (consultantAdded)="consultantAdded($event)"
       (consultantDeleted)="consultantDeleted($event)"
       (enableStep2)="enableStep2()"
+      (projectSubmitted)="createProject()"
     >
     </app-project-dialog-step3>
-    <!-- End of step 3 -->
-    
-    <button (click)="createProject()">Submit</button>
   </form>
 </mat-card>
