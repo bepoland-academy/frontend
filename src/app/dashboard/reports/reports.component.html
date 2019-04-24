@@ -1,0 +1,12 @@
+<div class="container">
+  <app-reports-header
+    [departments]="departments"
+    (setDepartment)="setDepartment($event)"
+    [clients]="clients"
+    (setClient)="setClient($event)"
+  ></app-reports-header>
+  <app-reports-content
+    [weeksInMonth]="weeksInMonth"
+    [usersTimesheet]="usersTimesheet"
+  ></app-reports-content>
+</div>

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
-
 import { MatDialog } from '@angular/material';
 import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog';
 import { OptionsInput } from '@fullcalendar/core';

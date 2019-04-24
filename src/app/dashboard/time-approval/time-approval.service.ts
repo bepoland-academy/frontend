@@ -17,7 +17,6 @@ import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class TimeApprovalService {
-  reload = new BehaviorSubject({});
   projects = new BehaviorSubject([]);
 
   constructor(private httpService: HttpService) {

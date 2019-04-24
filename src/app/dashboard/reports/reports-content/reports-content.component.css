@@ -1,0 +1,16 @@
+.content__main {
+  overflow: hidden;
+  margin-bottom: 20px; 
+}
+.employee {
+  padding: 0 16px;
+  display: grid;
+  grid-template-rows: 80px;
+}
+
+.employee_cell {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

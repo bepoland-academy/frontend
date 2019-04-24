@@ -1,0 +1,38 @@
+<header class="header">
+  <div class="department">
+    <h4 class="department__title title">Department: </h4>
+    <mat-form-field>
+      <mat-select placeholder="Select department" (selectionChange)="setDepartmentHandle($event.value)">
+        <mat-option *ngFor="let department of departments" [value]="department">
+          {{department.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="client">
+    <h4 class="client__title title">Client: </h4>
+    <mat-form-field>
+      <mat-select placeholder="Select client" (selectionChange)="setClientHandler($event.value)">
+        <mat-option *ngFor="let client of clients" [value]="client">
+          {{client.clientName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="date">
+    <h4 class="date__title title">Date: </h4>
+    <mat-form-field>
+      <input matInput [matDatepicker]="dp" placeholder="Month and Year">
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+        (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+      </mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="export">
+    <button mat-icon-button>
+      <mat-icon>cloud_download</mat-icon>
+    </button>
+    <a href="#" class="export__link">Export XSL</a>
+  </div>
+</header>

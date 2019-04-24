@@ -4,10 +4,12 @@ import { Client } from './client.model';
 export interface Project {
   active: boolean;
   client: Client;
+  clientGuid: string
   comments: string;
-  department: string;
+  departmentGuid: string;
   name: string;
   rate: number;
+  rates: Array<any>;
   projectId: string;
   removable?: boolean;
   _links?: {

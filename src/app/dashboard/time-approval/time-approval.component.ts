@@ -98,7 +98,6 @@ export class TimeApprovalComponent implements OnInit {
   }
 
   setStatusForOneDay({status, date, comment = ''}) {
-    console.log('TCL: TimeApprovalComponent -> setStatusForOneDay -> status', status);
   const dataToSend: Array<MonthTimeEntryWithoutProjectInfo> = this.currentUser.monthTimeSheet
       .map((timeSheet: MonthTimeEntry) => {
         const {projectInfo, ...rest} = timeSheet;

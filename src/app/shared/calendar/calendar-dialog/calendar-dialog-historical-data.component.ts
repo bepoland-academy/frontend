@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {  } from 'module';
-import * as moment from 'moment';
 import { Router } from '@angular/router';
+
+import * as moment from 'moment';
 import { CalendarDialogComponent } from './calendar-dialog';
 
 @Component({
