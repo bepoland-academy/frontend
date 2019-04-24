@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../core/services/http.service';
 import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
-import { ClientsResponse, DepartmentsResponse, Project } from '../../core/models';
+import {
+  ClientsResponse,
+  DepartmentsResponse,
+  Project
+} from '../../core/models';
 import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class ProjectManagementService {
-
   departments = 'departments';
   projects = 'projects';
   projectsByDepartment = 'projects/?department=';
@@ -15,8 +18,7 @@ export class ProjectManagementService {
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
-
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService) {}
 
   changeReloadStatus(): void {
     this.reloadStatus.next(null);
@@ -38,33 +40,71 @@ export class ProjectManagementService {
     return this.httpService.get('users');
   }
 
-  getProjects(department: string) {
-    return this.httpService.get(this.projectsByDepartment + department).pipe(
-      map((response) => response._embedded.projectBodyList),
-      flatMap((res) => {
-        return forkJoin(
-          res.map((project: Project) => {
-            return this.isRemovable(project.projectId).pipe(
-              map(removableRes => {
-                return { ...project, removable: !removableRes };
-              })
-            );
-          })
-        );
-      })
+  // getProjects(department: string): Observable<Array<Project>> {
+  //   return this.httpService.get(this.projectsByDepartment + department).pipe(
+  //     map(response => response._embedded.projectBodyList),
+  //     flatMap(res => {
+  //       return forkJoin(
+  //         res.map((project: Project) => {
+  //           return this.isRemovable(project.projectId).pipe(
+  //             map(removableRes => {
+  //               return { ...project, removable: !removableRes };
+  //             })
+  //           );
+  //         })
+  //       );
+  //     })
+  //   );
+  // }
+
+  // getProjects(department: string): Observable<any> {
+  //   return this.httpService.fakeGet(
+  //     `http://localhost:3000/projects?department_guid=${department}`
+  //   );
+  // }
+
+  getProjects(department: string): Observable<any> {
+    return this.httpService.get(
+      `projects?department=${department}`
     );
   }
 
+
+  test() {
+    return this.httpService.fakeGet('http://beontime.be-academy.pl/gateway/projects/954928d4-b2d5-4e30-ae39-d2516c57ce2e');
+  }
+  // sendNewProject(newProjectData: Project) {
+  //   return this.httpService.post(this.projects, newProjectData);
+  // }
+
   sendNewProject(newProjectData: Project) {
-    return this.httpService.post(this.projects, newProjectData);
+    console.log('wokrs');
+    return this.httpService.fakePost(
+      'http://localhost:3000/projects',
+      newProjectData
+    );
   }
 
-  updateProject(url: string, updatedProject: Project) {
-    return this.httpService.put(url, updatedProject);
+  // updateProject(url: string, updatedProject: Project) {
+  //   return this.httpService.put(url, updatedProject);
+  // }
+
+  updateProject(id, updatedProject: Project) {
+    console.log(updatedProject);
+    return this.httpService.put(
+      `http://localhost:3000/projects/${id}`,
+      updatedProject
+    );
   }
 
-  deleteProject(project: Project) {
-    return this.httpService.delete(project._links.DELETE.href);
+  // deleteProject(project: Project) {
+  //   return this.httpService.delete(project._links.DELETE.href);
+  // }
+
+  deleteProject(projectId: string) {
+    return this.httpService.fakeDelete(
+      `http://localhost:3000/projects/${projectId}`
+    );
   }
 
   isRemovable(projectId: string) {
@@ -79,4 +119,3 @@ export class ProjectManagementService {
     return this.httpService.get(`users?department=${department}`);
   }
 }
-

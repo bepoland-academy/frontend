@@ -40,7 +40,8 @@
                type="button" 
                mat-raised-button 
                color="primary"
-               (click)="createProject()" 
+               (click)="createProject()"
+               [disabled]="!actualDepartmentId" 
             >
                Add new Project
             </button>

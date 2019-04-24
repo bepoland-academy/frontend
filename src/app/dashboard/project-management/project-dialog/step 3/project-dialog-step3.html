@@ -1,0 +1,81 @@
+<!-- Step 3 -->
+<div class="step3">
+  <mat-card-content>
+    <!-- Consultants List -->
+    <div class="rolesList">
+      <div class="roles-header-grid2">
+        <div class="grid-item">Consultant</div>
+        <div class="grid-item">Role</div>
+        <div class="grid-item edit"></div>
+        <div class="grid-item edit"></div>
+      </div>
+      <div class="roles-grid2" *ngFor="let consultant of consultantsSaved">
+        <div class="grid-item truncate" *ngIf="consultant">
+          <h4 class="truncate">{{ consultant.consultant }}</h4>
+        </div>
+        <div class="grid-item truncate" *ngIf="consultant">
+          <h4 class="truncate">{{ consultant.role.name }}</h4>
+        </div>
+        <div class="grid-item edit" *ngIf="consultant">
+          <button
+            mat-icon-button
+            type="button"
+            (click)="openEditConsultant(consultant)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div class="grid-item edit" *ngIf="consultant">
+          <button
+            mat-icon-button
+            type="button"
+            (click)="deleteConsultant(consultant)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <mat-card-actions class="assignRoleButton">
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="openAssignConsultant()"
+        >
+          Add new Consultant
+        </button>
+      </mat-card-actions>
+    </div>
+    <!-- End of Consultants List -->
+
+    <!-- Add/Assign Consultant Section -->
+    <consultant-assignment
+      [ngClass]="{
+        assignRole: createEditConsultant === true,
+        hidden: createEditConsultant !== true
+      }"
+      (consultantCreated)="consultantCreated($event)"
+      [siteOffsite]="onsiteOffsite"
+      [title]="title"
+      [consultantToEdit]="consultantToEdit"
+      [rolesSaved]="rolesSaved"
+    >
+    </consultant-assignment>
+    <!-- End of Add/Assign Consultant Section -->
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="backToStep2()"
+    >
+      Back
+    </button>
+    <button mat-raised-button color="primary" (click)="createProject()">
+      Submit
+    </button>
+  </mat-card-actions>
+</div>
+
+<!-- End of Step 2 -->
