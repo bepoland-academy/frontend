@@ -69,10 +69,6 @@ export class ProjectManagementService {
     );
   }
 
-
-  test() {
-    return this.httpService.fakeGet('http://beontime.be-academy.pl/gateway/projects/954928d4-b2d5-4e30-ae39-d2516c57ce2e');
-  }
   // sendNewProject(newProjectData: Project) {
   //   return this.httpService.post(this.projects, newProjectData);
   // }
@@ -89,10 +85,9 @@ export class ProjectManagementService {
   //   return this.httpService.put(url, updatedProject);
   // }
 
-  updateProject(id, updatedProject: Project) {
-    console.log(updatedProject);
+  updateProject(link, updatedProject: Project) {
     return this.httpService.put(
-      `http://localhost:3000/projects/${id}`,
+      link,
       updatedProject
     );
   }
