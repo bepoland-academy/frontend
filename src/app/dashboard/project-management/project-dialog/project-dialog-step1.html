@@ -1,39 +1,71 @@
 <!-- Create New Project -->
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Create New Project</mat-card-title>
+    <mat-card-title *ngIf="!this.data.project">Create New Project</mat-card-title>
+    <mat-card-title *ngIf="this.data.project">Edit Project</mat-card-title>
   </mat-card-header>
   <form [formGroup]="mainForm" fxLayout="column">
     <!-- Step 1 -->
-    <mat-card-content [ngClass]="{
-          hidden: step2 === true || step3 === true,
-          createStep1: step2 !== true && step3 !== true
-        }">
+    <mat-card-content
+      [ngClass]="{
+        hidden: step2 === true || step3 === true,
+        createStep1: step2 !== true && step3 !== true
+      }"
+    >
       <mat-form-field appearance="outline">
         <mat-label>Project Name</mat-label>
         <input matInput formControlName="name" />
       </mat-form-field>
       <mat-form-field>
-        <mat-select matNativeControl placeholder="Client" formControlName="client">
-          <mat-option *ngFor="let client of data.clients" [value]="client.clientId">
+        <mat-select
+          matNativeControl
+          placeholder="Client"
+          formControlName="client_id"
+          [compareWith]="compareClient"
+        >
+          <mat-option
+            *ngFor="let client of data.clients"
+            [value]="client.clientId"
+          >
             {{ client.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div class="checkbox">
-        <mat-checkbox (change)="selectSite($event)">
+        <mat-checkbox (change)="selectSite($event)" [checked]="onsiteOffsite">
           On-site/Off-site Project
         </mat-checkbox>
       </div>
       <mat-form-field appearance="outline">
         <mat-label>Comments</mat-label>
-        <textarea matInput rows="3" formControlName="comments"> </textarea>
+        <textarea matInput rows="3" maxlength="500" formControlName="comments">
+        </textarea>
       </mat-form-field>
       <mat-card-actions>
-        <button type="button" mat-raised-button color="primary" (click)="cancel()">
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="cancel()"
+        >
           Cancel
         </button>
-        <button type="button" mat-raised-button color="primary" (click)="goToStep2()">
+        <button
+          type="button"
+          *ngIf="this.data.project"
+          mat-raised-button
+          color="primary"
+          (click)="deleteProject()"
+        >
+          Delete
+        </button>
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          [disabled]="!mainForm.valid"
+          (click)="goToStep2()"
+        >
           Next
         </button>
       </mat-card-actions>
@@ -41,7 +73,7 @@
     <!-- End of Step 1 -->
 
     <!-- Step 2 -->
-    <app-project-dialog-step2 
+    <app-project-dialog-step2
       [ngClass]="{ hidden: step2 !== true, step2: step2 === true }"
       [step2]="step2"
       [onsiteOffsite]="onsiteOffsite"
@@ -55,7 +87,7 @@
     <!-- End of Step 2 -->
 
     <!-- Step 3 -->
-    <app-project-dialog-step3 
+    <app-project-dialog-step3
       [ngClass]="{ hidden: step3 !== true, step3: step3 === true }"
       [step3]="step3"
       [siteOffsite]="onsiteOffsite"

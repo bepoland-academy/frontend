@@ -38,3 +38,7 @@ import { ConsultantAssignment } from './project-dialog/step 3/consultant-assignm
   ],
 })
 export class ProjectManagementModule {}
+    // data.forEach((project) => this.clients.forEach((client) => 
+        // if (project.client_id === client.clientId) {
+        //   project.client = { clientId: client.clientId, name: client.name}
+        // }))

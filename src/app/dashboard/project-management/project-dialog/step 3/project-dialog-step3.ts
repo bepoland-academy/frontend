@@ -4,10 +4,10 @@ import {
   OnInit,
   Output,
   EventEmitter,
-  Input,
-} from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { Client, Department, Project } from '../../../../core/models';
+  Input
+} from "@angular/core";
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
+import { Client, Department, Project } from "../../../../core/models";
 
 export interface DialogData {
   active: boolean;
@@ -35,13 +35,11 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-project-dialog-step3',
-  templateUrl: './project-dialog-step3.html',
-  styleUrls: ['../project-dialog.css'],
+  selector: "app-project-dialog-step3",
+  templateUrl: "./project-dialog-step3.html",
+  styleUrls: ["../project-dialog.css"]
 })
-
 export class ProjectDialogStep3 implements OnInit {
-
   @Input() step3;
   @Input() siteOffsite;
   @Input() rolesSaved;
@@ -69,13 +67,13 @@ export class ProjectDialogStep3 implements OnInit {
   }
 
   openAssignConsultant() {
-    this.title = 'Add consultant';
+    this.title = "Add consultant";
     this.createEditConsultant = true;
     this.consultantToEdit = null;
   }
 
   openEditConsultant(consultant) {
-    this.title = 'Consultant assignment';
+    this.title = "Consultant assignment";
     this.createEditConsultant = true;
     this.consultantToEdit = consultant;
   }
@@ -94,5 +92,4 @@ export class ProjectDialogStep3 implements OnInit {
   createProject() {
     this.projectSubmitted.emit();
   }
-
 }

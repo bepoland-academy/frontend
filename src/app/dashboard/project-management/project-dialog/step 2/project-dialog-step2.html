@@ -15,7 +15,7 @@
         <div *ngFor="let role of rolesSaved">
           <div *ngIf="onsiteOffsite" class="roles-grid1">
             <div class="grid-item truncate" *ngIf="role">
-              <h4 class="truncate">{{ role.role }}</h4>
+              <h4 class="truncate">{{ role.role.name }}</h4>
             </div>
             <div class="grid-item truncate" *ngIf="role">
               <h4 class="truncate">{{ role.onSiteRate }}</h4>
@@ -24,7 +24,11 @@
               <h4 class="truncate">{{ role.rate }}</h4>
             </div>
             <div class="grid-item edit" *ngIf="role">
-              <button mat-icon-button type="button" (click)="openEditRole(role)">
+              <button
+                mat-icon-button
+                type="button"
+                (click)="openEditRole(role)"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
             </div>
@@ -47,7 +51,7 @@
         </div>
         <div class="roles-grid2" *ngFor="let role of rolesSaved">
           <div class="grid-item truncate" *ngIf="role">
-            <h4 class="truncate">{{ role.role }}</h4>
+            <h4 class="truncate">{{ role.role.name }}</h4>
           </div>
           <div class="grid-item truncate" *ngIf="role">
             <h4 class="truncate">{{ role.rate }}</h4>

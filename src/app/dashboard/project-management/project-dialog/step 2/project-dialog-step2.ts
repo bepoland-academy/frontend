@@ -54,15 +54,13 @@ export class ProjectDialogStep2 implements OnInit {
   createEditRole = false;
   roleToEdit;
 
-
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ProjectDialogStep2>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   backToStep1() {
     this.enableStep1.emit();
@@ -74,6 +72,9 @@ export class ProjectDialogStep2 implements OnInit {
   }
 
   openAssignRole() {
+    console.log(this.data.roles);
+    console.log(this.rolesSaved);
+
     this.title = 'Create Role';
     this.createEditRole = true;
     this.roleToEdit = null;
@@ -96,5 +97,3 @@ export class ProjectDialogStep2 implements OnInit {
     this.createEditRole = false;
   }
 }
-
-

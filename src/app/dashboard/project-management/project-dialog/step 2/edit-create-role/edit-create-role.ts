@@ -40,17 +40,20 @@ export interface DialogData {
   styleUrls: ['../../project-dialog.css'],
 })
 export class EditCreateRole implements OnInit {
-  @Input() title: string;
-  @Input() siteOffsite;
-  @Output() roleCreated = new EventEmitter<any>();
-  @Input() roleToEdit: any;
-  editCreateRoleForm: FormGroup;
 
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<EditCreateRole>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
+  @Input() title: string;
+  @Input() siteOffsite;
+  @Output() roleCreated = new EventEmitter<any>();
+  @Input() roleToEdit: any;
+  editCreateRoleForm: FormGroup;
+
+  // Check when the roleToEdit.role value for mat-option updated
+  compareFn: ((f1: any, f2: any) => boolean) | null = this.compareByValue;
 
   ngOnInit(): void {
     this.editCreateRoleForm = new FormGroup(
@@ -86,15 +89,31 @@ export class EditCreateRole implements OnInit {
   }
 
   createEditRole(role) {
-    this.roleCreated.emit(role);
+    if (this.roleToEdit) {
+      this.roleCreated.emit({
+        rate: role.rate,
+        onSiteRate: role.onSiteRate,
+        role: {
+          name: this.roleToEdit.role.name,
+          roleId: this.roleToEdit.role.roleId,
+        },
+      });
+    } else {
+      this.roleCreated.emit(role);
+    }
+
     // Check if the newly created role doesn't already exist
     this.data.roles = this.data.roles.filter(
-      el => el.name !== this.editCreateRoleForm.value.role
+      el => el.name !== this.editCreateRoleForm.value.role.name
     );
     // Sort roles alphabetically
     this.data.roles = this.data.roles.sort();
     this.editCreateRoleForm.reset();
     return this.data.roles;
+  }
+
+  compareByValue(f1: any, f2: any) {
+    return f1 && f2 && f1.roleId === f2.roleId;
   }
 
   // Update the Form dynamically
@@ -104,7 +123,7 @@ export class EditCreateRole implements OnInit {
     }
     if (this.roleToEdit) {
       this.editCreateRoleForm.setValue({
-        role: this.roleToEdit.role,
+        role: this.roleToEdit.role.roleId,
         rate: this.roleToEdit.rate,
         onSiteRate: this.roleToEdit.onSiteRate,
       });

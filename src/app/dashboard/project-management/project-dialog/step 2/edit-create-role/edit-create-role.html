@@ -9,17 +9,18 @@
           <mat-card-title>{{ title }}</mat-card-title>
         </mat-card-header>
         <mat-form-field>
-          <mat-select placeholder="Role" formControlName="role">
+          <mat-select
+            placeholder="Role"
+            formControlName="role"
+            [compareWith]="compareFn"
+          >
             <div *ngIf="roleToEdit">
-              <mat-option
-                [value]="role.name"
-                *ngFor="let role of data.allRoles"
-              >
-                {{ role.name }}
+              <mat-option [value]="roleToEdit">
+                {{ roleToEdit.role.name }}
               </mat-option>
             </div>
             <div *ngIf="!roleToEdit">
-              <mat-option [value]="role.name" *ngFor="let role of data.roles">
+              <mat-option [value]="role" *ngFor="let role of data.roles">
                 {{ role.name }}
               </mat-option>
             </div>
