@@ -4,14 +4,20 @@ import { FormsModule } from '@angular/forms';
 
 import { CalendarComponent } from './calendar.component';
 import { CustomMaterialModule } from 'src/app/shared/material/material.module';
-import { TimeApprovalDialog } from './time-approval-dialog/time-approval-dialog';
+import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog';
 import { MatInputModule } from '@angular/material';
 import { FullCalendarModule } from 'ng-fullcalendar';
+import {
+  CalendarDialogTimeApprovalComponent
+} from './calendar-dialog/calendar-dialog-time-approval/calendar-dialog-time-approval.component';
+import { CalendarDialogHistoricalDataComponent } from './calendar-dialog/calendar-dialog-historical-data.component';
 
 @NgModule({
   declarations: [
     CalendarComponent,
-    TimeApprovalDialog,
+    CalendarDialogComponent,
+    CalendarDialogTimeApprovalComponent,
+    CalendarDialogHistoricalDataComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +31,7 @@ import { FullCalendarModule } from 'ng-fullcalendar';
     CalendarComponent,
   ],
   entryComponents: [
-    TimeApprovalDialog,
+    CalendarDialogComponent,
   ],
 })
 export class CalendarModule { }

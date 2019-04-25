@@ -3,10 +3,13 @@
   position: relative ;
 }
 
+.fc-event-container {
+  height: 90%;
+}
+
 .fc-event {
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
+  height: inherit;
+  width: inherit;
   text-align: center;
   font-size: 16px;
   font-weight: bold;
@@ -16,8 +19,6 @@
   border-radius: 5px;
   border: 1px solid #bfbfbf;
   margin-bottom: 5px;
-  bottom: 0;
-  position: absolute;
 }
 
 
@@ -25,3 +26,30 @@
   overflow: hidden!important;
 }
 
+.fc-row.fc-week.fc-widget-content {
+  height: 64px !important;
+}
+
+.fc-scroller.fc-day-grid-container {
+  height: 384px !important;
+}
+
+@media (min-height: 700px) {
+  .fc-row.fc-week.fc-widget-content {
+    height: 78px !important;
+  }
+
+  .fc-scroller.fc-day-grid-container {
+    height: 468px !important;
+  }
+}
+
+@media (min-height: 800px) {
+  .fc-row.fc-week.fc-widget-content {
+    height: 110px !important;
+  }
+
+  .fc-scroller.fc-day-grid-container {
+    height: 660px !important;
+  }
+}

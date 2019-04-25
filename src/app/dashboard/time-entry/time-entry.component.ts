@@ -218,7 +218,6 @@ export class TimeEntryComponent implements OnInit {
 
   submitCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      console.log('usuniete');
       this.timeEntries = this.timeEntries
         .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
         .map((project: TimeEntry) => (
