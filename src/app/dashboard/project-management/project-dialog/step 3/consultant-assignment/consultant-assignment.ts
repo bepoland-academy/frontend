@@ -5,15 +5,14 @@ import {
   Output,
   EventEmitter,
   Input
-} from "@angular/core";
-import { FormControl, Validators } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
-import { FormGroup } from "@angular/forms";
-import { Client, Department, Project } from "../../../../../core/models";
+} from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { FormGroup } from '@angular/forms';
+import { Client, Department, Project } from '../../../../../core/models';
 
 export interface DialogData {
   active: boolean;
-  allRoles;
   client: Client;
   clients: Array<Client>;
   comments: string;
@@ -38,10 +37,16 @@ export interface DialogData {
 
 @Component({
   selector: "consultant-assignment",
-  templateUrl: "./consultant-assignment.html",
-  styleUrls: ["../../project-dialog.css"]
+  templateUrl: './consultant-assignment.html',
+  styleUrls: ['../../project-dialog.css'],
 })
 export class ConsultantAssignment implements OnInit {
+
+  constructor(
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<ConsultantAssignment>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
   @Input() title: string;
   @Input() consultantToEdit: any;
   @Input() rolesSaved;
@@ -50,11 +55,12 @@ export class ConsultantAssignment implements OnInit {
 
   assignRoleForm: FormGroup;
 
-  constructor(
-    public dialog: MatDialog,
-    public dialogRef: MatDialogRef<ConsultantAssignment>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+  // Check when the consultantToEdit.consultant value for mat-option updated
+  compareConsultants: ((f1: any, f2: any) => boolean) | null = this
+    .compareConsultantsByValue;
+
+  compareRoles: ((f1: any, f2: any) => boolean) | null = this
+    .compareRolesByValue;
 
   ngOnInit(): void {
     this.assignRoleForm = new FormGroup({
@@ -75,16 +81,9 @@ export class ConsultantAssignment implements OnInit {
     return this.data.usersByDepartment;
   }
 
-  // Check when the consultantToEdit.consultant value for mat-option updated
-  compareConsultants: ((f1: any, f2: any) => boolean) | null = this
-    .compareConsultantsByValue;
-
   compareConsultantsByValue(f1: any, f2: any) {
     return f1 && f2;
   }
-
-  compareRoles: ((f1: any, f2: any) => boolean) | null = this
-    .compareRolesByValue;
 
   compareRolesByValue(f1: any, f2: any) {
     return f1 && f2;

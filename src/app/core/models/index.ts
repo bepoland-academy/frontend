@@ -1,5 +1,5 @@
 import { Department, DepartmentsResponse } from './department.model';
-import { Project, ProjectsResponse, ProjectsByClient } from './project.model';
+import { Project, ProjectsResponse, ProjectsByClient, Rate } from './project.model';
 import { Client, ClientsResponse } from './client.model';
 import { Credentials } from './credentials.model';
 import { User, UsersResponse } from './user.model';
@@ -27,6 +27,7 @@ export {
   Project,
   ProjectsResponse,
   ProjectsByClient,
+  Rate,
   Role,
   RolesResponse,
   User,

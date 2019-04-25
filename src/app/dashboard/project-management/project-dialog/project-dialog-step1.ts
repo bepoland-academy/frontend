@@ -2,7 +2,17 @@ import { Component, Inject, OnInit, Input } from '@angular/core';
 import { ProjectManagementService } from '../project-management.service';
 import { FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { Client, Department, Project } from '../../../core/models';
+import {
+  Client,
+  Department,
+  ClientsResponse,
+  DepartmentsResponse,
+  Project,
+  ProjectsResponse,
+  RolesResponse,
+  UsersResponse
+} from '../../../core/models';
+import { MatSnackBar } from '@angular/material';
 
 export interface DialogData {
   project: any;
@@ -17,7 +27,6 @@ export interface DialogData {
   rate: number;
   removable: boolean;
   roles;
-  allRoles;
   usersByDepartment;
   allUsersByDepartment;
   _links: {
@@ -40,7 +49,8 @@ export class ProjectDialogStep1 implements OnInit {
     private projectManagementService: ProjectManagementService,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ProjectDialogStep1>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private snackBar: MatSnackBar
   ) {}
 
   mainForm: FormGroup;
@@ -91,7 +101,7 @@ export class ProjectDialogStep1 implements OnInit {
         Validators.required
       ),
       comments: new FormControl(this.data.project.comments),
-      department_guid: new FormControl(this.data.project.department_guid),
+      departmentGuid: new FormControl(this.data.project.departmentGuid),
       offSiteOnly: new FormControl(this.data.project.offSiteOnly),
       active: new FormControl(this.data.project.active),
       rates: new FormArray([]),
@@ -150,7 +160,7 @@ export class ProjectDialogStep1 implements OnInit {
   }
 
   restoreAllRoleslist() {
-    this.projectManagementService.getRoles().subscribe((data: any) => {
+    this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
       this.data.roles = data._embedded.roleBodyList;
       this.data.roles = this.data.roles.sort((a, b) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
@@ -161,7 +171,7 @@ export class ProjectDialogStep1 implements OnInit {
   restoreAllConsultantslist() {
     this.projectManagementService
       .getUsersByDepartment(this.data.department)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         this.data.usersByDepartment = data._embedded.userBodyList;
         this.data.usersByDepartment = this.data.usersByDepartment.map(user => {
           return (user = {
@@ -208,7 +218,6 @@ export class ProjectDialogStep1 implements OnInit {
   }
 
   createConsultantsSavedFromProject() {
-    // this.restoreAllRoleslist();
     this.restoreAllConsultantslist();
 
     setTimeout(() => {
@@ -338,7 +347,9 @@ export class ProjectDialogStep1 implements OnInit {
     this.data.roles.sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
-
+    this.projectManagementService.deleteRole(role.role.roleId).subscribe((data) => {
+      console.log(data);
+    });
     this.updateConsultantsOnRoleDelete(role.role.roleId, role);
   }
 
@@ -388,7 +399,7 @@ export class ProjectDialogStep1 implements OnInit {
     // Get Consultant ID
     this.projectManagementService
       .getUsersByDepartment(this.data.department)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         let consultantId;
         let allUsers;
         allUsers = data._embedded.userBodyList;
@@ -486,7 +497,7 @@ export class ProjectDialogStep1 implements OnInit {
     // Get Consultant ID
     this.projectManagementService
       .getUsersByDepartment(this.data.department)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         let consultantId;
         let allUsers;
         allUsers = data._embedded.userBodyList;
@@ -520,6 +531,10 @@ export class ProjectDialogStep1 implements OnInit {
     );
   }
 
+  selectActive(event) {
+    this.mainForm.get('active').setValue(event.checked);
+  }
+
   // Navigation
   selectSite(event) {
     this.createNewForm();
@@ -527,8 +542,8 @@ export class ProjectDialogStep1 implements OnInit {
     this.mainForm.get('offSiteOnly').setValue(!event.checked);
     this.rolesSaved = [];
     this.consultantsSaved = [];
-    this.data.roles = this.data.allRoles;
-    this.data.usersByDepartment = this.data.allUsersByDepartment;
+    this.restoreAllRoleslist();
+    this.restoreAllConsultantslist();
   }
 
   cancel(): void {
@@ -564,17 +579,16 @@ export class ProjectDialogStep1 implements OnInit {
       this.projectManagementService
         .sendNewProject(this.mainForm.value)
         .subscribe(
-          () => {},
+          () => {
+            this.projectManagementService.changeReloadStatus();
+          },
           error => {
             console.log(error);
           }
         );
     } else {
       this.projectManagementService
-        .updateProject(this.data.project._links.self.href, {
-          ...this.mainForm.value,
-          departmentId: this.data.project.departmentId,
-        })
+        .updateProject(this.data.project._links.self.href, this.mainForm.value)
         .subscribe(
           () => {
             this.projectManagementService.changeReloadStatus();
@@ -605,15 +619,22 @@ export class ProjectDialogStep1 implements OnInit {
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
 
-    this.projectManagementService.deleteProject(this.data.project.id).subscribe(
-      () => {
-        console.log('deleted');
+    this.projectManagementService.deleteProject(this.data.project._links.DELETE.href).subscribe(
+      (data) => {
+        this.projectManagementService.changeReloadStatus();
+        this.snackBar.open(`Project ${this.data.project.name} was successfully deleted`, '', {
+          duration: 2000,
+        });
       },
       error => {
+        if (error.error.message === 'ACTIVE PROJECT CANNOT BE DELETED') {
+          this.snackBar.open(`You have to disactivate project first`, '', {
+            duration: 2000,
+          });
+        }
         console.log(error);
       }
     );
     this.dialogRef.close();
-    this.projectManagementService.changeReloadStatus();
   }
 }

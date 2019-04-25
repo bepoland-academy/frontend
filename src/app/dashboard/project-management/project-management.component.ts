@@ -7,7 +7,9 @@ import {
   ClientsResponse,
   Project,
   ProjectsByClient,
-  RolesResponse
+  ProjectsResponse,
+  RolesResponse,
+  UsersResponse,
 } from '../../core/models';
 import { NgForm, FormControl } from '@angular/forms';
 import { MatDialog, TooltipPosition } from '@angular/material';
@@ -48,9 +50,6 @@ export class ProjectManagementComponent implements OnInit {
   projectsList1: Array<ProjectsByClient> = [];
   // Duplicate projectsList for the filter purpose
   projectsList2: Array<ProjectsByClient> = [];
-  // projectsList1 = [];
-  // Duplicate projectsList for the filter purpose
-  // projectsList2 = [];
 
   isSuccess = false;
   isFail = false;
@@ -61,7 +60,6 @@ export class ProjectManagementComponent implements OnInit {
   actualClient: string;
   currentDepartment: Department;
   roles: any;
-  allRoles: any;
   usersByDepartment: any;
 
   constructor(
@@ -78,7 +76,7 @@ export class ProjectManagementComponent implements OnInit {
       }
     });
     this.projectManagementService
-      .getClientsList()
+      .getClients()
       .subscribe((data: ClientsResponse) => {
         this.clients = data._embedded.clientBodyList;
       });
@@ -113,18 +111,18 @@ export class ProjectManagementComponent implements OnInit {
   displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      (data: any) => {
-        data = data._embedded.projectBodyList;
-        data.forEach(project =>
+      (data: ProjectsResponse) => {
+        console.log(data);
+        const projectsResponse = data._embedded.projectBodyList;
+        projectsResponse.forEach(project =>
           this.clients.forEach(client => {
             if (project.clientGuid === client.clientId) {
               project.client = { clientId: client.clientId, name: client.name };
             }
           })
         );
-        console.log(data);
 
-        const projects = groupProjectsByClient(data);
+        const projects = groupProjectsByClient(projectsResponse);
         this.projectsList1 = projects;
         this.projectsList2 = projects;
       },
@@ -139,12 +137,12 @@ export class ProjectManagementComponent implements OnInit {
     );
     this.projectManagementService
       .getUsersByDepartment(event.departmentId)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         this.usersByDepartment = data._embedded.userBodyList;
       });
   }
 
-  createProject(project: Project): void {
+  createProject(): void {
     this.roles = this.roles.sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
@@ -160,23 +158,12 @@ export class ProjectManagementComponent implements OnInit {
         department: this.actualDepartmentId,
         clients: this.clients,
         roles: this.roles,
-        allRoles: this.roles,
         usersByDepartment: this.usersByDepartment,
-        allUsersByDepartment: this.usersByDepartment,
       },
-    });
-    console.log({
-      department: this.actualDepartmentId,
-      clients: this.clients,
-      roles: this.roles,
-      allRoles: this.roles,
-      usersByDepartment: this.usersByDepartment,
-      currentDepartment: this.currentDepartment,
     });
   }
 
   editProject(project: Project): void {
-    console.log(project);
     this.roles = this.roles.sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
@@ -193,18 +180,9 @@ export class ProjectManagementComponent implements OnInit {
         department: this.actualDepartmentId,
         clients: this.clients,
         roles: this.roles,
-        allRoles: this.roles,
         usersByDepartment: this.usersByDepartment,
-        allUsersByDepartment: this.usersByDepartment,
         currentDepartment: this.currentDepartment,
       },
-    });
-    console.log({
-      department: this.actualDepartmentId,
-      clients: this.clients,
-      roles: this.roles,
-      allRoles: this.roles,
-      usersByDepartment: this.usersByDepartment,
     });
   }
 
