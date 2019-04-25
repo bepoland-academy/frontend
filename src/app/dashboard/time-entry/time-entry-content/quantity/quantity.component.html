@@ -1,7 +1,8 @@
 <div
-  class="quantity-wrapper"  appWeekend [day]="day"
+  class="quantity-wrapper"  appWeekend [day]="day" 
 >
-  <div class="quantity" (wheel)="onMouseWheel($event)">
+<div class="quantity" (wheel)="onMouseWheel($event)" [ngClass]="[day.status]">
+  <div class="quantity__status" [ngClass]="{'quantity__status--change': dayState.hours !== day.hours}">
     <div class="quantity__input-wrapper">
       <input appTimeEntry (checkedValue)="verifiedValue($event)" [ngModel]="inputValue" type='text' class="quantity__input" />
     </div>
@@ -9,5 +10,7 @@
       <button class="quantity__button quantity__up" matRipple (click)="increaseValue()">+</button>
       <button class="quantity__button quantity__down" matRipple (click)="decreaseValue()">-</button>
     </div>
+
+  </div>
   </div>
 </div>

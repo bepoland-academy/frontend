@@ -1,18 +1,15 @@
 import { Client } from './client.model';
+import { Rate } from './rate.model';
 
-
-export interface Project {
+export interface ProjectWithoutClient {
   active: boolean;
-  client: Client;
-  clientGuid: string
+  clientGuid: string;
   comments: string;
   departmentGuid: string;
   name: string;
-  rate: number;
-  rates: Array<any>;
+  rates: Array<Rate>;
   projectId: string;
-  removable?: boolean;
-  _links?: {
+  _links: {
     DELETE: {
       href: string;
     },
@@ -22,9 +19,14 @@ export interface Project {
   };
 }
 
+export interface Project extends ProjectWithoutClient {
+  client: Client;
+}
+
+
 export interface ProjectsResponse {
   _embedded: {
-    projectBodyList: Array<Project>;
+    projectBodyList: Array<ProjectWithoutClient>;
   };
 }
 

@@ -22,10 +22,11 @@
   <div class="date">
     <h4 class="date__title title">Date: </h4>
     <mat-form-field>
-      <input matInput [matDatepicker]="dp" placeholder="Month and Year">
+      <input [value]="currentDate" hidden [matDatepicker]="dp">
+      <input matInput [value]="currentDate"  placeholder="Year - month">
       <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-      <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
-        (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+      <mat-datepicker #dp startView="year"
+        (monthSelected)="setCurrentDateHandler($event, dp)" panelClass="example-month-picker">
       </mat-datepicker>
     </mat-form-field>
   </div>

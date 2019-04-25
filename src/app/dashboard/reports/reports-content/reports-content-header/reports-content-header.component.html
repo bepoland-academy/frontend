@@ -1,9 +1,25 @@
 <mat-toolbar class="toolbar" color="primary" [ngStyle]="{'grid-template-columns': numberOfColumns}">
   <div class="toolbar__employee-input input-cnt">
-    <input class="project-input" matInput name="name" placeholder="Search employee" autocomplete="off" />
+    <input
+      class="project-input" 
+      (ngModelChange)="employeeInputChangesHandler($event)" 
+      [(ngModel)]="employeeInput" 
+      matInput 
+      name="name" 
+      placeholder="Search employee" 
+      autocomplete="off" 
+    />
   </div>
   <div class="toolbar__project-input input-cnt">
-    <input matInput class="project-input" name="name" placeholder="Search project" autocomplete="off" />
+    <input
+      matInput 
+      class="project-input" 
+      (ngModelChange)="projectInputChangesHandler($event)" 
+      [ngModel]="projectInput" 
+      name="name"
+      placeholder="Search project" 
+      autocomplete="off" 
+    />
   </div>
   <h4>Role</h4>
   <h4>Model</h4>

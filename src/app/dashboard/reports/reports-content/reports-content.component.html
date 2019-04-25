@@ -2,6 +2,8 @@
   <app-reports-content-header
     [weeksInMonth]="weeksInMonth"
     [numberOfColumns]="setNumberOfColumns()"
+    (employeeInputChanges)="employeeInputChanges($event)"
+    (projectInputChanges)="projectInputChanges($event)"
   ></app-reports-content-header>
   <main class="content__main">
     <div
@@ -10,7 +12,7 @@
         'grid-template-columns': setNumberOfColumns(),
         'background-color': i % 2 ? '#98999C' : '#E8E8E8'
       }"
-      *ngFor="let userTimesheet of usersTimesheet; let i = index;"
+      *ngFor="let userTimesheet of usersTimesheetToFilter; let i = index;"
     >
       <div class="employee_cell">
         <p>{{userTimesheet.lastName}} {{userTimesheet.firstName}}</p>

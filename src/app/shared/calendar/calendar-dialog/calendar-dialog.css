@@ -23,8 +23,6 @@
   color: lightcoral;
 }
 
-.reject-notice__comment {}
-
 .name {
   margin-right: 20px;
 }
@@ -43,7 +41,9 @@
   box-shadow: none;
 }
 
-
+span {
+  margin-left: auto
+}
 
 
 

@@ -4,8 +4,11 @@
     (setDepartment)="setDepartment($event)"
     [clients]="clients"
     (setClient)="setClient($event)"
+    [currentDate]="currentDate"
+    (setCurrentDate)="setCurrentDate($event)"
   ></app-reports-header>
   <app-reports-content
+    *ngIf="usersTimesheet.length"
     [weeksInMonth]="weeksInMonth"
     [usersTimesheet]="usersTimesheet"
   ></app-reports-content>

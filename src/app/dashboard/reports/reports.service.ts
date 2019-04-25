@@ -1,12 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { HttpService } from 'src/app/core/services/http.service';
-import { DepartmentsResponse, UserWithTimeSheetWithoutSubbmitedHours, ProjectsResponse, Department, Project, MonthTimeEntryResponse, Links, MonthTimeEntry, MonthTimeEntryWithoutProjectInfo, UsersResponse, User, UserWithTimeSheet, Day, RolesResponse, Role } from 'src/app/core/models';
-import { map, flatMap } from 'rxjs/operators';
+import {
+  DepartmentsResponse,
+  UserWithTimeSheetWithoutSubbmitedHours,
+  Department,
+  Project,
+  MonthTimeEntryResponse,
+  Links,
+  MonthTimeEntry,
+  MonthTimeEntryWithoutProjectInfo,
+  UsersResponse,
+  User,
+  Day,
+  RolesResponse,
+  Role
+} from 'src/app/core/models';
 import * as moment from 'moment';
+import { AssignedConsultant, Week, ConsultantWithTimesheet } from './models';
 
-const getWeekFromDateAndHours = (day: Day) => {
+
+const getWeekFromDateAndHours = (day: Day): Week => {
   const week = moment(day.date, 'YYYY-MM-DD').week();
   return {
     week,
@@ -18,7 +34,7 @@ const daysWithStatusApproved = (day: Day): boolean => {
   return day.status === 'APPROVED';
 };
 
-const sumHoursFromSameWeek = (acc, week) => {
+const sumHoursFromSameWeek = (acc: Array<Week>, week: Week): Array<Week> => {
   if (!acc.some(o => o.week === week.week)) {
     return [...acc, week];
   }
@@ -31,9 +47,8 @@ const sumHoursFromSameWeek = (acc, week) => {
 @Injectable()
 export class ReportsService {
   users: BehaviorSubject<Array<User>> = new BehaviorSubject([]);
-  projects: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
   roles: BehaviorSubject<Array<Role>> = new BehaviorSubject([]);
-  weeksInMonth = [];
+  weeksInMonth: Array<Week> = [];
   constructor(
     private httpService: HttpService
   ) {
@@ -47,17 +62,17 @@ export class ReportsService {
   }
 
   getDepartments(): Observable<Array<Department>> {
-    return this.httpService.get('/departments')
+    return this.httpService.get('departments')
       .pipe(
         map((response: DepartmentsResponse) => response._embedded.departmentBodyList)
       );
   }
 
-  getWeeksInMonth(yearWithMonth) {
+  getWeeksInMonth(yearWithMonth: string): Array<Week> {
     const date = moment(yearWithMonth, 'YYYY-MM');
     const startOfMonth = date.startOf('month').week();
     const endOfMonth = date.endOf('month').week();
-    let weekNumbers = [];
+    let weekNumbers: Array<Week> = [];
     for (let i = startOfMonth; i <= endOfMonth; i ++) {
       weekNumbers = [...weekNumbers, {week: i, hours: 0}];
     }
@@ -65,27 +80,26 @@ export class ReportsService {
     return weekNumbers;
   }
 
-  getWeekSum(monthTimeSheet) {
+  getWeekSum(monthTimeSheet: Array<Day>): Array<Week> {
     if (!monthTimeSheet.length) {
       return this.weeksInMonth;
     }
 
-    const weeksWithHours = monthTimeSheet
+    const weeksWithHours: Array<Week> = monthTimeSheet
       .filter(daysWithStatusApproved)
       .map(getWeekFromDateAndHours)
       .reduce(sumHoursFromSameWeek, []);
 
-    const isLenghtEqual = weeksWithHours.length === this.weeksInMonth.length;
+    const isLenghtEqual: boolean = weeksWithHours.length === this.weeksInMonth.length;
 
     if (isLenghtEqual) {
       return weeksWithHours;
     }
 
-
     return weeksWithHours
       .concat(this.weeksInMonth)
       .reduce(sumHoursFromSameWeek, [])
-      .sort((first, second) => {
+      .sort((first: Week, second: Week) => {
         if (first.week < second.week) { return -1; }
         if (first.week > second.week) { return 1; }
         return 0;
@@ -93,17 +107,17 @@ export class ReportsService {
 
   }
 
-  getAllUsers() {
+  getAllUsers(): Observable<UsersResponse> {
     return this.httpService.get('users');
   }
 
-  getUsersWithTimeSheet(usersWithRates, month) {
+  getUsersWithTimeSheet(usersWithRates: Array<AssignedConsultant>, month: string): Observable<ConsultantWithTimesheet[]> {
     this.getWeeksInMonth(month);
     const usersId = usersWithRates
       .map(o => o.consultantId)
-      .filter((el, i, self) => self.indexOf(el) === i);
+      .filter((el: string, i: number, self: Array<string>) => self.indexOf(el) === i);
 
-    const projects = this.projects.getValue();
+    const projects = this.httpService.projectsStream.getValue();
     const roles = this.roles.getValue();
 
     return forkJoin(
@@ -134,11 +148,13 @@ export class ReportsService {
               _links,
             };
           }),
-          map((user: UserWithTimeSheetWithoutSubbmitedHours) => {
+          map((user: UserWithTimeSheetWithoutSubbmitedHours): Array<ConsultantWithTimesheet> => {
             const {firstName, lastName, userId, monthTimeSheet} = user;
 
-            const getProject = (projectId) => projects.find((o: Project) => o.projectId === projectId).name;
-            const getSpecificProjectTimeSheet = (projectId) => {
+            const getProject = (projectId: string): string =>
+              projects.find((o: Project) => o.projectId === projectId).name;
+
+            const getSpecificProjectTimeSheet = (projectId: string) => {
               const projectTimeSheet = monthTimeSheet.find((o: MonthTimeEntry) => o.projectId === projectId);
               if (projectTimeSheet) {
                 return projectTimeSheet.monthDays;
@@ -148,13 +164,8 @@ export class ReportsService {
             return usersWithRates
               .filter(el => el.consultantId === userId)
               .map(el => {
-
                 const projectTimeSheet = getSpecificProjectTimeSheet(el.projectId);
                 const weeks = this.getWeekSum(projectTimeSheet);
-                if (el.consultantId === '7bb710ee-c16c-4c58-8343-73854a461160') {
-                  console.log(el);
-                  console.log('----------------------------------');
-                }
                 const allHours = weeks.map(week => week.hours).reduce((acc, n) => acc + n, 0);
                 const revenue = el.isOnSite ? (allHours * el.onSiteRate) : (allHours * el.rate);
                 const roleName = roles.find(o => o.roleId === el.roleId).name;
@@ -173,19 +184,12 @@ export class ReportsService {
         );
       })
     ).pipe(
-      map(el => el.flatMap(a => a))
+      map((el: [Array<ConsultantWithTimesheet>, Array<ConsultantWithTimesheet>]) => el.flatMap(a => a))
     );
   }
 
-  getRoles() {
+  getRoles(): Observable<RolesResponse> {
     return this.httpService.get('projects/roles/all');
   }
 
-  // TODO: Project by client endpoint
-  getProjects(departmentId: string): Observable<Array<Project>> {
-    return this.httpService.get(`projects?department=${departmentId}`)
-      .pipe(
-        map((response: ProjectsResponse) => response._embedded.projectBodyList)
-      );
-  }
 }

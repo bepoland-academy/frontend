@@ -10,7 +10,7 @@
     <div class="project-cell">
       <h5 class="projectTitle">{{project.projectInfo.name}}</h5>
     </div>
-    <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" [day]="day" class="{{day.status}}">
+    <app-quantity *ngFor="let day of project.weekDays" [(inputValue)]="day.hours" [day]="day" >
     </app-quantity>
     <div class="project-cell">
       <button mat-icon-button (click)="removeProjectHandler(project)">

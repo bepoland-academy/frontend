@@ -16,6 +16,7 @@ import { TimeEntryContentComponent } from './time-entry-content/time-entry-conte
 import { TimeEntryFooterComponent } from './time-entry-footer/time-entry-footer.component';
 import { FooterDirective } from './directives/footer.directive';
 import { DialogDeleteComponent } from './time-entry-content/dialog/time-entry-content-dialog';
+import { TimeEntryRejectionComponent } from './time-entry-rejection/time-entry-rejection.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { DialogDeleteComponent } from './time-entry-content/dialog/time-entry-co
     TimeEntryContentComponent,
     TimeEntryFooterComponent,
     DialogDeleteComponent,
+    TimeEntryRejectionComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import { Day } from '../../../../core/models';
 
@@ -13,9 +13,13 @@ export class QuantityComponent implements OnInit {
 
   @Input() day: Day;
 
+  dayState: Day;
+
   constructor() {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.dayState = {...this.day};
+
   }
 
   verifiedValue(newValue: number) {
