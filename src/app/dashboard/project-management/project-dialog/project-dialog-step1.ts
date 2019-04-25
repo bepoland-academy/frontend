@@ -13,6 +13,7 @@ import {
   UsersResponse
 } from '../../../core/models';
 import { MatSnackBar } from '@angular/material';
+import { Observable } from 'rxjs';
 
 export interface DialogData {
   project: any;
@@ -92,7 +93,7 @@ export class ProjectDialogStep1 implements OnInit {
     });
   }
 
-  createFormFromProject() {
+  async createFormFromProject() {
     // Create Main Form based on the Project edited
     this.mainForm = new FormGroup({
       name: new FormControl(this.data.project.name, Validators.required),
@@ -108,7 +109,7 @@ export class ProjectDialogStep1 implements OnInit {
     });
 
     // Add roles to the rates array
-    this.data.project.rates.forEach(rate => {
+    await this.data.project.rates.forEach(rate => {
       this.addRolesFromProject(rate);
     });
 
@@ -120,10 +121,7 @@ export class ProjectDialogStep1 implements OnInit {
 
     this.createConsultantsSavedFromProject();
 
-    // Add consultants to each role in the Form rates
-    setTimeout(() => {
-      this.addConsultantsFromProject();
-    }, 3000);
+    await this.addConsultantsFromProject();
 
     this.onsiteOffsite = !this.data.project.offSiteOnly;
   }
@@ -160,7 +158,7 @@ export class ProjectDialogStep1 implements OnInit {
   }
 
   restoreAllRoleslist() {
-    this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
+     this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
       this.data.roles = data._embedded.roleBodyList;
       this.data.roles = this.data.roles.sort((a, b) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
@@ -200,8 +198,9 @@ export class ProjectDialogStep1 implements OnInit {
 
   createRolesSavedFromProject() {
     this.restoreAllRoleslist();
+
     setTimeout(() => {
-      this.data.project.rates.forEach(rate => {
+    this.data.project.rates.forEach(rate => {
         this.data.roles.forEach(role => {
           if (rate.roleId === role.roleId) {
             this.rolesSaved = this.rolesSaved.concat({
@@ -212,8 +211,8 @@ export class ProjectDialogStep1 implements OnInit {
           }
         });
       });
-      this.updateRolesToChoose();
-      console.log(this.rolesSaved);
+    this.updateRolesToChoose();
+    console.log(this.rolesSaved);
     }, 1000);
   }
 
@@ -295,6 +294,7 @@ export class ProjectDialogStep1 implements OnInit {
       this.rates.push(this.createRole(role));
     }
   }
+
   createRole(role): FormGroup {
     return new FormGroup({
       roleId: new FormControl(role.role.roleId),
@@ -347,9 +347,9 @@ export class ProjectDialogStep1 implements OnInit {
     this.data.roles.sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
-    this.projectManagementService.deleteRole(role.role.roleId).subscribe((data) => {
-      console.log(data);
-    });
+    // this.projectManagementService.deleteRole(role.role.roleId).subscribe((data) => {
+    //   console.log(data);
+    // });
     this.updateConsultantsOnRoleDelete(role.role.roleId, role);
   }
 
@@ -623,14 +623,19 @@ export class ProjectDialogStep1 implements OnInit {
       (data) => {
         this.projectManagementService.changeReloadStatus();
         this.snackBar.open(`Project ${this.data.project.name} was successfully deleted`, '', {
-          duration: 2000,
+          duration: 3000,
         });
       },
       error => {
         if (error.error.message === 'ACTIVE PROJECT CANNOT BE DELETED') {
           this.snackBar.open(`You have to disactivate project first`, '', {
-            duration: 2000,
+            duration: 3000,
           });
+        } else if (error.error.message === 'PROJECT CANNOT BE DELETED BECAUSE OF EXISTING TIME ENTRIES') {
+        this.snackBar.open(`Project ${this.data.project.name} cannot be deleted
+          because there exists a consultant assigned to it`, '', {
+          duration: 3000,
+        });
         }
         console.log(error);
       }

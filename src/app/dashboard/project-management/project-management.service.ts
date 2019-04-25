@@ -9,6 +9,7 @@ import {
   RolesResponse,
   UsersResponse
 } from '../../core/models';
+import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class ProjectManagementService {
@@ -46,15 +47,19 @@ export class ProjectManagementService {
     return this.httpService.get('projects/roles/all');
   }
 
-  // getProjects(department: string): Observable<Array<Project>> {
-  //   return this.httpService.get(this.projectsByDepartment + department).pipe(
+  //   getProjects(department: string): Observable<any> {
+  //   return this.httpService.get(
+  //     `projects?department=${department}`
+  //   ).pipe(
   //     map(response => response._embedded.projectBodyList),
   //     flatMap(res => {
   //       return forkJoin(
   //         res.map((project: Project) => {
-  //           return this.isRemovable(project.projectId).pipe(
-  //             map(removableRes => {
-  //               return { ...project, removable: !removableRes };
+  //           console.log(project);
+  //           return this.deleteProject(project._links.DELETE.href).pipe(
+  //             map(a => {
+  //               console.log(a);
+  //               // return { ...project, removable: !removableRes };
   //             })
   //           );
   //         })
@@ -64,14 +69,11 @@ export class ProjectManagementService {
   // }
 
 
+
   getProjects(department: string): Observable<ProjectsResponse> {
     return this.httpService.get(
       `projects?department=${department}`
     );
-  }
-
-  deleteRole(roleId: string) {
-    return this.httpService.delete(`http://beontime.be-academy.pl/gateway/projects/roles/${roleId}`);
   }
 
   sendNewProject(newProjectData: Project) {
