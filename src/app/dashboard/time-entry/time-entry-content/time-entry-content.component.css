@@ -1,4 +1,4 @@
-@import '../../../shared/css/statuses.css';
+
 .time-entry-content {
   display: grid;
   grid-template-columns: 2fr 11fr;

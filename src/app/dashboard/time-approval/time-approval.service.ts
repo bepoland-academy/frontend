@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject, of } from 'rxjs';
 import { HttpService } from '../../core/services/http.service';
 import {
   User,
@@ -17,7 +17,6 @@ import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class TimeApprovalService {
-  reload = new BehaviorSubject({});
   projects = new BehaviorSubject([]);
 
   constructor(private httpService: HttpService) {

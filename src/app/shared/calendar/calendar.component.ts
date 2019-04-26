@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
-
 import { MatDialog } from '@angular/material';
-import { TimeApprovalDialog } from './time-approval-dialog/time-approval-dialog';
+import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog';
 import { OptionsInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarComponent as NgCalendar } from 'ng-fullcalendar';
 import * as moment from 'moment';
 import { HttpService } from 'src/app/core/services/http.service';
@@ -18,7 +16,6 @@ import {
   MonthTimeEntryWithoutProjectInfo
 } from 'src/app/core/models';
 import { EventsModel, convertDataToCalendar } from './convertDataToCalendar';
-
 
 @Component({
   selector: 'app-calendar',
@@ -34,6 +31,8 @@ export class CalendarComponent implements OnInit, OnChanges {
   @Output() approveAll: EventEmitter<UserWithTimeSheet> = new EventEmitter();
   @Output() setStatusForOneDay: EventEmitter<{status: string; date: string, comment?: string}> = new EventEmitter();
   @Output() nextApproval: EventEmitter<string> = new EventEmitter();
+  @Output() updateCurrentUser: EventEmitter<UserWithTimeSheet> = new EventEmitter();
+
   currentDate = new Date();
 
   isLoading = false;
@@ -51,20 +50,21 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.options = {
       firstDay: 1,
       editable: true,
+      height: 'parent',
       header: {
         left: 'prev,next today myCustomButton',
         center: 'title',
         right: '',
       },
-
+      buttonText: {
+        today: 'Current Month',
+      },
+      showNonCurrentDates: false,
       plugins: [dayGridPlugin],
       weekNumbers: true,
-      allDayDefault: true,
-      eventRender({el, event, ...rest}) {
+      eventRender({el, event}) {
         if (el.classList.contains('REJECTED')) {
           el.setAttribute('title', `REJECTION NOTICE: ${event.extendedProps.comment}`);
-
-
         }
       },
     };
@@ -84,21 +84,22 @@ export class CalendarComponent implements OnInit, OnChanges {
       this.fullcalendar.calendar.gotoDate(this.currentDate);
       this.fullcalendar.calendar.removeAllEvents();
       this.eventsModel = convertDataToCalendar(this.currentUser.monthTimeSheet);
+      this.fullcalendar.calendar.el.style.marginBottom = '50px';
     }
   }
 
   eventClick(model) {
     const projects = model.event.extendedProps.projects;
     const { isTimeApproval } = this;
-    const dialog = this.dialog.open(TimeApprovalDialog, {
+    const dialog = this.dialog.open(CalendarDialogComponent, {
       data: { projects, isTimeApproval},
     });
     dialog.afterClosed().subscribe((val: undefined | {comment: string}) => {
+      console.log(val);
       if (!val) {
         return;
       }
-
-      if (val.comment) {
+      if (val.hasOwnProperty('comment')) {
         this.setStatusForOneDay.emit({ status: 'REJECTED', date: projects[0].day.date, comment: val.comment });
         return;
       }
@@ -119,6 +120,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.updateViewCalendar();
     // update link with current month
     link = `${link}${date.year()}-${month}`;
+    console.log(link);
     this.fetchUserInfo(link);
   }
   approveAllHandler() {
@@ -173,6 +175,7 @@ export class CalendarComponent implements OnInit, OnChanges {
       .subscribe((userWithTimesheet: UserWithTimeSheet) => {
         this.isLoading = false;
         this.currentUser = userWithTimesheet;
+        this.updateCurrentUser.emit(this.currentUser);
         this.updateViewCalendar();
       });
 

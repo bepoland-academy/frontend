@@ -27,23 +27,24 @@ export const groupProjectsAndSumHours = (data: Array<Day>): Array<DayWithHours> 
   let finalArray: Array<DayWithHours> = [];
   counts.forEach((title: number, start: string) => {
     const { status, comment } = data.find((el: Day) => el.date === start);
+    const rendering = 'background';
+    const allDay = true;
     finalArray = [...finalArray, { title, start, status, comment }];
   });
   return finalArray;
 };
 
+export const getDayStatus = (status: string): string => {
+  const colorForStatus = {
+    APPROVED: 'APPROVED',
+    REJECTED: 'REJECTED',
+    SUBMITTED: 'SUBMITTED',
+  };
+  return colorForStatus[status] || '';
+};
+
 // converting current data to calendar where start is equal to date and title to hours from day
 export const convertDataToCalendar = (projects: Array<MonthTimeEntry>): Array<EventsModel> => {
-
-  const getDayStatus = (date: string): string => {
-    const status: string = projects[0].monthDays.find(el => el.date === date).status;
-    const colorForStatus = {
-      APPROVED: 'APPROVED',
-      REJECTED: 'REJECTED',
-      SUBMITTED: 'SUBMITTED',
-    };
-    return colorForStatus[status] || '';
-  };
 
   const projectsWithoutSavedStatus: Array<Day> = projects
     .flatMap((project: MonthTimeEntry) => project.monthDays)
@@ -55,7 +56,7 @@ export const convertDataToCalendar = (projects: Array<MonthTimeEntry>): Array<Ev
     .map(entry => {
       return {
         ...entry,
-        className: [getDayStatus(entry.start)],
+        className: [getDayStatus(entry.status)],
         projects: projects
           .flatMap(project => ({
             day: project.monthDays.find(el => el.date === entry.start),

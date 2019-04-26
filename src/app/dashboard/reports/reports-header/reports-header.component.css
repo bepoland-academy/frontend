@@ -1,0 +1,20 @@
+.header, .department, .client, .date {
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  justify-content: space-around;
+}
+
+.department, .client {
+  margin-right: 45px;
+}
+
+.title {
+  margin-right: 10px;
+}
+
+.icon {
+  transform: rotate(180deg);
+}

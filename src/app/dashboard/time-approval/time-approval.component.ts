@@ -51,7 +51,6 @@ export class TimeApprovalComponent implements OnInit {
         );
       }
     });
-
   }
 
   setCurrentUser(user: UserWithTimeSheet) {
@@ -60,13 +59,16 @@ export class TimeApprovalComponent implements OnInit {
     this.currentUser = user;
   }
 
+  updateCurrentUser(user: UserWithTimeSheet) {
+    this.currentUser = user;
+  }
+
   showSidenav() {
     this.sidenavOpen = true;
     this.toggleButtonVisible = false;
   }
 
-  approveAll(currentUser: UserWithTimeSheet) {
-    this.currentUser = currentUser;
+  approveAll() {
     const dataToSend: Array<MonthTimeEntryWithoutProjectInfo> = this.currentUser.monthTimeSheet
       .map((timeSheet: MonthTimeEntry) => {
         const { projectInfo, ...rest } = timeSheet;
@@ -96,7 +98,7 @@ export class TimeApprovalComponent implements OnInit {
   }
 
   setStatusForOneDay({status, date, comment = ''}) {
-    const dataToSend: Array<MonthTimeEntryWithoutProjectInfo> = this.currentUser.monthTimeSheet
+  const dataToSend: Array<MonthTimeEntryWithoutProjectInfo> = this.currentUser.monthTimeSheet
       .map((timeSheet: MonthTimeEntry) => {
         const {projectInfo, ...rest} = timeSheet;
         return {
@@ -108,7 +110,7 @@ export class TimeApprovalComponent implements OnInit {
       })
       .filter((timeSheet: MonthTimeEntry) => timeSheet.monthDays.length);
 
-    this.httpService.put(this.currentUser._links.self.href, { monthTimeEntryBodyList: dataToSend })
+  this.httpService.put(this.currentUser._links.self.href, { monthTimeEntryBodyList: dataToSend })
       .subscribe(
         () => {
           this.calendarComponent.fetchUserInfo(this.currentUser._links.self.href);

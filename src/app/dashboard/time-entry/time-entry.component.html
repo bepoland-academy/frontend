@@ -14,9 +14,9 @@
       (setToCurrentDate)="setToCurrentDate()"
     ></app-time-entry-naviagtion>
 
+    <app-time-entry-rejection *ngIf="isDayRejected()" [timeEntries]="timeEntries"></app-time-entry-rejection>
     <!-- header time entry -->
     <app-time-entry-heading [week]="week"></app-time-entry-heading>
-
 
     <!-- content time entry -->
     <app-time-entry-content *ngIf="!isLoading" [timeEntries]="timeEntries" (removeProject)="removeProject($event)"></app-time-entry-content>

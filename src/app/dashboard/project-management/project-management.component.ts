@@ -10,6 +10,7 @@ import {
   ProjectsResponse,
   RolesResponse,
   UsersResponse,
+  ProjectWithoutClient,
 } from '../../core/models';
 import { NgForm, FormControl } from '@angular/forms';
 import { MatDialog, TooltipPosition } from '@angular/material';
@@ -112,17 +113,16 @@ export class ProjectManagementComponent implements OnInit {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
       (data: ProjectsResponse) => {
-        console.log(data);
         const projectsResponse = data._embedded.projectBodyList;
-        projectsResponse.forEach(project =>
-          this.clients.forEach(client => {
-            if (project.clientGuid === client.clientId) {
-              project.client = { clientId: client.clientId, name: client.name };
-            }
-          })
-        );
 
-        const projects = groupProjectsByClient(projectsResponse);
+        const projectWithClient: Array<Project> = projectsResponse
+          .map((project: ProjectWithoutClient)  => {
+            const client = this.clients.find(client => client.clientId === project.clientGuid);
+            return {...project, client};
+            }
+          );
+
+        const projects = groupProjectsByClient(projectWithClient);
         this.projectsList1 = projects;
         this.projectsList2 = projects;
       },

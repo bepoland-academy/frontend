@@ -98,8 +98,8 @@
     ],
     "space-within-parens": true,
     "arrow-return-shorthand": true,
-    "whitespace":[ 
-      true, 
+    "whitespace": [
+      true,
       "check-module",
       "check-branch",
       "check-decl",

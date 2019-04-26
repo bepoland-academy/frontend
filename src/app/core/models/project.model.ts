@@ -1,28 +1,15 @@
-export interface ProjectsResponse {
-  _embedded: {
-    projectBodyList: Array<Project>;
-  };
-}
+import { Client } from './client.model';
+import { Rate } from './rate.model';
 
-export interface ProjectsByClient {
-  clientName: string;
-  projects: Array<Project>;
-}
-
-export interface Project {
+export interface ProjectWithoutClient {
   active: boolean;
-  client: {
-    clientId: string;
-    name: string;
-  };
   clientGuid: string;
   comments: string;
   departmentGuid: string;
   name: string;
-  offSiteOnly: boolean;
-  projectId: string;
   rates: Array<Rate>;
-  _links?: {
+  projectId: string;
+  _links: {
     DELETE: {
       href: string;
     },
@@ -32,11 +19,20 @@ export interface Project {
   };
 }
 
-export interface Rate {
-  consultants: Array<string>;
-  onSiteRate: number;
-  rate: number;
-  roleId: string;
+export interface Project extends ProjectWithoutClient {
+  client: Client;
+}
+
+
+export interface ProjectsResponse {
+  _embedded: {
+    projectBodyList: Array<ProjectWithoutClient>;
+  };
+}
+
+export interface ProjectsByClient {
+  clientName: string;
+  projects: Array<Project>;
 }
 
 

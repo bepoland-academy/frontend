@@ -8,6 +8,10 @@ input {
   background-color: inherit;
 }
 
+body {
+  margin-bottom: 0;
+}
+
 button {
   color: inherit;
   background-color: inherit;
@@ -24,3 +28,12 @@ button:disabled {
 p {
   margin: 0;
 }
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+

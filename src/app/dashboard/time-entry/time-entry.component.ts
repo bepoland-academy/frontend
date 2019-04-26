@@ -17,7 +17,6 @@ import {
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
 import { forkJoin, of } from 'rxjs';
 
-
 @Component({
   selector: 'app-time-entry',
   templateUrl: './time-entry.component.html',
@@ -25,6 +24,8 @@ import { forkJoin, of } from 'rxjs';
 })
 export class TimeEntryComponent implements OnInit {
   timeEntries: Array<TimeEntry> = [];
+  timeEntriesFromApi: Array<TimeEntry> = [];
+
   week: Array<Day> = [];
   clientList: Array<Project> = [];
   showingClientList: Array<ProjectsByClient> = [];
@@ -77,7 +78,10 @@ export class TimeEntryComponent implements OnInit {
         this.isError = true;
       }
     );
+  }
 
+  isDayRejected(): boolean {
+    return this.timeEntries.some(el => el.weekDays.some(o => o.status === 'REJECTED'));
   }
 
   getPreviousWeek(): void {
@@ -150,6 +154,7 @@ export class TimeEntryComponent implements OnInit {
     this.timeEntryService.fetchTracks(param).subscribe(
       (response: TimeEntriesWithLinksAndProjects) => {
         this.timeEntries = response.timeEntries;
+        this.timeEntriesFromApi = response.timeEntries;
         this._links = response._links;
         this.clientList = response.projectList;
         this.getDifferenceBetweenTimeEntriesAndProjects();
@@ -218,7 +223,6 @@ export class TimeEntryComponent implements OnInit {
 
   submitCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      console.log('usuniete');
       this.timeEntries = this.timeEntries
         .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
         .map((project: TimeEntry) => (
@@ -302,4 +306,6 @@ export class TimeEntryComponent implements OnInit {
     }
     return of(null);
   }
+
+
 }

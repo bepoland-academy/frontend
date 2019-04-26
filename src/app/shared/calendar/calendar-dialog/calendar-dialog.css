@@ -1,0 +1,53 @@
+.mat-card-title {
+  font-size: 14px;
+  text-align: left;
+  font-weight: bolder;
+  margin: 5px 0;
+  color: #4d4d4d;
+}
+
+.mat-list-base .mat-list-item {
+  font-size: 12px;
+  font-weight: bolder;
+  /* border: 1px solid green; */
+  height: 20px;
+  padding: 3px 0;
+  color: #666666;
+}
+.reject-notice {
+  margin: 15px 16px;
+  margin-bottom: 0;
+}
+
+.reject-notice__title {
+  color: lightcoral;
+}
+
+.name {
+  margin-right: 20px;
+}
+
+.sum {
+  margin-left: auto;
+}
+
+.total {
+  margin-top: 20px;
+  border-top: 1px solid #bfbfbf;
+}
+
+.mat-card {
+  max-width: 330px;
+  box-shadow: none;
+}
+
+span {
+  margin-left: auto
+}
+
+
+
+
+
+
+
