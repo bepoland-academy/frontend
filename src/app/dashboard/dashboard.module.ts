@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DashboardComponent } from './dashboard.component';
 import { NavigationModule } from './navigation/navigation.module';
 import { routerModule } from './dashboard.routing';
-import { ReportsComponent } from './reports.component';
 import { UserManagementModule } from './user-management/user-management.module';
 import { NoRoleComponent } from './no-role.component';
 import { TimeEntryModule } from './time-entry/time-entry.module';
@@ -14,11 +13,11 @@ import { TimeApprovalModule } from './time-approval/time-approval.module';
 import { HistoricalDataModule } from './historical-data/historical-data.module';
 import { ClientManagementModule } from './client-management/client-management.module';
 import { RoleManagementModule } from './role-management/role-management.module';
+import { ReportsModule } from './reports/reports.module';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    ReportsComponent,
     NoRoleComponent,
   ],
   imports: [
@@ -33,6 +32,7 @@ import { RoleManagementModule } from './role-management/role-management.module';
     HistoricalDataModule,
     ClientManagementModule,
     RoleManagementModule,
+    ReportsModule,
   ],
   exports: [
     DashboardComponent,

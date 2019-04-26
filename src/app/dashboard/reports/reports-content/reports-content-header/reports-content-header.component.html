@@ -1,0 +1,30 @@
+<mat-toolbar class="toolbar" color="primary" [ngStyle]="{'grid-template-columns': numberOfColumns}">
+  <div class="toolbar__employee-input input-cnt">
+    <input
+      class="project-input" 
+      (ngModelChange)="employeeInputChangesHandler($event)" 
+      [(ngModel)]="employeeInput" 
+      matInput 
+      name="name" 
+      placeholder="Search employee" 
+      autocomplete="off" 
+    />
+  </div>
+  <div class="toolbar__project-input input-cnt">
+    <input
+      matInput 
+      class="project-input" 
+      (ngModelChange)="projectInputChangesHandler($event)" 
+      [ngModel]="projectInput" 
+      name="name"
+      placeholder="Search project" 
+      autocomplete="off" 
+    />
+  </div>
+  <h4>Role</h4>
+  <h4>Model</h4>
+  <h4>Rate</h4>
+  <h4 *ngFor="let week of weeksInMonth">Week {{week.week}}</h4>
+  <h4>Total <span>revenue</span></h4>
+  <h4>Total <span>hours</span></h4>
+</mat-toolbar>

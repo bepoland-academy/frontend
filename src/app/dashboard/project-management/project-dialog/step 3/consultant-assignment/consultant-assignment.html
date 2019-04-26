@@ -1,0 +1,57 @@
+<div>
+  <form
+    [formGroup]="assignRoleForm"
+    (ngSubmit)="createAssignRole(assignRoleForm.value)"
+  >
+    <mat-card>
+      <mat-card-content>
+        <mat-card-header>
+          <mat-card-title>{{ title }}</mat-card-title>
+        </mat-card-header>
+        <mat-form-field>
+          <mat-select
+            placeholder="Consultant"
+            formControlName="consultant"
+            [compareWith]="compareConsultants"
+          >
+            <div *ngIf="consultantToEdit">
+              <mat-option [value]="consultantToEdit.consultant">
+                {{ consultantToEdit.consultant }}
+              </mat-option>
+            </div>
+            <div *ngIf="!consultantToEdit">
+              <mat-option
+                [value]="consultant.name"
+                *ngFor="let consultant of data.usersByDepartment"
+              >
+                {{ consultant.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+        <div>
+          <mat-form-field>
+            <mat-select
+              placeholder="Role"
+              formControlName="role"
+              [compareWith]="compareConsultants"
+            >
+              <mat-option [value]="role.role" *ngFor="let role of rolesSaved">
+                {{ role.role.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <div mat-dialog-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="!assignRoleForm.valid"
+        >
+          Save
+        </button>
+      </div>
+    </mat-card>
+  </form>
+</div>

@@ -1,5 +1,5 @@
 import { Department, DepartmentsResponse } from './department.model';
-import { Project, ProjectsResponse, ProjectsByClient } from './project.model';
+import { Project, ProjectsResponse, ProjectsByClient, ProjectWithoutClient } from './project.model';
 import { Client, ClientsResponse } from './client.model';
 import { Credentials } from './credentials.model';
 import { User, UsersResponse } from './user.model';
@@ -14,7 +14,7 @@ import {
   UserWithTimeSheetWithoutSubbmitedHours
 } from './monthTimeEntry.model';
 import { Role, RolesResponse } from './role.model';
-
+import { Rate } from './rate.model';
 
 export {
   Client,
@@ -27,6 +27,7 @@ export {
   Project,
   ProjectsResponse,
   ProjectsByClient,
+  Rate,
   Role,
   RolesResponse,
   User,
@@ -39,5 +40,6 @@ export {
   MonthTimeEntryResponse,
   UserWithTimeSheet,
   MonthTimeEntryWithoutProjectInfo,
-  UserWithTimeSheetWithoutSubbmitedHours
+  UserWithTimeSheetWithoutSubbmitedHours,
+  ProjectWithoutClient
 };

@@ -1,0 +1,15 @@
+<div class="container">
+  <app-reports-header
+    [departments]="departments"
+    (setDepartment)="setDepartment($event)"
+    [clients]="clients"
+    (setClient)="setClient($event)"
+    [currentDate]="currentDate"
+    (setCurrentDate)="setCurrentDate($event)"
+  ></app-reports-header>
+  <app-reports-content
+    *ngIf="usersTimesheet.length"
+    [weeksInMonth]="weeksInMonth"
+    [usersTimesheet]="usersTimesheet"
+  ></app-reports-content>
+</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpService } from 'src/app/core/services/http.service';
-import { User, Links, MonthTimeEntry, MonthTimeEntryResponse, UserWithTimeSheetWithoutSubbmitedHours, MonthTimeEntryWithoutProjectInfo, Project } from 'src/app/core/models';
+import { User, Links, MonthTimeEntry, MonthTimeEntryResponse, MonthTimeEntryWithoutProjectInfo, Project } from 'src/app/core/models';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 

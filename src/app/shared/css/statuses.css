@@ -7,9 +7,9 @@
 }
 
 .APPROVED {
-  background: green;
+  background: #87FF87;
 }
 
 .REJECTED {
-  background: lightcoral;
+  background: #f08080;
 }

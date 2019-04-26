@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../core/services/http.service';
 import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
-import { ClientsResponse, DepartmentsResponse, Project } from '../../core/models';
+import {
+  ClientsResponse,
+  DepartmentsResponse,
+  Project,
+  ProjectsResponse,
+  RolesResponse,
+  UsersResponse
+} from '../../core/models';
 import { map, flatMap } from 'rxjs/operators';
 
 @Injectable()
 export class ProjectManagementService {
-
   departments = 'departments';
   projects = 'projects';
   projectsByDepartment = 'projects/?department=';
@@ -14,7 +20,6 @@ export class ProjectManagementService {
   removable = 'timeEntry/projectExist?guid=';
 
   private reloadStatus = new BehaviorSubject<null>(null);
-
 
   constructor(private httpService: HttpService) { }
 
@@ -30,53 +35,68 @@ export class ProjectManagementService {
     return this.httpService.get(this.departments);
   }
 
-  getClientsList(): Observable<ClientsResponse> {
+  getUsersByDepartment(department: string): Observable<UsersResponse> {
+    return this.httpService.get(`users?department=${department}`);
+  }
+
+  getClients(): Observable<ClientsResponse> {
     return this.httpService.get(this.clients);
   }
 
-  getUsers() {
-    return this.httpService.get('users');
+  getRoles(): Observable<RolesResponse> {
+    return this.httpService.get('projects/roles/all');
   }
 
-  getProjects(department: string) {
-    return this.httpService.get(this.projectsByDepartment + department).pipe(
-      map((response) => response._embedded.projectBodyList),
-      flatMap((res) => {
-        return forkJoin(
-          res.map((project: Project) => {
-            return this.isRemovable(project.projectId).pipe(
-              map(removableRes => {
-                return { ...project, removable: !removableRes };
-              })
-            );
-          })
-        );
-      })
+  //   getProjects(department: string): Observable<any> {
+  //   return this.httpService.get(
+  //     `projects?department=${department}`
+  //   ).pipe(
+  //     map(response => response._embedded.projectBodyList),
+  //     flatMap(res => {
+  //       return forkJoin(
+  //         res.map((project: Project) => {
+  //           console.log(project);
+  //           return this.deleteProject(project._links.DELETE.href).pipe(
+  //             map(a => {
+  //               console.log(a);
+  //               // return { ...project, removable: !removableRes };
+  //             })
+  //           );
+  //         })
+  //       );
+  //     })
+  //   );
+  // }
+
+
+
+  getProjects(department: string): Observable<ProjectsResponse> {
+    return this.httpService.get(
+      `projects?department=${department}`
     );
   }
 
   sendNewProject(newProjectData: Project) {
-    return this.httpService.post(this.projects, newProjectData);
+    console.log(newProjectData);
+    return this.httpService.post(
+      'projects',
+      newProjectData
+    );
   }
 
-  updateProject(url: string, updatedProject: Project) {
-    return this.httpService.put(url, updatedProject);
+  updateProject(link: string, updatedProject: Project) {
+    console.log(updatedProject);
+    return this.httpService.put(
+      link,
+      updatedProject
+    );
   }
 
-  deleteProject(project: Project) {
-    return this.httpService.delete(project._links.DELETE.href);
+  deleteProject(link: string) {
+    return this.httpService.delete(link);
   }
 
-  isRemovable(projectId: string) {
-    return this.httpService.get(`${this.removable}${projectId}`);
-  }
-
-  getRoles(): Observable<any> {
-    return this.httpService.get('projects/roles/all');
-  }
-
-  getUsersByDepartment(department) {
-    return this.httpService.get(`users?department=${department}`);
-  }
+  // isRemovable(projectId: string) {
+  //   return this.httpService.get(`${this.removable}${projectId}`);
+  // }
 }
-

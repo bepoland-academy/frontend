@@ -7,14 +7,15 @@ import {
   ClientsResponse,
   Project,
   ProjectsByClient,
-  RolesResponse
+  ProjectsResponse,
+  RolesResponse,
+  UsersResponse,
+  ProjectWithoutClient,
 } from '../../core/models';
 import { NgForm, FormControl } from '@angular/forms';
 import { MatDialog, TooltipPosition } from '@angular/material';
-import { ProjectManagementDialog } from './edit-project-dialog/edit-project-dialog';
+import { ProjectDialogStep1 } from './project-dialog/project-dialog-step1';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
-import { CreateProjectDialog } from './create-project-dialog/create-project-dialog';
-
 
 export interface DialogData {
   active: boolean;
@@ -30,10 +31,10 @@ export interface DialogData {
   _links: {
     DELETE: {
       href: string;
-    },
+    };
     self: {
       href: string;
-    }
+    };
   };
 }
 
@@ -42,9 +43,7 @@ export interface DialogData {
   templateUrl: './project-management.component.html',
   styleUrls: ['./project-management.component.css'],
 })
-
 export class ProjectManagementComponent implements OnInit {
-
   @ViewChild('myForm') newProjectForm: NgForm;
 
   departments: Array<Department> = [];
@@ -52,11 +51,13 @@ export class ProjectManagementComponent implements OnInit {
   projectsList1: Array<ProjectsByClient> = [];
   // Duplicate projectsList for the filter purpose
   projectsList2: Array<ProjectsByClient> = [];
+
   isSuccess = false;
   isFail = false;
   errorMessage = '';
   errorOnCreate = '';
-  actualDepartment: string;
+  actualDepartmentName: string;
+  actualDepartmentId: string;
   actualClient: string;
   currentDepartment: Department;
   roles: any;
@@ -66,7 +67,7 @@ export class ProjectManagementComponent implements OnInit {
     private projectManagementService: ProjectManagementService,
     private changeDetectorRefs: ChangeDetectorRef,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.getDepartments();
@@ -75,14 +76,16 @@ export class ProjectManagementComponent implements OnInit {
         this.displayProjects(this.currentDepartment);
       }
     });
-    this.projectManagementService.getClientsList().subscribe((data: ClientsResponse) => {
-      this.clients = data._embedded.clientBodyList;
-      console.log(this.clients);
-    });
-    this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
-      this.roles = data._embedded.roleBodyList;
-      console.log(this.roles);
-    });
+    this.projectManagementService
+      .getClients()
+      .subscribe((data: ClientsResponse) => {
+        this.clients = data._embedded.clientBodyList;
+      });
+    this.projectManagementService
+      .getRoles()
+      .subscribe((data: RolesResponse) => {
+        this.roles = data._embedded.roleBodyList;
+      });
   }
 
   getDepartments() {
@@ -97,21 +100,31 @@ export class ProjectManagementComponent implements OnInit {
           this.isFail = false;
           this.changeDetectorRefs.detectChanges();
         }, 3000);
-      });
+      }
+    );
   }
 
   setDepartment(event: Department) {
-    this.actualDepartment = event.name;
+    this.actualDepartmentName = event.name;
+    this.actualDepartmentId = event.departmentId;
   }
 
   displayProjects(event: Department) {
     this.currentDepartment = event;
     this.projectManagementService.getProjects(event.departmentId).subscribe(
-      (data: Array<Project>) => {
-        const projects = groupProjectsByClient(data);
+      (data: ProjectsResponse) => {
+        const projectsResponse = data._embedded.projectBodyList;
+
+        const projectWithClient: Array<Project> = projectsResponse
+          .map((project: ProjectWithoutClient)  => {
+            const client = this.clients.find(client => client.clientId === project.clientGuid);
+            return {...project, client};
+            }
+          );
+
+        const projects = groupProjectsByClient(projectWithClient);
         this.projectsList1 = projects;
         this.projectsList2 = projects;
-        console.log(projects);
       },
       () => {
         this.isFail = true;
@@ -122,66 +135,62 @@ export class ProjectManagementComponent implements OnInit {
         }, 3000);
       }
     );
-    this.projectManagementService.getUsersByDepartment(event.departmentId).subscribe((data) => {
-      this.usersByDepartment = data._embedded.userBodyList;
-    });
+    this.projectManagementService
+      .getUsersByDepartment(event.departmentId)
+      .subscribe((data: UsersResponse) => {
+        this.usersByDepartment = data._embedded.userBodyList;
+      });
   }
 
-  // createProject() {
-  //   const value = {
-  //     ...this.newProjectForm.value,
-  //     client: { clientId: this.newProjectForm.value.client },
-  //   };
-  //   this.projectManagementService.sendNewProject(value)
-  //     .subscribe(
-  //       () => {
-  //         this.isSuccess = true;
-  //         this.projectManagementService.changeReloadStatus();
-  //         setTimeout(() => {
-  //           this.isSuccess = false;
-  //           this.changeDetectorRefs.detectChanges();
-  //         }, 3000);
-  //         this.newProjectForm.resetForm();
-  //       },
-  //       () => {
-  //         this.isFail = true;
-  //         this.errorOnCreate = 'Ups! Something went wrong :(';
-  //         setTimeout(() => {
-  //           this.isFail = false;
-  //           this.changeDetectorRefs.detectChanges();
-  //         }, 3000);
-  //       }
-  //     );
-  // }
-
-  editProject(project: Project): void {
-    this.usersByDepartment = this.usersByDepartment.map((user) => {
-      return user = { ...user, name: user.firstName + ' ' + user.lastName };
+  createProject(): void {
+    this.roles = this.roles.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
+    this.usersByDepartment = this.usersByDepartment.map(user => {
+      return (user = { ...user, name: user.firstName + ' ' + user.lastName });
     });
+    this.usersByDepartment = this.usersByDepartment.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
 
-    const dialogRef = this.dialog.open(ProjectManagementDialog, {
+    const dialogRef = this.dialog.open(ProjectDialogStep1, {
       data: {
-        ...project,
-        departments: this.departments,
-        roles: this.roles,
+        department: this.actualDepartmentId,
         clients: this.clients,
+        roles: this.roles,
         usersByDepartment: this.usersByDepartment,
       },
     });
   }
 
-  createProject(project: Project): void {
-    const dialogRef = this.dialog.open(CreateProjectDialog, {
+  editProject(project: Project): void {
+    this.roles = this.roles.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
+    this.usersByDepartment = this.usersByDepartment.map(user => {
+      return (user = { ...user, name: user.firstName + ' ' + user.lastName });
+    });
+    this.usersByDepartment = this.usersByDepartment.sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
+
+    const dialogRef = this.dialog.open(ProjectDialogStep1, {
       data: {
-        departments: this.departments,
+        project,
+        department: this.actualDepartmentId,
         clients: this.clients,
         roles: this.roles,
+        usersByDepartment: this.usersByDepartment,
+        currentDepartment: this.currentDepartment,
       },
     });
   }
 
   filterClients(event: Event) {
-    this.projectsList2 = this.projectsList1.filter(
-      client => client.clientName.toLowerCase().includes((<HTMLInputElement> event.target).value));
+    this.projectsList2 = this.projectsList1.filter(client =>
+      client.clientName
+        .toLowerCase()
+        .includes((<HTMLInputElement> event.target).value)
+    );
   }
 }

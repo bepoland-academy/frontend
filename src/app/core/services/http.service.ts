@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Project, ProjectsResponse } from '../models';
+import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+import { Project, ProjectsResponse, Client, ClientsResponse, ProjectWithoutClient } from '../models';
 import { MatSnackBar } from '@angular/material';
 
 @Injectable()
@@ -10,6 +10,8 @@ export class HttpService {
   url = 'http://beontime.be-academy.pl/gateway/';
 
   projectsStream: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
+
+  clientsStream: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
 
   constructor(
     private http: HttpClient,
@@ -59,39 +61,46 @@ export class HttpService {
   }
 
   fetchProjects(department) {
-    this.http.get(`${this.url}projects?department=${department}`)
-      .subscribe(
-        (response: ProjectsResponse) => {
-
-          const rates =  [
-            {
-              role_id: 1,
-              rate: 100,
-              onSiteRate: 150,
-              consultants: [
-                '7041cb03-200d-457c-84a9-a4881527448f',
-              ],
-            },
-            {
-              role_id: 2,
-              role: {},
-              rate: 200,
-              onSiteRate: 150,
-              allUsers: [],
-              consultants: [
-                '7bb710ee-c16c-4c58-8343-73854a461160',
-                'af197078-ef3e-46e6-893f-e016e05c895f',
-              ],
-            },
-          ];
-          // const a = response._embedded.projectBodyList.map(el => )
-          this.projectsStream.next(response._embedded.projectBodyList);
-        },
-        () => this.snackBar.open('Something went wrong, the app would not work correctly')._dismissAfter(5000)
+    const projectsFetch: Observable<Array<ProjectWithoutClient>> = this.http
+      .get(`${this.url}projects/all`)
+      .pipe(
+        map((res: ProjectsResponse) => res._embedded.projectBodyList)
       );
+    const clientsFetch: Observable<Array<Client>> = this.http.get(`${this.url}clients/`)
+        .pipe(
+          map((res: ClientsResponse) => res._embedded.clientBodyList)
+        );
+
+    forkJoin(
+      projectsFetch,
+      clientsFetch
+    )
+    .pipe(
+      map((responses: [ProjectWithoutClient[], Client[]]) => {
+        const projects = responses[0];
+        const clients = responses[1];
+        this.clientsStream.next(clients);
+        return projects.map((project: ProjectWithoutClient) => (
+          {
+            ...project,
+            client: clients.find(o => o.clientId === project.clientGuid)}
+        ));
+      })
+    )
+    .subscribe(
+      (projects: Array<Project>) => {
+        this.projectsStream.next(projects);
+      },
+      () => this.snackBar.open('Something went wrong, app would not work correctly', 'X', {duration: 5000})
+    );
+
   }
 
   getProjectsStream() {
     return this.projectsStream;
+  }
+
+  getClientsStream() {
+    return this.clientsStream;
   }
 }
