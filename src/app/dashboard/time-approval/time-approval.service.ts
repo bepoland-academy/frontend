@@ -35,7 +35,7 @@ export class TimeApprovalService {
     return this.httpService.get(`users?department=${loggedInUser.department}`)
       .pipe(
         map((res: UsersResponse): Array<User> => res._embedded.userBodyList),
-        flatMap((users: Array<User>): Observable<UserWithTimeSheetWithoutSubbmitedHours[]> => {
+        flatMap((users: Array<User>): Observable<any> => {
           const projects: Array<Project> = this.projects.getValue();
           // go through all array of users and get for every user his month timesheet and with forkJoin wait till all
           // http requests ends

@@ -16,6 +16,16 @@ import {
 } from '../../core/models';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
 import { forkJoin, of } from 'rxjs';
+import { differenceWith, isEqual } from 'lodash';
+
+const getDifferenceBetweenEntries = (entriesFromApi: Array<TimeEntry>, currentEntries: Array<TimeEntry>) => {
+  const entriesFromApiWeek = entriesFromApi.map(el => el.weekDays);
+  console.log('TCL: getDifferenceBetweenEntries -> entriesFromApiWeek', entriesFromApiWeek);
+  const currentEntriesWeek = currentEntries.map(el => el.weekDays);
+  console.log('TCL: getDifferenceBetweenEntries -> currentEntriesWeek', currentEntriesWeek);
+  const a = differenceWith(entriesFromApi, currentEntries, isEqual);
+  console.log(a);
+};
 
 @Component({
   selector: 'app-time-entry',
@@ -153,8 +163,9 @@ export class TimeEntryComponent implements OnInit {
     // fetching data
     this.timeEntryService.fetchTracks(param).subscribe(
       (response: TimeEntriesWithLinksAndProjects) => {
-        this.timeEntries = response.timeEntries;
-        this.timeEntriesFromApi = response.timeEntries;
+        this.timeEntries = JSON.parse(JSON.stringify(response.timeEntries));
+        this.timeEntriesFromApi = JSON.parse(JSON.stringify(response.timeEntries));
+
         this._links = response._links;
         this.clientList = response.projectList;
         this.getDifferenceBetweenTimeEntriesAndProjects();
@@ -223,22 +234,24 @@ export class TimeEntryComponent implements OnInit {
 
   submitCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      this.timeEntries = this.timeEntries
-        .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
-        .map((project: TimeEntry) => (
-          {
-            ...project,
-            weekDays: project.weekDays.map((day: Day) => (
-              {
-                ...day,
-                status: day.status !== 'SUBMITTED' ? 'SUBMITTED' : day.status,
-                comment: '',
-              })
-            ),
-          })
-        );
+      // this.timeEntries = this.timeEntries
+      //   .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
+      //   .map((project: TimeEntry) => (
+      //     {
+      //       ...project,
+      //       weekDays: project.weekDays.map((day: Day) => (
+      //         {
+      //           ...day,
+      //           status: day.status !== 'SUBMITTED' ? 'SUBMITTED' : day.status,
+      //           comment: '',
+      //         })
+      //       ),
+      //     })
+      //   );
 
-      this.sendData();
+      // this.sendData();
+      // const a = getDifferenceBetweenEntries(this.timeEntriesFromApi, this.timeEntries);
+      console.log('TCL: TimeEntryComponent -> submitCurrentEntries -> this.timeEntriesFromApi', this.timeEntriesFromApi);
     });
 
   }

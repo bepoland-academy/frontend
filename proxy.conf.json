@@ -1,0 +1,8 @@
+{
+  "a/* ": {
+    "target": "http://beontime.be-academy.pl/gateway/",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}
