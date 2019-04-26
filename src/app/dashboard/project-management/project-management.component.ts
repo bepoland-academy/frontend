@@ -117,7 +117,7 @@ export class ProjectManagementComponent implements OnInit {
 
         const projectWithClient: Array<Project> = projectsResponse
           .map((project: ProjectWithoutClient)  => {
-            const client = this.clients.find(client => client.clientId === project.clientGuid);
+            const client = this.clients.find(el => client.clientId === project.clientGuid);
             return {...project, client};
             }
           );
