@@ -3,14 +3,16 @@ import { UserManagementService } from '../user-management.service';
 import { MatTableDataSource } from '@angular/material';
 import { User, Department, DepartmentsResponse } from '../../../core/models';
 import { UsersResponse } from 'src/app/core/models/user.model';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users-report',
   templateUrl: './users-report.component.html',
   styleUrls: ['./users-report.component.css'],
- })
+})
 
- export class UsersReportComponent implements OnInit {
+export class UsersReportComponent implements OnInit {
   users: Array<User>;
   dataSource: MatTableDataSource<User>;
   displayedColumns = ['employee', 'role', 'department', 'active'];
@@ -22,33 +24,41 @@ import { UsersResponse } from 'src/app/core/models/user.model';
   constructor(
     private userManagementService: UserManagementService,
     private changeDetectorRefs: ChangeDetectorRef
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
-    this.userManagementService.getDepartments().subscribe((response: DepartmentsResponse) => {
-      this.departments = response._embedded.departmentBodyList;
+  ngOnInit() {
+    this.getDepartments().subscribe((departments) => {
+      this.userManagementService.getReloadStatus().subscribe(() => {
+        this.getUsersData(departments);
+      });
     });
-    this.userManagementService.getReloadStatus().subscribe(() => {
-      this.getUsersData();
-    });
+
   }
 
-  getUsersData(): void {
+  getDepartments(): Observable<any> {
+    return this.userManagementService.getDepartments()
+    .pipe(
+      map((response: DepartmentsResponse) => {
+        return this.departments = response._embedded.departmentBodyList;
+      }));
+  }
+
+  getUsersData(departments): void {
     this.userManagementService.getUsers()
-    .subscribe(
-      (response: UsersResponse) => {
-        let data = response._embedded.userBodyList;
-        data = data.map(el => ({...el, department: this.departments.find(a => a.departmentId === el.department).name}));
-        this.users = data;
-        this.dataSource = new MatTableDataSource(this.users);
-        this.isResponse = true;
-        this.isDataAvailable = true;
-        this.changeDetectorRefs.detectChanges();
-      },
-      () => {
-        this.serverError = true;
-        this.isResponse = true;
-      });
+      .subscribe(
+        (response: UsersResponse) => {
+          let data = response._embedded.userBodyList;
+          data = data.map(el => ({ ...el, department: departments.find(a => a.departmentId === el.department).name }));
+          this.users = data;
+          this.dataSource = new MatTableDataSource(this.users);
+          this.isResponse = true;
+          this.isDataAvailable = true;
+          this.changeDetectorRefs.detectChanges();
+        },
+        () => {
+          this.serverError = true;
+          this.isResponse = true;
+        });
   }
 
   checkRole(user: User, role: string): boolean {
@@ -80,12 +90,12 @@ import { UsersResponse } from 'src/app/core/models/user.model';
       .subscribe(() => {
         this.userManagementService.changeReloadStatus();
       },
-      () => {
-        this.serverError = true;
-        this.isResponse = true;
-      });
+        () => {
+          this.serverError = true;
+          this.isResponse = true;
+        });
     setTimeout(() => {
-        this.serverError = false;
-      }, 3000);
+      this.serverError = false;
+    }, 3000);
   }
- }
+}
