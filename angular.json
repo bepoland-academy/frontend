@@ -60,7 +60,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "beOnTime:build"
+            "browserTarget": "beOnTime:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
