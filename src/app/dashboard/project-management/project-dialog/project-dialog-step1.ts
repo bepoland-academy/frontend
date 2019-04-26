@@ -14,6 +14,7 @@ import {
 } from '../../../core/models';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface DialogData {
   project: any;
@@ -52,7 +53,7 @@ export class ProjectDialogStep1 implements OnInit {
     public dialogRef: MatDialogRef<ProjectDialogStep1>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   mainForm: FormGroup;
   rates: FormArray;
@@ -157,14 +158,24 @@ export class ProjectDialogStep1 implements OnInit {
     });
   }
 
-  restoreAllRoleslist() {
-     this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
-      this.data.roles = data._embedded.roleBodyList;
-      this.data.roles = this.data.roles.sort((a, b) =>
-        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-      );
-    });
+
+  restoreAllRoleslist(): Observable<any> {
+    return this.projectManagementService.getRoles()
+      .pipe(
+        map((data: RolesResponse) => {
+          return data._embedded.roleBodyList.sort((a, b) =>
+            a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+          );
+        }));
   }
+  // restoreAllRoleslist() {
+  //    this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
+  //     this.data.roles = data._embedded.roleBodyList;
+  //     this.data.roles = this.data.roles.sort((a, b) =>
+  //       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  //     );
+  //   });
+  // }
 
   restoreAllConsultantslist() {
     this.projectManagementService
@@ -183,6 +194,17 @@ export class ProjectDialogStep1 implements OnInit {
       });
   }
 
+  // this.data.usersByDepartment = data._embedded.userBodyList;
+  // this.data.usersByDepartment = this.data.usersByDepartment.map(user => {
+  //   return (user = {
+  //     ...user,
+  //     name: user.firstName + ' ' + user.lastName,
+  //   });
+  // });
+  // this.data.usersByDepartment = this.data.usersByDepartment.sort((a, b) =>
+  //   a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  // );
+
   updateRolesToChoose() {
     this.data.project.rates.forEach(projectRole => {
       this.data.roles.forEach(role => {
@@ -197,11 +219,9 @@ export class ProjectDialogStep1 implements OnInit {
   }
 
   createRolesSavedFromProject() {
-    this.restoreAllRoleslist();
-
-    setTimeout(() => {
-    this.data.project.rates.forEach(rate => {
-        this.data.roles.forEach(role => {
+    this.restoreAllRoleslist().subscribe((roles) => {
+      this.data.project.rates.forEach(rate => {
+        roles.forEach(role => {
           if (rate.roleId === role.roleId) {
             this.rolesSaved = this.rolesSaved.concat({
               onSiteRate: rate.onSiteRate,
@@ -211,9 +231,8 @@ export class ProjectDialogStep1 implements OnInit {
           }
         });
       });
-    this.updateRolesToChoose();
-    console.log(this.rolesSaved);
-    }, 1000);
+      this.updateRolesToChoose();
+    });
   }
 
   createConsultantsSavedFromProject() {
@@ -347,9 +366,7 @@ export class ProjectDialogStep1 implements OnInit {
     this.data.roles.sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
-    // this.projectManagementService.deleteRole(role.role.roleId).subscribe((data) => {
-    //   console.log(data);
-    // });
+
     this.updateConsultantsOnRoleDelete(role.role.roleId, role);
   }
 
@@ -632,10 +649,10 @@ export class ProjectDialogStep1 implements OnInit {
             duration: 3000,
           });
         } else if (error.error.message === 'PROJECT CANNOT BE DELETED BECAUSE OF EXISTING TIME ENTRIES') {
-        this.snackBar.open(`Project ${this.data.project.name} cannot be deleted
+          this.snackBar.open(`Project ${this.data.project.name} cannot be deleted
           because there exists a consultant assigned to it`, '', {
-          duration: 3000,
-        });
+              duration: 3000,
+            });
         }
         console.log(error);
       }
