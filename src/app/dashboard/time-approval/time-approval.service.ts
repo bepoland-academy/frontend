@@ -39,7 +39,7 @@ export class TimeApprovalService {
           const projects: Array<Project> = this.projects.getValue();
           // go through all array of users and get for every user his month timesheet and with forkJoin wait till all
           // http requests ends
-          return forkJoin<UserWithTimeSheetWithoutSubbmitedHours>(
+          return forkJoin(
             users.map((user: User) => {
               return this.httpService
                 .get(`managers/${loggedInUser.department}/consultants/${user.userId}/months/${month}`)
@@ -79,7 +79,7 @@ export class TimeApprovalService {
         }),
         // users with their timesheet for selected month and adding submittedHours with suming all hours for
         // user with status subbmitted
-        map((usersWithTimeSheets: Array<UserWithTimeSheetWithoutSubbmitedHours>): Array<UserWithTimeSheet> => {
+        map((usersWithTimeSheets): Array<UserWithTimeSheet> => {
           return usersWithTimeSheets.map((userAndTimeSheet) => ({
             ...userAndTimeSheet,
             // submittedHours: calculating all hours with status SUBMITTED only!!!!
