@@ -26,11 +26,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // taking user information
-    this.substription.add(
-      this.authService.getUserStream().subscribe((user: User) => {
-        this.user = user;
-      })
-    );
+    this.user = JSON.parse(localStorage.getItem('user'));
 
     // gettin links and setting active url link, also calling event resize because material with active
     // link class is bugged

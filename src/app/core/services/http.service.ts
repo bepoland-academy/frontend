@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material';
 import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { Project, ProjectsResponse, Client, ClientsResponse, ProjectWithoutClient } from '../models';
-import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class HttpService {
-  url = 'http://beontime.be-academy.pl/gateway/';
 
   projectsStream: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
 
@@ -20,24 +20,24 @@ export class HttpService {
 
 
   login(endpoint: string, body: any, option): Observable<any> {
-    return this.http.post(this.url + endpoint, body, option).pipe(
+    return this.http.post(environment.url + endpoint, body, option).pipe(
       tap(response => {
-        const token = response.headers.get('Authorization');
+        const token: string = response.headers.get('Authorization');
         localStorage.setItem('token', JSON.stringify(token));
       })
     );
   }
 
   changePassword(endpoint: string, body: any) {
-    return this.http.post(this.url + endpoint, body);
+    return this.http.post(environment.url + endpoint, body);
   }
 
   post(endpoint: string, body: any): Observable<any> {
-    return this.http.post(this.url + endpoint, body);
+    return this.http.post(environment.url + endpoint, body);
   }
 
   get(endpoint: string): Observable<any> {
-    return this.http.get(this.url + endpoint);
+    return this.http.get(environment.url + endpoint);
   }
 
   delete(url: string) {
@@ -60,13 +60,13 @@ export class HttpService {
     return this.http.delete(url);
   }
 
-  fetchProjects(department) {
+  fetchProjects() {
     const projectsFetch: Observable<Array<ProjectWithoutClient>> = this.http
-      .get(`${this.url}projects/all`)
+      .get(`${environment.url}projects/all`)
       .pipe(
         map((res: ProjectsResponse) => res._embedded.projectBodyList)
       );
-    const clientsFetch: Observable<Array<Client>> = this.http.get(`${this.url}clients/`)
+    const clientsFetch: Observable<Array<Client>> = this.http.get(`${environment.url}clients/`)
         .pipe(
           map((res: ClientsResponse) => res._embedded.clientBodyList)
         );

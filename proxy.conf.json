@@ -1,8 +1,11 @@
 {
-  "a/* ": {
-    "target": "http://beontime.be-academy.pl/gateway/",
+  "/BackendBeOnTime/*": {
+    "target": "http://beontime.be-academy.pl/gateway",
     "secure": false,
+    "changeOrigin": true,
     "logLevel": "debug",
-    "changeOrigin": true
+    "pathRewrite": {
+      "^/BackendBeOnTime": ""
+    }
   }
 }

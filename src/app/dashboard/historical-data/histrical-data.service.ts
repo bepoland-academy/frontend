@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { HttpService } from 'src/app/core/services/http.service';
-import { User, Links, MonthTimeEntry, MonthTimeEntryResponse, MonthTimeEntryWithoutProjectInfo, Project } from 'src/app/core/models';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  User,
+  Links,
+  MonthTimeEntry,
+  MonthTimeEntryResponse,
+  MonthTimeEntryWithoutProjectInfo,
+  Project
+} from 'src/app/core/models';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class HistoricalDataService {
@@ -29,7 +37,7 @@ export class HistoricalDataService {
           const projects = this.httpService.getProjectsStream().value;
           let _links: Links = {
             self: {
-              href: `${this.httpService.url}/consultants/${loggedInUser.department}/months/${month}`,
+              href: `${environment.url}/consultants/${loggedInUser.department}/months/${month}`,
             },
           };
           let monthTimeSheet: MonthTimeEntry[] = [];

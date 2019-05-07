@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, BehaviorSubject, of } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { map, flatMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+
 import { HttpService } from '../../core/services/http.service';
 import {
   User,
@@ -12,7 +15,6 @@ import {
   UserWithTimeSheetWithoutSubbmitedHours,
   UserWithTimeSheet
 } from '../../core/models';
-import { map, flatMap } from 'rxjs/operators';
 
 
 @Injectable()
@@ -47,7 +49,7 @@ export class TimeApprovalService {
                   map((userTimeSheetResponse: MonthTimeEntryResponse): UserWithTimeSheetWithoutSubbmitedHours => {
                     let _links: Links = {
                       self: {
-                        href: `${this.httpService.url}managers/${loggedInUser.department}/
+                        href: `${window.location.origin}/${environment.url}/managers/${loggedInUser.department}/
                         consultants/${user.userId}/months/${month}`,
                       },
                     };
