@@ -105,7 +105,7 @@ export class PasswordComponent implements OnInit {
 sendPassword() {
   const password = this.setPasswordForm.get('newPassword').value;
   this.httpService
-    .changePassword('password?action=SET', { token: this.token, password })
+    .post('password?action=SET', { token: this.token, password })
     .subscribe(() => this.router.navigate(['/login']));
 
 }

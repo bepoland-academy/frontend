@@ -38,7 +38,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
         // dispatching new event to set underline to matched url
         setTimeout(() => {
           window.dispatchEvent(new Event('resize'));
-        }, 350);
+        }, 500);
       })
     );
 

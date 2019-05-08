@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Project, ProjectsResponse, Client, ClientsResponse, ProjectWithoutClient } from '../models';
+import { Project, ProjectsResponse, Client, ClientsResponse, ProjectWithoutClient, User, Credentials } from '../models';
 
 @Injectable()
 export class HttpService {
@@ -19,17 +19,8 @@ export class HttpService {
   ) {}
 
 
-  login(endpoint: string, body: any, option): Observable<any> {
-    return this.http.post(environment.url + endpoint, body, option).pipe(
-      tap(response => {
-        const token: string = response.headers.get('Authorization');
-        localStorage.setItem('token', JSON.stringify(token));
-      })
-    );
-  }
-
-  changePassword(endpoint: string, body: any) {
-    return this.http.post(environment.url + endpoint, body);
+  login(credentials: Credentials): Observable<any> {
+    return this.http.post(environment.url + 'auth/login', credentials, { observe: 'response' as 'body' });
   }
 
   post(endpoint: string, body: any): Observable<any> {
@@ -60,7 +51,7 @@ export class HttpService {
     return this.http.delete(url);
   }
 
-  fetchProjects() {
+  fetchProjects(): Observable<Array<Project>> {
     const projectsFetch: Observable<Array<ProjectWithoutClient>> = this.http
       .get(`${environment.url}projects/all`)
       .pipe(
@@ -71,7 +62,7 @@ export class HttpService {
           map((res: ClientsResponse) => res._embedded.clientBodyList)
         );
 
-    forkJoin(
+    return forkJoin(
       projectsFetch,
       clientsFetch
     )
@@ -80,19 +71,17 @@ export class HttpService {
         const projects = responses[0];
         const clients = responses[1];
         this.clientsStream.next(clients);
-        return projects.map((project: ProjectWithoutClient) => (
+        const projectsWithClient: Array<Project> = projects.map((project: ProjectWithoutClient) => (
           {
             ...project,
-            client: clients.find(o => o.clientId === project.clientGuid)}
+            client: clients.find(o => o.clientId === project.clientGuid)
+          }
         ));
+
+        this.projectsStream.next(projectsWithClient);
+        return projectsWithClient
       })
     )
-    .subscribe(
-      (projects: Array<Project>) => {
-        this.projectsStream.next(projects);
-      },
-      () => this.snackBar.open('Something went wrong, app would not work correctly', 'X', {duration: 5000})
-    );
 
   }
 

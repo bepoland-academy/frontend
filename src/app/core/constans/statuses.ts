@@ -1,0 +1,6 @@
+export const STATUS = {
+  SUBMITTED: 'SUBMITTED',
+  APPROVED: 'APPROVED',
+  SAVED: 'SAVED',
+  REJECTED: 'REJECTED',
+};

@@ -18,17 +18,6 @@ export class AuthService {
     this.getUser();
   }
 
-  login(credentials: Credentials): Observable<HttpResponse<User>> {
-    return this.http
-      .login('auth/login', credentials, { observe: 'response' as 'body' })
-      .pipe(
-        tap((response: HttpResponse<User>) => {
-          localStorage.setItem('user', JSON.stringify(response.body));
-          this.callServices(response.body);
-        })
-      );
-  }
-
   logout(): void {
     localStorage.clear();
     this.loggedIn.next(false);
@@ -36,16 +25,13 @@ export class AuthService {
 
   getUser(): void {
     const user: User = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-      return;
-    }
     if (user) {
-      this.callServices(user);
+      this.callServices(user.roles);
     }
   }
 
-  callServices(user: User) {
-    this.navigationService.filterRoutes(user.roles);
+  callServices(roles: Array<string>) {
+    this.navigationService.filterRoutes(roles);
     this.loggedIn.next(true);
     this.http.fetchProjects();
   }
