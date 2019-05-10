@@ -1,9 +1,9 @@
 import { Component, ViewChild, Inject, OnInit } from '@angular/core';
-import { ClientManagementService } from '../../client-management.service';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+
 import { Client } from '../../../../core/models';
-import { MatSnackBar } from '@angular/material';
+import { HttpService } from 'src/app/core/services/http.service';
 
 
 @Component({
@@ -17,16 +17,16 @@ import { MatSnackBar } from '@angular/material';
   `],
 })
 
-export class CreateClientDialog implements OnInit {
+export class CreateClientDialogComponent implements OnInit {
 
   @ViewChild('clientForm') createClientForm: NgForm;
 
 
   constructor(
-    public dialogRef: MatDialogRef<CreateClientDialog>,
+    public dialogRef: MatDialogRef<CreateClientDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Client,
-    private clientManagementService: ClientManagementService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private httpService: HttpService
   ) {
     }
 
@@ -38,18 +38,23 @@ export class CreateClientDialog implements OnInit {
   }
 
   createClient(): void {
-    const value = this.createClientForm.value;
-
-    this.clientManagementService.createClient(value).subscribe(
+    const client = this.createClientForm.value;
+    const clients = this.httpService.clientsStream.getValue();
+    const isNameInClientsStream = clients.some(el => el.name.replace(/\s+/g, '') === client.name.replace(/\s+/g, ''));
+    if (isNameInClientsStream) {
+      this.snackBar.open('Client with current already exist, please change name', 'X', { duration: 5000 });
+      return;
+    }
+    this.httpService.post('clients', client).subscribe(
       () => {
-        this.clientManagementService.changeReloadStatus();
-        this.createClientForm.resetForm();
-        this.snackBar.open(`New client ${value.name} created`, '', {
+        this.httpService.getProjectsAndClients();
+        this.snackBar.open(`New client ${client.name} created`, '', {
           duration: 2000,
         });
+        this.createClientForm.resetForm();
       },
-      error => {
-        this.snackBar.open(`Ups! New client ${value.name} has not been created`, '', {
+      (error) => {
+        this.snackBar.open(`Ups! New client ${client.name} has not been created`, '', {
           duration: 2000,
         });
       }

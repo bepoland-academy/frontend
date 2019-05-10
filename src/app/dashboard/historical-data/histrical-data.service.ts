@@ -15,18 +15,12 @@ import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class HistoricalDataService {
-  projects: BehaviorSubject<any> = new BehaviorSubject([]);
   constructor(
     private httpService: HttpService
   ) {
-    this.httpService.getProjectsStream().subscribe((projects: Array<Project>) => {
-      this.projects.next(projects);
-    });
+
   }
 
-  getProjects(): Observable<Array<Project>> {
-    return this.projects.asObservable();
-  }
 
   getConsultantTimeSheet(month: string) {
     const loggedInUser: User = JSON.parse(localStorage.getItem('user'));

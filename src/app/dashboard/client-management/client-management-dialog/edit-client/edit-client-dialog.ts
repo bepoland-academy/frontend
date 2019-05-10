@@ -1,9 +1,9 @@
 import { Component, ViewChild, Inject, OnInit } from '@angular/core';
-import { ClientManagementService } from '../../client-management.service';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 import { Client } from '../../../../core/models';
-import { MatSnackBar } from '@angular/material';
+import { HttpService } from 'src/app/core/services/http.service';
 
 
 @Component({
@@ -19,16 +19,16 @@ import { MatSnackBar } from '@angular/material';
   `],
 })
 
-export class EditClientDialog implements OnInit {
+export class EditClientDialogComponent implements OnInit {
   client: string;
 
   @ViewChild('updateForm') updateClientForm: NgForm;
 
   constructor(
-    public dialogRef: MatDialogRef<EditClientDialog>,
+    public dialogRef: MatDialogRef<EditClientDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Client,
-    private clientManagementService: ClientManagementService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private httpService: HttpService
   ) {
     }
 
@@ -41,32 +41,46 @@ export class EditClientDialog implements OnInit {
   }
 
   editClient(): void {
-    this.data.name = this.updateClientForm.value.name;
-    this.clientManagementService.updateClient(this.data)
-      .subscribe(() => {
-        this.clientManagementService.changeReloadStatus();
-      },
-      (err) => {
-        this.snackBar.open(`Ups! Changes for client ${this.data.name} have not been saved`, '', {
-          duration: 2000,
-        });
-      });
+    const clients = this.httpService.clientsStream.getValue();
+    const {...client} = this.data;
+    client.name = this.updateClientForm.value.name;
+    const isNameInClientsStream = clients.some(el => el.name.replace(/\s+/g, '') === client.name.replace(/\s+/g, ''));
+    if (isNameInClientsStream) {
+      this.snackBar.open('Client with current already exist, please change name', 'X', {duration: 5000});
+      return;
+    }
+    console.log('tutajs');
+    this.httpService.put(client._links.self.href, client)
+      .subscribe(
+        () => {
+          this.httpService.getProjectsAndClients();
+        },
+        (err) => {
+          this.snackBar.open(`Ups! Changes for client ${client.name} have not been saved`, '', {
+            duration: 2000,
+          });
+        }
+      );
     this.dialogRef.close();
   }
 
 deleteClient(): void {
-  this.clientManagementService.deleteClient(this.data)
-    .subscribe(() => {
-      this.clientManagementService.changeReloadStatus();
-      this.snackBar.open(`Client ${this.data.name} was deleted`, '', {
-        duration: 2000,
-      });
-    },
-    (err) => {
-      this.snackBar.open(`Client ${this.data.name} cannot be deleted`, '', {
-        duration: 2000,
-      });
-    });
+  const {...client} = this.data;
+  this.httpService.delete(client._links.DELETE.href)
+    .subscribe(
+      () => {
+        this.httpService.getProjectsAndClients();
+        this.snackBar.open(`Client ${client.name} was deleted`, '', {
+          duration: 2000,
+        });
+      },
+      (err) => {
+        this.snackBar.open(`Client ${client.name} cannot be deleted`, '', {
+          duration: 2000,
+        });
+      }
+    );
+
   this.dialogRef.close();
 }
 }

@@ -33,6 +33,6 @@ export class AuthService {
   callServices(roles: Array<string>) {
     this.navigationService.filterRoutes(roles);
     this.loggedIn.next(true);
-    this.http.fetchProjects();
+    this.http.getProjectsAndClients();
   }
 }

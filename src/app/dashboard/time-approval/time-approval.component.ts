@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
+
 import { TimeApprovalService } from './time-approval.service';
 import { UserWithTimeSheet, Project, MonthTimeEntry, MonthTimeEntryWithoutProjectInfo, User } from '../../core/models';
 import * as moment from 'moment';
-import { MatSnackBar } from '@angular/material';
 import { HttpService } from 'src/app/core/services/http.service';
-import { CalendarComponent } from 'src/app/shared/calendar/calendar.component';
+import { CalendarComponent } from 'src/app/shared/components/calendar/calendar.component';
 
 interface NextApprovalResponse {
   _embedded: {

@@ -18,6 +18,7 @@ import { MatSnackBar } from '@angular/material';
   template: `
       <app-navigation></app-navigation>
       <router-outlet *ngIf="showRouter"></router-outlet>
+      <app-error *ngIf="error"></app-error>
   `,
   styles: [],
   entryComponents: [
@@ -34,19 +35,24 @@ import { MatSnackBar } from '@angular/material';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   showRouter: boolean;
+  error: boolean;
   constructor(
     private httpService: HttpService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.httpService.fetchProjects().subscribe(
+    this.httpService.getProjectsStream().subscribe(
       (projects: Array<Project>) => {
         if (projects.length) {
           this.showRouter = true;
+          this.error = false;
         }
       },
-      () => this.snackBar.open('Something went wrong, app would not work correctly', 'X', { duration: 5000 })
+      () => {
+        this.snackBar.open('Something went wrong, app would not work correctly', 'X', { duration: 5000 });
+        this.error = true;
+      }
     );
   }
 

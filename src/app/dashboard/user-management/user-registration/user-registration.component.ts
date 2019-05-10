@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, OnInit, Input } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { NgForm } from '@angular/forms';
 import { User, Department, DepartmentsResponse } from '../../../core/models';
@@ -15,7 +15,7 @@ export class UserRegistrationComponent implements OnInit {
   isSuccess = false;
   isFail = false;
   errorMessage: string;
-  departments: Array<Department>;
+  @Input() departments: Array<Department>;
 
   constructor(
     private userManagementService: UserManagementService,
@@ -23,9 +23,6 @@ export class UserRegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userManagementService.getDepartments().subscribe((response: DepartmentsResponse) => {
-      this.departments = response._embedded.departmentBodyList;
-    });
   }
 
   onSubmit() {

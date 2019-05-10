@@ -14,6 +14,7 @@ import { HistoricalDataModule } from './historical-data/historical-data.module';
 import { ClientManagementModule } from './client-management/client-management.module';
 import { RoleManagementModule } from './role-management/role-management.module';
 import { ReportsModule } from './reports/reports.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ReportsModule } from './reports/reports.module';
     ClientManagementModule,
     RoleManagementModule,
     ReportsModule,
+    SharedModule,
   ],
   exports: [
     DashboardComponent,

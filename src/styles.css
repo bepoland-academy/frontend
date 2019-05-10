@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import './app/shared/calendar/ng-calendar.style.css';
+@import './app/shared/components/calendar/ng-calendar.style.css';
 @import './app/shared/css/statuses.css';
 @import './app/shared/css//tooltip.css';
 

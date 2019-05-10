@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
-import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { Observable, BehaviorSubject, forkJoin, of, throwError } from 'rxjs';
+import { tap, map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Project, ProjectsResponse, Client, ClientsResponse, ProjectWithoutClient, User, Credentials } from '../models';
 
@@ -16,7 +16,8 @@ export class HttpService {
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+  }
 
 
   login(credentials: Credentials): Observable<any> {
@@ -51,7 +52,7 @@ export class HttpService {
     return this.http.delete(url);
   }
 
-  fetchProjects(): Observable<Array<Project>> {
+  getProjectsAndClients() {
     const projectsFetch: Observable<Array<ProjectWithoutClient>> = this.http
       .get(`${environment.url}projects/all`)
       .pipe(
@@ -62,7 +63,7 @@ export class HttpService {
           map((res: ClientsResponse) => res._embedded.clientBodyList)
         );
 
-    return forkJoin(
+    forkJoin(
       projectsFetch,
       clientsFetch
     )
@@ -74,14 +75,19 @@ export class HttpService {
         const projectsWithClient: Array<Project> = projects.map((project: ProjectWithoutClient) => (
           {
             ...project,
-            client: clients.find(o => o.clientId === project.clientGuid)
+            client: clients.find(o => o.clientId === project.clientGuid),
           }
-        ));
+          ));
 
         this.projectsStream.next(projectsWithClient);
-        return projectsWithClient
+      }),
+      catchError(err => {
+        this.snackBar.open('App will not correctly working', 'X', { duration: 5000 });
+        this.clientsStream.error('');
+        this.projectsStream.error('');
+        return throwError('App will not correctly working');
       })
-    )
+    ).subscribe();
 
   }
 
@@ -90,6 +96,6 @@ export class HttpService {
   }
 
   getClientsStream() {
-    return this.clientsStream;
+    return this.clientsStream.asObservable();
   }
 }

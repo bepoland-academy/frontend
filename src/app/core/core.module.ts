@@ -19,5 +19,6 @@ import { AuthGuard } from './guards/auth.guard';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: APP_BASE_HREF, useValue: '/' },
   ],
+  exports: [],
 })
 export class CoreModule {}

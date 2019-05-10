@@ -21,12 +21,8 @@ export class HistoricalDataComponent implements OnInit {
       month = `0${month}`;
     }
     const currentDate = `${moment().year()}-${month}`;
-    this.historicalDataService.getProjects().subscribe((projects) => {
-      if (projects.length) {
-        this.historicalDataService.getConsultantTimeSheet(currentDate).subscribe(userWithTimeSheet => {
-          this.currentUser = userWithTimeSheet;
-        });
-      }
+    this.historicalDataService.getConsultantTimeSheet(currentDate).subscribe(userWithTimeSheet => {
+      this.currentUser = userWithTimeSheet;
     });
 
   }
