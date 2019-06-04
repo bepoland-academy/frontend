@@ -16,6 +16,7 @@ import {
   MonthTimeEntryWithoutProjectInfo
 } from 'src/app/core/models';
 import { EventsModel, convertDataToCalendar } from './convertDataToCalendar';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 @Component({
   selector: 'app-calendar',
@@ -41,7 +42,8 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   constructor(
     public dialog: MatDialog,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private globalData: GlobalDataService
   ) {
   }
 
@@ -122,7 +124,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.httpService.fakeGet(link)
       .pipe(
         map((userTimeSheetResponse: MonthTimeEntryResponse) => {
-          const projects = this.httpService.getProjectsStream().value;
+          const projects = this.globalData.getProjectsValue;
           let _links: Links = {
             self: {
               href: link,

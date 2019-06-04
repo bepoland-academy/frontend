@@ -1,6 +1,11 @@
-<app-add-entry [clients]="showingClientList" (createNewEntry)="createNewEntry($event)" [(isOpen)]="isDrawerOpened">
-</app-add-entry>
-<div class="container">
+<div class="container" *ngIf="displayedWeek">
+  <app-add-entry
+    *ngIf="isDrawerOpened"
+    [clients]="showingClientList"
+    (createNewEntry)="createNewEntry($event)"
+    [(isOpen)]="isDrawerOpened"
+  >
+  </app-add-entry>
   <mat-card class="main-card">
 
     <!-- time entry navigation -->

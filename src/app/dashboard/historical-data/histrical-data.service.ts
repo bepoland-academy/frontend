@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HttpService } from 'src/app/core/services/http.service';
@@ -12,11 +11,13 @@ import {
   Project
 } from 'src/app/core/models';
 import { environment } from 'src/environments/environment';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 @Injectable()
 export class HistoricalDataService {
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private globalData: GlobalDataService
   ) {
 
   }
@@ -28,7 +29,7 @@ export class HistoricalDataService {
       .get(`consultants/${loggedInUser.userId}/months/${month}`)
       .pipe(
         map((userTimeSheetResponse: MonthTimeEntryResponse) => {
-          const projects = this.httpService.getProjectsStream().value;
+          const projects = this.globalData.getProjectsValue;
           let _links: Links = {
             self: {
               href: `${environment.url}/consultants/${loggedInUser.department}/months/${month}`,

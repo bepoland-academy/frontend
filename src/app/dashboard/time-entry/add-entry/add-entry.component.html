@@ -1,6 +1,6 @@
-<mat-drawer-container class="drawer-container" [ngClass]="{'overlay': isOpen}" autosize (click)="closeDrawer()">
-  <mat-drawer #drawer (click)="$event.stopPropagation()" class="drawer-content" [opened]="isOpen" mode="side"
-    position="end">
+<mat-drawer-container class="drawer-container overlay" autosize (click)="closeDrawer()">
+  <mat-drawer #drawer [@openClose]="animationState"  (click)="$event.stopPropagation()" class="drawer-content" [opened]="isOpen" mode="side"
+  position="end">
     <div class="content-wrapper">
       <nav class="navigation">
         <button class="go-back" [ngClass]="{'moveUp': !isProjectsShown}" (click)="goBack()" mat-icon-button>

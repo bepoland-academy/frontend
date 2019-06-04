@@ -7,6 +7,7 @@ import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClien
 import { HttpService } from 'src/app/core/services/http.service';
 import { AssignedConsultant, Week, ConsultantWithTimesheet } from './models';
 import * as moment from 'moment';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 const checkForOnsiteRate = (arr: Array<AssignedConsultant>): Array<AssignedConsultant> => {
@@ -63,12 +64,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
   currentClient: ProjectsByClient;
   constructor(
     private reportsService: ReportsService,
-    private httpServie: HttpService
+    private globalData: GlobalDataService
   ) { }
 
   ngOnInit() {
     this.currentDate = moment().format('YYYY-MM');
-    this.weeksInMonth = this.reportsService.getWeeksInMonth(this.currentDate);
+    this.weeksInMonth = this.reportsService.getWeeksInMonth('2017-12');
     this.subscriptions.add(
       this.reportsService.getDepartments().subscribe((departments: Array<Department>) => {
         this.departments = departments;
@@ -81,8 +82,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   setDepartment(department: Department) {
-    const projectList: Array<Project> = this.httpServie.projectsStream
-      .getValue()
+    const projectList: Array<Project> = this.globalData
+      .getProjectsValue
       .filter(el => el.departmentGuid === department.departmentId);
 
     this.clients = groupProjectsByClient(projectList);
@@ -102,6 +103,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   setCurrentDate(date: Date) {
     this.currentDate = moment(date).format('YYYY-MM');
+    if (!this.currentClient) {
+      return;
+    }
     this.weeksInMonth = this.reportsService.getWeeksInMonth(this.currentDate);
     this.setClient(this.currentClient);
   }

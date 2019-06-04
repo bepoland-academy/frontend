@@ -1,23 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material';
-import { Observable, BehaviorSubject, forkJoin, of, throwError } from 'rxjs';
-import { tap, map, catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Project, ProjectsResponse, Client, ClientsResponse, ProjectWithoutClient, User, Credentials } from '../models';
+
+import { Credentials } from '../models';
 
 @Injectable()
 export class HttpService {
 
-  projectsStream: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
-
-  clientsStream: BehaviorSubject<Array<Client>> = new BehaviorSubject([]);
-
   constructor(
-    private http: HttpClient,
-    private snackBar: MatSnackBar
-  ) {
-  }
+    private http: HttpClient
+  ) {}
 
 
   login(credentials: Credentials): Observable<any> {
@@ -50,52 +43,5 @@ export class HttpService {
 
   fakeDelete(url: string): Observable<any> {
     return this.http.delete(url);
-  }
-
-  getProjectsAndClients() {
-    const projectsFetch: Observable<Array<ProjectWithoutClient>> = this.http
-      .get(`${environment.url}projects/all`)
-      .pipe(
-        map((res: ProjectsResponse) => res._embedded.projectBodyList)
-      );
-    const clientsFetch: Observable<Array<Client>> = this.http.get(`${environment.url}clients/`)
-        .pipe(
-          map((res: ClientsResponse) => res._embedded.clientBodyList)
-        );
-
-    forkJoin(
-      projectsFetch,
-      clientsFetch
-    )
-    .pipe(
-      map((responses: [ProjectWithoutClient[], Client[]]) => {
-        const projects = responses[0];
-        const clients = responses[1];
-        this.clientsStream.next(clients);
-        const projectsWithClient: Array<Project> = projects.map((project: ProjectWithoutClient) => (
-          {
-            ...project,
-            client: clients.find(o => o.clientId === project.clientGuid),
-          }
-          ));
-
-        this.projectsStream.next(projectsWithClient);
-      }),
-      catchError(err => {
-        this.snackBar.open('App will not correctly working', 'X', { duration: 5000 });
-        this.clientsStream.error('');
-        this.projectsStream.error('');
-        return throwError('App will not correctly working');
-      })
-    ).subscribe();
-
-  }
-
-  getProjectsStream() {
-    return this.projectsStream;
-  }
-
-  getClientsStream() {
-    return this.clientsStream.asObservable();
   }
 }

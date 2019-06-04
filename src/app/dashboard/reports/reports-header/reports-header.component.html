@@ -22,7 +22,7 @@
   <div class="date">
     <h4 class="date__title title">Date: </h4>
     <mat-form-field>
-      <input [value]="currentDate" hidden [matDatepicker]="dp">
+      <input [value]="actualDate" hidden [matDatepicker]="dp">
       <input matInput [value]="currentDate"  placeholder="Year - month">
       <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
       <mat-datepicker #dp startView="year"

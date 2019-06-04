@@ -5,6 +5,7 @@ import { CreateClientDialogComponent } from './client-management-dialog/create-c
 import { EditClientDialogComponent } from './client-management-dialog/edit-client/edit-client-dialog';
 import { Client, ClientsResponse } from '../../core/models';
 import { HttpService } from 'src/app/core/services/http.service';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 @Component({
@@ -18,17 +19,11 @@ export class ClientManagementComponent implements OnInit {
   error: boolean;
   constructor(
     public dialog: MatDialog,
-    private httpService: HttpService
+    private globalData: GlobalDataService
     ) { }
 
   ngOnInit() {
-    this.httpService.getClientsStream().subscribe(
-      (clients: Array<Client>) => {
-        this.clients = clients;
-        this.error = false;
-      },
-      () => this.error = true
-    );
+    this.clients = this.globalData.getClientsValue;
   }
 
   openCreateDialog(): void {

@@ -7,6 +7,7 @@ import { NavigationService } from './services/navigation.service';
 import { AuthService } from './services/auth.service';
 import { HttpService } from './services/http.service';
 import { AuthGuard } from './guards/auth.guard';
+import { GlobalDataService } from './services/global-data.service';
 
 @NgModule({
   imports: [HttpClientModule],
@@ -18,6 +19,7 @@ import { AuthGuard } from './guards/auth.guard';
     HttpService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: APP_BASE_HREF, useValue: '/' },
+    GlobalDataService,
   ],
   exports: [],
 })

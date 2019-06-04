@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 
 import { Client } from '../../../../core/models';
 import { HttpService } from 'src/app/core/services/http.service';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class EditClientDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<EditClientDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Client,
     private snackBar: MatSnackBar,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private globalData: GlobalDataService
   ) {
     }
 
@@ -41,7 +43,7 @@ export class EditClientDialogComponent implements OnInit {
   }
 
   editClient(): void {
-    const clients = this.httpService.clientsStream.getValue();
+    const clients = this.globalData.getClientsValue;
     const {...client} = this.data;
     client.name = this.updateClientForm.value.name;
     const isNameInClientsStream = clients.some(el => el.name.replace(/\s+/g, '') === client.name.replace(/\s+/g, ''));
@@ -53,7 +55,7 @@ export class EditClientDialogComponent implements OnInit {
     this.httpService.put(client._links.self.href, client)
       .subscribe(
         () => {
-          this.httpService.getProjectsAndClients();
+          this.globalData.getGlobalData();
         },
         (err) => {
           this.snackBar.open(`Ups! Changes for client ${client.name} have not been saved`, '', {
@@ -69,7 +71,7 @@ deleteClient(): void {
   this.httpService.delete(client._links.DELETE.href)
     .subscribe(
       () => {
-        this.httpService.getProjectsAndClients();
+        this.globalData.getGlobalData();
         this.snackBar.open(`Client ${client.name} was deleted`, '', {
           duration: 2000,
         });

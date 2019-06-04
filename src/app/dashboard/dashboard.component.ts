@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 import { TimeEntryComponent } from './time-entry/time-entry.component';
 import { HistoricalDataComponent } from './historical-data/historical-data.component';
@@ -9,9 +10,8 @@ import { ProjectManagementComponent } from './project-management/project-managem
 import { ClientManagementComponent } from './client-management/client-management.component';
 import { RoleManagementComponent } from './role-management/role-management.component';
 import { ReportsComponent } from './reports/reports.component';
-import { HttpService } from '../core/services/http.service';
-import { Project } from '../core/models';
-import { MatSnackBar } from '@angular/material';
+import { ProjectWithoutClient, Client } from '../core/models';
+import { GlobalDataService } from '../core/services/global-data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,23 +37,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showRouter: boolean;
   error: boolean;
   constructor(
-    private httpService: HttpService,
+    private globalData: GlobalDataService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.httpService.getProjectsStream().subscribe(
-      (projects: Array<Project>) => {
-        if (projects.length) {
-          this.showRouter = true;
-          this.error = false;
+    this.globalData.getGlobalData()
+      .subscribe(
+        (projectsAndClients: [ProjectWithoutClient[], Client[]]) => {
+          if (projectsAndClients[0].length) {
+            this.showRouter = true;
+            this.error = false;
+            this.globalData.setClients = projectsAndClients[1];
+            this.globalData.setProjects = projectsAndClients[0];
+          }
+        },
+        () => {
+          this.snackBar.open('App will not correctly working', 'X', { duration: 5000 });
+          this.error = true;
         }
-      },
-      () => {
-        this.snackBar.open('Something went wrong, app would not work correctly', 'X', { duration: 5000 });
-        this.error = true;
-      }
-    );
+      );
   }
 
   ngOnDestroy(): void {

@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 import { NavigationService } from './navigation.service';
-import { HttpService } from './http.service';
-import { User, Credentials } from '../../core/models';
+import { User } from '../../core/models';
 
 @Injectable()
 export class AuthService {
   loggedIn: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private navigationService: NavigationService,
-    private http: HttpService
+    private navigationService: NavigationService
   ) {
     this.getUser();
   }
@@ -33,6 +29,5 @@ export class AuthService {
   callServices(roles: Array<string>) {
     this.navigationService.filterRoutes(roles);
     this.loggedIn.next(true);
-    this.http.getProjectsAndClients();
   }
 }

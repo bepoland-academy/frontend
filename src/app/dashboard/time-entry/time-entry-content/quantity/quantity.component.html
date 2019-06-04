@@ -1,8 +1,8 @@
 <div
   class="quantity-wrapper"  appWeekend [day]="day" 
 >
-<div class="quantity" (wheel)="onMouseWheel($event)" [ngClass]="[day.status]">
-  <div class="quantity__status" [ngClass]="{'quantity__status--change': dayState.hours !== day.hours}">
+<div class="quantity" #quantity [ngClass]="[day.status]">
+  <div class="quantity__status" [ngClass]="{'quantity__status--change': dayState.hours !== day.hours && !!day.status}">
     <div class="quantity__input-wrapper">
       <input appTimeEntry (checkedValue)="verifiedValue($event)" [ngModel]="inputValue" type='text' class="quantity__input" />
     </div>
