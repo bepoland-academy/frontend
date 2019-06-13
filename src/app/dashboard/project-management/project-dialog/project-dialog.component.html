@@ -1,0 +1,51 @@
+<!-- Create New Project -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Create New Project</mat-card-title>
+  </mat-card-header>
+  <form fxLayout="column" [formGroup]="mainForm">
+    <!-- Step 1 -->
+    <app-project-dialog-step1 
+      *ngIf="currentStep === 'step1'"
+      [onsiteOffsite]="onsiteOffsite"
+      (siteModelUpdated)="handleSiteModelChoice($event)" 
+      (enableStep2)="changeStep($event)"
+      (closeDialog)="closeDialog()"
+      (updateStep1Form)="saveStep1Data($event)"
+      [mainForm]="mainForm.value"
+    >
+    </app-project-dialog-step1>
+    <!-- End of Step 1 -->
+
+    <!-- Step 2 -->
+    <app-project-dialog-step2 
+      *ngIf="currentStep === 'step2'"
+      [onsiteOffsite]="onsiteOffsite" 
+      (changeStep)="changeStep($event)"
+      [allRoles]="data.roles"
+      (ratesFormUpdated)="updateRatesInForm($event)"
+      [roles]="roles"
+      (rolesListUpdated)="updateRolesList($event)"
+      [rolesSaved]="rolesSaved"
+      (rolesUpdated)="updateRolesSaved($event)"
+    >
+    </app-project-dialog-step2>
+    <!-- End of Step 2 -->
+
+    <!-- Step 3 -->
+    <app-project-dialog-step3 
+      *ngIf="currentStep === 'step3'" 
+      [onsiteOffsite]="onsiteOffsite"
+      (changeStep)="changeStep($event)"
+      [usersListDropdown]="usersListDropdown"
+      [allUsersListFromDropdown]="allUsersListFromDropdown"
+      [usersAssigned]="usersAssigned"
+      [rolesSaved]="rolesSaved"
+      (usersAssignedUpdated)="updateUsersAssigned($event)"
+      (usersListDropdownUpdated)="updateUsersListDropdown($event)"
+      (formSubmitted)="sendForm()"
+    >
+    </app-project-dialog-step3>
+    <!-- End of Step 3 -->
+  </form>
+</mat-card>

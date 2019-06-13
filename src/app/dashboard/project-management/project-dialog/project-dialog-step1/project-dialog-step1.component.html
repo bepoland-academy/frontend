@@ -1,0 +1,45 @@
+<form [formGroup]="step1Form">
+  <mat-card-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Project Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <div class="checkbox">
+      <mat-checkbox formControlName="active">
+        Active
+      </mat-checkbox>
+    </div>
+    <mat-form-field>
+      <mat-select 
+        atNativeControl 
+        placeholder="Client" 
+        formControlName="clientGuid"
+      >
+        <mat-option *ngFor="let client of data.clients" [value]="client.clientId">
+          {{client.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="checkbox">
+      <mat-checkbox [checked]="onsiteOffsite" (change)="updateSiteModel()">
+        On-site/Off-site Project
+      </mat-checkbox>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Comments</mat-label>
+      <textarea matInput rows="5" maxlength="500" formControlName="comments">
+              </textarea>
+    </mat-form-field>
+    <mat-card-actions>
+      <button type="button" mat-raised-button color="primary" (click)="cancel()">
+        Cancel
+      </button>
+      <button type="button" mat-raised-button color="primary">
+        Delete
+      </button>
+      <button type="button" mat-raised-button color="primary" (click)="goToStep2()">
+        Next
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+</form>

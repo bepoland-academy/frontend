@@ -1,0 +1,85 @@
+<div class="step3">
+  <mat-card-content>
+    <!-- Consultants List -->
+    <div class="rolesList">
+      <div class="roles-header-grid2">
+        <div class="grid-item">Consultant</div>
+        <div class="grid-item">Role</div>
+        <div class="grid-item edit"></div>
+        <div class="grid-item edit"></div>
+      </div>
+      <div *ngFor="let user of usersAssigned">
+        <div class="roles-grid2">
+          <div class="grid-item truncate">
+            <h4 class="truncate">{{user.user.name}}</h4>
+          </div>
+          <div class="grid-item truncate">
+            <h4 class="truncate">{{user.role.name}}</h4>
+          </div>
+          <div class="grid-item edit">
+            <button mat-icon-button type="button" (click)="editUser(user)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <div class="grid-item edit">
+            <button mat-icon-button type="button" (click)="deleteUser(user)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <mat-card-actions class="assignRoleButton">
+        <button type="button" mat-raised-button color="primary" (click)="addNewUser()">
+          Add new Consultant
+        </button>
+      </mat-card-actions>
+    </div>
+    <!-- End of Consultants List -->
+
+    <!-- Add/Assign Consultant Section -->
+    <div class="assignRole">
+      <form [formGroup]="usersForm" (ngSubmit)="createUpdateUser(usersForm.value)">
+        <mat-card>
+          <mat-card-content>
+            <mat-card-header>
+              <mat-card-title>Title</mat-card-title>
+            </mat-card-header>
+            <mat-form-field>
+              <mat-select placeholder="Consultant" formControlName="user" [compareWith]="compareUsers">
+                <div>
+                  <mat-option *ngFor="let user of usersListDropdown" [value]="user" required>
+                    {{user.name}}
+                  </mat-option>
+                </div>
+              </mat-select>
+            </mat-form-field>
+            <div>
+              <mat-form-field>
+                <mat-select placeholder="Role" formControlName="role" [compareWith]="compareRoles">
+                  <mat-option *ngFor="let role of rolesSaved" [value]="role.role" required>
+                    {{role.role.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+          <div mat-dialog-actions>
+            <button mat-raised-button color="primary" [disabled]="!usersForm.valid">
+              Save
+            </button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+    <!-- End of Add/Assign Consultant Section -->
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="button" mat-raised-button color="primary" (click)="goToStep2()">
+      Back
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      Submit
+    </button>
+  </mat-card-actions>
+</div>

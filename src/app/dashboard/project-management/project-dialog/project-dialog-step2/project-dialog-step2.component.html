@@ -1,0 +1,82 @@
+<div class="step2">
+  <mat-card-content>
+    <!-- RolesList -->
+    <div class="rolesList">
+      <div>
+        <div class="roles-header-grid1">
+          <div class="grid-item">Role</div>
+          <div *ngIf="onsiteOffsite" class="grid-item">On-site rate</div>
+          <div class="grid-item">Off-site rate</div>
+          <div class="grid-item edit"></div>
+          <div class="grid-item edit"></div>
+        </div>
+        <div *ngFor="let role of rolesSaved">
+          <div class="roles-grid1">
+            <div class="grid-item truncate">
+              <h4 class="truncate">{{role.role.name}}</h4>
+            </div>
+            <div class="grid-item truncate">
+              <h4 class="truncate">{{role.rate}}</h4>
+            </div>
+            <div  *ngIf="onsiteOffsite" class="grid-item truncate">
+              <h4 class="truncate">{{role.onSiteRate}}</h4>
+            </div>
+            <div class="grid-item edit">
+              <button mat-icon-button type="button" (click)="editRole(role)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+            <div class="grid-item edit">
+              <button mat-icon-button type="button" (click)="deleteRole(role)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Roles List -->
+
+    <!-- Create/Edit role Section -->
+    <div class="assignRole">
+      <form [formGroup]="ratesForm" (ngSubmit)="createUpdateRole()">
+        <mat-card>
+          <mat-card-content>
+            <mat-card-header>
+              <mat-card-title>Title</mat-card-title>
+            </mat-card-header>
+            <mat-form-field>
+              <mat-select placeholder="Role" formControlName="role" [compareWith]="compareFn">
+                <mat-option *ngFor="let role of roles" [value]="role">{{role.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="inputs">
+              <mat-form-field *ngIf="onsiteOffsite" appearance="outline">
+                <mat-label>Onsite Rate</mat-label>
+                <input input type="number" min="0" matInput formControlName="onSiteRate"/>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Offsite Rate</mat-label>
+                <input input type="number" min="0" matInput formControlName="rate"/>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+          <div mat-dialog-actions>
+            <button type="submit" mat-raised-button color="primary" [disabled]="!ratesForm.valid">
+              Save
+            </button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+    <!-- End of Assign Role Section -->
+  </mat-card-content>
+  <mat-card-actions>
+    <button type="button" mat-raised-button color="primary" (click)="goToStep1()">
+      Back
+    </button>
+    <button type="button" mat-raised-button color="primary" (click)="goToStep3()">
+      Next
+    </button>
+  </mat-card-actions>
+</div>

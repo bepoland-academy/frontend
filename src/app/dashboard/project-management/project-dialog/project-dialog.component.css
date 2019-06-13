@@ -208,3 +208,7 @@ button {
 .column2 {
   margin-left: 20px;
 }
+
+.formStep2 {
+  display: block;
+}

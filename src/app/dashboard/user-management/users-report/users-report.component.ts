@@ -39,7 +39,8 @@ export class UsersReportComponent implements OnInit {
     return this.userManagementService.getDepartments()
     .pipe(
       map((response: DepartmentsResponse) => {
-        return this.departments = response._embedded.departmentBodyList;
+         this.departments = response._embedded.departmentBodyList;
+         return response._embedded.departmentBodyList;
       }));
   }
 

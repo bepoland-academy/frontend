@@ -14,7 +14,7 @@ import {
 } from '../../core/models';
 import { NgForm, FormControl } from '@angular/forms';
 import { MatDialog, TooltipPosition } from '@angular/material';
-import { ProjectDialogStep1 } from './project-dialog/project-dialog-step1';
+import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
 
 export interface DialogData {
@@ -117,7 +117,7 @@ export class ProjectManagementComponent implements OnInit {
 
         const projectWithClient: Array<Project> = projectsResponse
           .map((project: ProjectWithoutClient)  => {
-            const client = this.clients.find(el => client.clientId === project.clientGuid);
+            const client = this.clients.find(client => client.clientId === project.clientGuid);
             return {...project, client};
             }
           );
@@ -153,7 +153,7 @@ export class ProjectManagementComponent implements OnInit {
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
 
-    const dialogRef = this.dialog.open(ProjectDialogStep1, {
+    const dialogRef = this.dialog.open(ProjectDialogComponent, {
       data: {
         department: this.actualDepartmentId,
         clients: this.clients,
@@ -164,6 +164,7 @@ export class ProjectManagementComponent implements OnInit {
   }
 
   editProject(project: Project): void {
+    console.log(project);
     this.roles = this.roles.sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
@@ -174,7 +175,7 @@ export class ProjectManagementComponent implements OnInit {
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
 
-    const dialogRef = this.dialog.open(ProjectDialogStep1, {
+    const dialogRef = this.dialog.open(ProjectDialogComponent, {
       data: {
         project,
         department: this.actualDepartmentId,
