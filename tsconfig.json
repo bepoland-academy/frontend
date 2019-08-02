@@ -18,5 +18,8 @@
       "dom",
       "esnext"
     ]
-  }
+  },
+  "exclude": [
+    "src/app/**/*"
+  ]
 }
