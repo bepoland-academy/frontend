@@ -24,7 +24,6 @@ export interface DialogData {
   rate: number;
   removable: boolean;
   roles: any;
-  allRoles: any;
   _links: {
     DELETE: {
       href: string;

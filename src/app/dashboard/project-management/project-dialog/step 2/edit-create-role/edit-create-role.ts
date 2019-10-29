@@ -13,7 +13,6 @@ import { Client, Department, Project } from '../../../../../core/models';
 
 export interface DialogData {
   active: boolean;
-  allRoles;
   client: Client;
   clients: Array<Client>;
   comments: string;

@@ -2,7 +2,19 @@ import { Component, Inject, OnInit, Input } from '@angular/core';
 import { ProjectManagementService } from '../project-management.service';
 import { FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
-import { Client, Department, Project } from '../../../core/models';
+import {
+  Client,
+  Department,
+  ClientsResponse,
+  DepartmentsResponse,
+  Project,
+  ProjectsResponse,
+  RolesResponse,
+  UsersResponse
+} from '../../../core/models';
+import { MatSnackBar } from '@angular/material';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface DialogData {
   project: any;
@@ -17,7 +29,6 @@ export interface DialogData {
   rate: number;
   removable: boolean;
   roles;
-  allRoles;
   usersByDepartment;
   allUsersByDepartment;
   _links: {
@@ -40,8 +51,9 @@ export class ProjectDialogStep1 implements OnInit {
     private projectManagementService: ProjectManagementService,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ProjectDialogStep1>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private snackBar: MatSnackBar
+  ) { }
 
   mainForm: FormGroup;
   rates: FormArray;
@@ -56,12 +68,6 @@ export class ProjectDialogStep1 implements OnInit {
   compareClient: ((f1: any, f2: any) => boolean) | null = this.compareClientId;
 
   ngOnInit(): void {
-    this.projectManagementService.test().subscribe((data) => {
-      console.log(data);
-    });
-    this.projectManagementService.getProjects(this.data.department).subscribe((data) => {
-      console.log(data);
-    });
     if (!this.data.project) {
       this.restoreAllRoleslist();
       this.restoreAllConsultantslist();
@@ -79,32 +85,32 @@ export class ProjectDialogStep1 implements OnInit {
     this.data.usersByDepartment = this.data.allUsersByDepartment;
     this.mainForm = new FormGroup({
       name: new FormControl(null, Validators.required),
-      client_id: new FormControl(null, Validators.required),
+      clientGuid: new FormControl(null, Validators.required),
       comments: new FormControl(null),
-      department_guid: new FormControl(this.data.department),
+      departmentGuid: new FormControl(this.data.department),
       offSiteOnly: new FormControl(true),
       active: new FormControl(true),
       rates: new FormArray([]),
     });
   }
 
-  createFormFromProject() {
+  async createFormFromProject() {
     // Create Main Form based on the Project edited
     this.mainForm = new FormGroup({
       name: new FormControl(this.data.project.name, Validators.required),
-      client_id: new FormControl(
+      clientGuid: new FormControl(
         this.data.project.client.name,
         Validators.required
       ),
       comments: new FormControl(this.data.project.comments),
-      department_guid: new FormControl(this.data.project.department_guid),
+      departmentGuid: new FormControl(this.data.project.departmentGuid),
       offSiteOnly: new FormControl(this.data.project.offSiteOnly),
       active: new FormControl(this.data.project.active),
       rates: new FormArray([]),
     });
 
     // Add roles to the rates array
-    this.data.project.rates.forEach(rate => {
+    await this.data.project.rates.forEach(rate => {
       this.addRolesFromProject(rate);
     });
 
@@ -116,10 +122,7 @@ export class ProjectDialogStep1 implements OnInit {
 
     this.createConsultantsSavedFromProject();
 
-    // Add consultants to each role in the Form rates
-    setTimeout(() => {
-      this.addConsultantsFromProject();
-    }, 3000);
+    await this.addConsultantsFromProject();
 
     this.onsiteOffsite = !this.data.project.offSiteOnly;
   }
@@ -131,7 +134,7 @@ export class ProjectDialogStep1 implements OnInit {
 
   createRoleFromProject(role): FormGroup {
     return new FormGroup({
-      role_id: new FormControl(role.role_id),
+      roleId: new FormControl(role.roleId),
       rate: new FormControl(role.rate),
       onSiteRate: new FormControl(role.onSiteRate),
       consultants: new FormArray([]),
@@ -144,9 +147,9 @@ export class ProjectDialogStep1 implements OnInit {
     this.rates.value.forEach(formRate => {
       this.data.project.rates.forEach(rate => {
         rate.consultants.forEach(consultant => {
-          if (formRate.role_id === rate.role_id) {
+          if (formRate.roleId === rate.roleId) {
             this.rates
-              .at(this.rates.value.findIndex(el => el.role_id === rate.role_id))
+              .at(this.rates.value.findIndex(el => el.roleId === rate.roleId))
               .get('consultants')
               .value.push(consultant);
           }
@@ -155,19 +158,29 @@ export class ProjectDialogStep1 implements OnInit {
     });
   }
 
-  restoreAllRoleslist() {
-    this.projectManagementService.getRoles().subscribe((data: any) => {
-      this.data.roles = data._embedded.roleBodyList;
-      this.data.roles = this.data.roles.sort((a, b) =>
-        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-      );
-    });
+
+  restoreAllRoleslist(): Observable<any> {
+    return this.projectManagementService.getRoles()
+      .pipe(
+        map((data: RolesResponse) => {
+          return data._embedded.roleBodyList.sort((a, b) =>
+            a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+          );
+        }));
   }
+  // restoreAllRoleslist() {
+  //    this.projectManagementService.getRoles().subscribe((data: RolesResponse) => {
+  //     this.data.roles = data._embedded.roleBodyList;
+  //     this.data.roles = this.data.roles.sort((a, b) =>
+  //       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  //     );
+  //   });
+  // }
 
   restoreAllConsultantslist() {
     this.projectManagementService
       .getUsersByDepartment(this.data.department)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         this.data.usersByDepartment = data._embedded.userBodyList;
         this.data.usersByDepartment = this.data.usersByDepartment.map(user => {
           return (user = {
@@ -181,10 +194,21 @@ export class ProjectDialogStep1 implements OnInit {
       });
   }
 
+  // this.data.usersByDepartment = data._embedded.userBodyList;
+  // this.data.usersByDepartment = this.data.usersByDepartment.map(user => {
+  //   return (user = {
+  //     ...user,
+  //     name: user.firstName + ' ' + user.lastName,
+  //   });
+  // });
+  // this.data.usersByDepartment = this.data.usersByDepartment.sort((a, b) =>
+  //   a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  // );
+
   updateRolesToChoose() {
     this.data.project.rates.forEach(projectRole => {
       this.data.roles.forEach(role => {
-        if (projectRole.role_id === role.roleId) {
+        if (projectRole.roleId === role.roleId) {
           this.data.roles.splice(
             this.data.roles.findIndex(el => el.roleId === role.roleId),
             1
@@ -195,11 +219,10 @@ export class ProjectDialogStep1 implements OnInit {
   }
 
   createRolesSavedFromProject() {
-    this.restoreAllRoleslist();
-    setTimeout(() => {
+    this.restoreAllRoleslist().subscribe((roles) => {
       this.data.project.rates.forEach(rate => {
-        this.data.roles.forEach(role => {
-          if (rate.role_id === role.roleId) {
+        roles.forEach(role => {
+          if (rate.roleId === role.roleId) {
             this.rolesSaved = this.rolesSaved.concat({
               onSiteRate: rate.onSiteRate,
               rate: rate.rate,
@@ -209,11 +232,10 @@ export class ProjectDialogStep1 implements OnInit {
         });
       });
       this.updateRolesToChoose();
-    }, 1000);
+    });
   }
 
   createConsultantsSavedFromProject() {
-    // this.restoreAllRoleslist();
     this.restoreAllConsultantslist();
 
     setTimeout(() => {
@@ -221,7 +243,7 @@ export class ProjectDialogStep1 implements OnInit {
       this.data.project.rates.forEach(rate => {
         rate.consultants.forEach(consultant => {
           this.rolesSaved.forEach(role => {
-            if (rate.role_id === role.role.roleId) {
+            if (rate.roleId === role.role.roleId) {
               array = array.concat({
                 consultant,
                 role: { name: role.role.name, roleId: role.role.roleId },
@@ -275,25 +297,26 @@ export class ProjectDialogStep1 implements OnInit {
     this.rates = this.mainForm.get('rates') as FormArray;
 
     const isRolePresent = this.rates.value.some(
-      el => role.role.roleId === el.role_id
+      el => role.role.roleId === el.roleId
     );
 
     if (isRolePresent) {
       this.rates
-        .at(this.rates.value.findIndex(el => el.role_id === role.role.roleId))
+        .at(this.rates.value.findIndex(el => el.roleId === role.role.roleId))
         .get('rate')
         .setValue(role.rate);
       this.rates
-        .at(this.rates.value.findIndex(el => el.role_id === role.role.roleId))
+        .at(this.rates.value.findIndex(el => el.roleId === role.role.roleId))
         .get('onSiteRate')
         .setValue(role.onSiteRate);
     } else {
       this.rates.push(this.createRole(role));
     }
   }
+
   createRole(role): FormGroup {
     return new FormGroup({
-      role_id: new FormControl(role.role.roleId),
+      roleId: new FormControl(role.role.roleId),
       rate: new FormControl(role.rate),
       onSiteRate: new FormControl(role.onSiteRate),
       consultants: new FormArray([]),
@@ -328,7 +351,7 @@ export class ProjectDialogStep1 implements OnInit {
   roleDeleted(role) {
     // Remove role from Form
     this.rates.removeAt(
-      this.rates.value.findIndex(el => el.role_id === role.role.roleId)
+      this.rates.value.findIndex(el => el.roleId === role.role.roleId)
     );
 
     // Remove role from the list of saved roles
@@ -393,7 +416,7 @@ export class ProjectDialogStep1 implements OnInit {
     // Get Consultant ID
     this.projectManagementService
       .getUsersByDepartment(this.data.department)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         let consultantId;
         let allUsers;
         allUsers = data._embedded.userBodyList;
@@ -437,7 +460,7 @@ export class ProjectDialogStep1 implements OnInit {
     }
     this.rates
       .at(
-        this.rates.value.findIndex(el => el.role_id === consultant.role.roleId)
+        this.rates.value.findIndex(el => el.roleId === consultant.role.roleId)
       )
       .get('consultants')
       .value.push(consultantId);
@@ -491,7 +514,7 @@ export class ProjectDialogStep1 implements OnInit {
     // Get Consultant ID
     this.projectManagementService
       .getUsersByDepartment(this.data.department)
-      .subscribe(data => {
+      .subscribe((data: UsersResponse) => {
         let consultantId;
         let allUsers;
         allUsers = data._embedded.userBodyList;
@@ -515,7 +538,7 @@ export class ProjectDialogStep1 implements OnInit {
     // Remove consultant from Form
     this.consultants = this.rates
       .at(
-        this.rates.value.findIndex(el => el.role_id === consultant.role.roleId)
+        this.rates.value.findIndex(el => el.roleId === consultant.role.roleId)
       )
       .get('consultants') as FormArray;
 
@@ -525,6 +548,10 @@ export class ProjectDialogStep1 implements OnInit {
     );
   }
 
+  selectActive(event) {
+    this.mainForm.get('active').setValue(event.checked);
+  }
+
   // Navigation
   selectSite(event) {
     this.createNewForm();
@@ -532,8 +559,8 @@ export class ProjectDialogStep1 implements OnInit {
     this.mainForm.get('offSiteOnly').setValue(!event.checked);
     this.rolesSaved = [];
     this.consultantsSaved = [];
-    this.data.roles = this.data.allRoles;
-    this.data.usersByDepartment = this.data.allUsersByDepartment;
+    this.restoreAllRoleslist();
+    this.restoreAllConsultantslist();
   }
 
   cancel(): void {
@@ -560,8 +587,8 @@ export class ProjectDialogStep1 implements OnInit {
 
   createProject() {
     this.data.clients.forEach(client => {
-      if (this.mainForm.get('client_id').value === client.name) {
-        this.mainForm.get('client_id').setValue(client.clientId);
+      if (this.mainForm.get('clientGuid').value === client.name) {
+        this.mainForm.get('clientGuid').setValue(client.clientId);
       }
     });
 
@@ -569,19 +596,20 @@ export class ProjectDialogStep1 implements OnInit {
       this.projectManagementService
         .sendNewProject(this.mainForm.value)
         .subscribe(
-          () => {},
+          () => {
+            this.projectManagementService.changeReloadStatus();
+          },
           error => {
             console.log(error);
           }
         );
     } else {
       this.projectManagementService
-        .updateProject(this.data.project.id, {
-          ...this.mainForm.value,
-          id: this.data.project.id,
-        })
+        .updateProject(this.data.project._links.self.href, this.mainForm.value)
         .subscribe(
-          () => {},
+          () => {
+            this.projectManagementService.changeReloadStatus();
+          },
           error => {
             console.log(error);
           }
@@ -589,7 +617,6 @@ export class ProjectDialogStep1 implements OnInit {
     }
 
     this.dialogRef.close();
-    this.projectManagementService.changeReloadStatus();
     console.log(this.mainForm);
   }
 
@@ -609,15 +636,27 @@ export class ProjectDialogStep1 implements OnInit {
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
 
-    this.projectManagementService.deleteProject(this.data.project.id).subscribe(
-      () => {
-        console.log('deleted');
+    this.projectManagementService.deleteProject(this.data.project._links.DELETE.href).subscribe(
+      (data) => {
+        this.projectManagementService.changeReloadStatus();
+        this.snackBar.open(`Project ${this.data.project.name} was successfully deleted`, '', {
+          duration: 3000,
+        });
       },
       error => {
+        if (error.error.message === 'ACTIVE PROJECT CANNOT BE DELETED') {
+          this.snackBar.open(`You have to disactivate project first`, '', {
+            duration: 3000,
+          });
+        } else if (error.error.message === 'PROJECT CANNOT BE DELETED BECAUSE OF EXISTING TIME ENTRIES') {
+          this.snackBar.open(`Project ${this.data.project.name} cannot be deleted
+          because there exists a consultant assigned to it`, '', {
+              duration: 3000,
+            });
+        }
         console.log(error);
       }
     );
     this.dialogRef.close();
-    this.projectManagementService.changeReloadStatus();
   }
 }

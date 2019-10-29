@@ -33,6 +33,7 @@ export {
   Project,
   ProjectsResponse,
   ProjectsByClient,
+  Rate,
   Role,
   RolesResponse,
   User,
@@ -49,5 +50,4 @@ export {
   Rate,
   ProjectWithoutClient,
   TimeEntryWithoutProjectInfo,
-
 };

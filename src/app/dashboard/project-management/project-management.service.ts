@@ -4,7 +4,10 @@ import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
 import {
   ClientsResponse,
   DepartmentsResponse,
-  Project
+  Project,
+  ProjectsResponse,
+  RolesResponse,
+  UsersResponse
 } from '../../core/models';
 import { map, flatMap } from 'rxjs/operators';
 
@@ -18,7 +21,7 @@ export class ProjectManagementService {
 
   private reloadStatus = new BehaviorSubject<null>(null);
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService) { }
 
   changeReloadStatus(): void {
     this.reloadStatus.next(null);
@@ -32,23 +35,31 @@ export class ProjectManagementService {
     return this.httpService.get(this.departments);
   }
 
-  getClientsList(): Observable<ClientsResponse> {
+  getUsersByDepartment(department: string): Observable<UsersResponse> {
+    return this.httpService.get(`users?department=${department}`);
+  }
+
+  getClients(): Observable<ClientsResponse> {
     return this.httpService.get(this.clients);
   }
 
-  getUsers() {
-    return this.httpService.get('users');
+  getRoles(): Observable<RolesResponse> {
+    return this.httpService.get('projects/roles/all');
   }
 
-  // getProjects(department: string): Observable<Array<Project>> {
-  //   return this.httpService.get(this.projectsByDepartment + department).pipe(
+  //   getProjects(department: string): Observable<any> {
+  //   return this.httpService.get(
+  //     `projects?department=${department}`
+  //   ).pipe(
   //     map(response => response._embedded.projectBodyList),
   //     flatMap(res => {
   //       return forkJoin(
   //         res.map((project: Project) => {
-  //           return this.isRemovable(project.projectId).pipe(
-  //             map(removableRes => {
-  //               return { ...project, removable: !removableRes };
+  //           console.log(project);
+  //           return this.deleteProject(project._links.DELETE.href).pipe(
+  //             map(a => {
+  //               console.log(a);
+  //               // return { ...project, removable: !removableRes };
   //             })
   //           );
   //         })
@@ -57,65 +68,35 @@ export class ProjectManagementService {
   //   );
   // }
 
-  // getProjects(department: string): Observable<any> {
-  //   return this.httpService.fakeGet(
-  //     `http://localhost:3000/projects?department_guid=${department}`
-  //   );
-  // }
 
-  getProjects(department: string): Observable<any> {
+
+  getProjects(department: string): Observable<ProjectsResponse> {
     return this.httpService.get(
       `projects?department=${department}`
     );
   }
 
-
-  test() {
-    return this.httpService.fakeGet('http://beontime.be-academy.pl/gateway/projects/954928d4-b2d5-4e30-ae39-d2516c57ce2e');
-  }
-  // sendNewProject(newProjectData: Project) {
-  //   return this.httpService.post(this.projects, newProjectData);
-  // }
-
   sendNewProject(newProjectData: Project) {
-    console.log('wokrs');
-    return this.httpService.fakePost(
-      'http://localhost:3000/projects',
+    console.log(newProjectData);
+    return this.httpService.post(
+      'projects',
       newProjectData
     );
   }
 
-  // updateProject(url: string, updatedProject: Project) {
-  //   return this.httpService.put(url, updatedProject);
-  // }
-
-  updateProject(id, updatedProject: Project) {
+  updateProject(link: string, updatedProject: Project) {
     console.log(updatedProject);
     return this.httpService.put(
-      `http://localhost:3000/projects/${id}`,
+      link,
       updatedProject
     );
   }
 
-  // deleteProject(project: Project) {
-  //   return this.httpService.delete(project._links.DELETE.href);
+  deleteProject(link: string) {
+    return this.httpService.delete(link);
+  }
+
+  // isRemovable(projectId: string) {
+  //   return this.httpService.get(`${this.removable}${projectId}`);
   // }
-
-  deleteProject(projectId: string) {
-    return this.httpService.fakeDelete(
-      `http://localhost:3000/projects/${projectId}`
-    );
-  }
-
-  isRemovable(projectId: string) {
-    return this.httpService.get(`${this.removable}${projectId}`);
-  }
-
-  getRoles(): Observable<any> {
-    return this.httpService.get('projects/roles/all');
-  }
-
-  getUsersByDepartment(department) {
-    return this.httpService.get(`users?department=${department}`);
-  }
 }

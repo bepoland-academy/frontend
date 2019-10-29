@@ -25,16 +25,6 @@
                (keyup)="filterClients($event)"
             >
          </mat-form-field>
-         <div class="addClient">
-            <button 
-               type="button" 
-               mat-raised-button 
-               color="primary" 
-               [disabled]="!actualDepartment"
-            >
-               Add new Client
-            </button>
-         </div>
          <div class="addProject">
             <button 
                type="button" 
@@ -57,7 +47,6 @@
          <div class="main-grid">
             <div class="grid-item">Client</div>
             <div class="grid-item">Project</div>
-            <div class="grid-item">Rate</div>
             <div class="grid-item">Comments</div>
             <div class="grid-item">Active</div>
             <div class="grid-item edit"></div>
@@ -80,9 +69,6 @@
                            matTooltip="{{project.name}}"
                         >
                            <h4 class="truncate">{{project.name}}</h4>
-                        </div>
-                        <div class="grid-item">
-                           <h4>{{project.rate}}</h4>
                         </div>
                         <div 
                            class="grid-item truncate" 
