@@ -6,6 +6,7 @@ import { Week, ConsultantWithTimesheet } from '../models';
   selector: 'app-reports-content',
   templateUrl: './reports-content.component.html',
   styleUrls: ['./reports-content.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsContentComponent implements OnInit, OnChanges {
   @Input() weeksInMonth: Array<Week>;

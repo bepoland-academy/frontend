@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { UserManagementService } from '../user-management.service';
 import { MatTableDataSource } from '@angular/material';
-import { User, Department, DepartmentsResponse } from '../../../core/models';
+import { User, Department } from '../../../core/models';
 import { UsersResponse } from 'src/app/core/models/user.model';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ export class UsersReportComponent implements OnInit {
   isDataAvailable = false;
   isResponse = false;
   serverError = false;
-  departments: Array<Department>;
+  @Input() departments: Array<Department>;
 
   constructor(
     private userManagementService: UserManagementService,

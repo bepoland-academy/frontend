@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { map, flatMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 
 import * as moment from 'moment';
 import {
@@ -11,26 +13,26 @@ import {
   User
 } from '../../core/models';
 import { HttpService } from '../../core/services/http.service';
-import { map, flatMap } from 'rxjs/operators';
-import { of, Observable, BehaviorSubject } from 'rxjs';
 import { sortDaysByDate } from '../../shared/utils/sortDaysByDate';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 @Injectable()
 export class TimeEntryService {
-  projects: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
 
-  constructor(private httpService: HttpService) {
-    this.httpService.getProjectsStream().subscribe((projects: Array<Project>) => {
-      this.projects.next(projects);
-    });
-  }
+  constructor(
+    private httpService: HttpService,
+    private globalData: GlobalDataService
+  ) {}
 
   fetchTracks(week: string): Observable<TimeEntriesWithLinksAndProjects> {
     return this.getTimeEntries(week)
       .pipe(
         map((timeEntriesWithLinks) => {
-          const projectList: Array<Project> = this.projects.getValue();
+          const user: User = JSON.parse(localStorage.getItem('user'));
+          const projectList: Array<Project> = this.globalData
+            .getProjectsValue
+            .filter(o => o.departmentGuid === user.department);
 
           // adding projectInfo to time entry array, because it does not exist sorry for no type :)
           return {
@@ -46,17 +48,12 @@ export class TimeEntryService {
       );
   }
 
-  getProjects(): Observable<Array<Project>> {
-    return this.projects.asObservable();
-  }
-
   getTimeEntries(week): Observable<TimeEntriesWithLinks> {
     const user: User = JSON.parse(localStorage.getItem('user'));
     return this.httpService
       .get(`consultants/${user.userId}/weeks/${week}`)
       .pipe(
         flatMap((timeEntriesResponse: TimeEntryResponse) => {
-
           // if there is response from backend
           if (timeEntriesResponse._embedded) {
             return of({

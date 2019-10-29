@@ -8,11 +8,11 @@
          <form (ngSubmit)="login()" #myForm="ngForm" fxLayout="column">
             <mat-form-field appearance="outline" >
                <mat-label>Username(email)</mat-label>
-               <input matInput [(ngModel)]="username" name="name" required #name="ngModel"/>
+               <input matInput [(ngModel)]="username" name="name" required #name="ngModel" autocomplete="username"/>
             </mat-form-field>
             <mat-form-field appearance="outline">
                <mat-label>Password</mat-label>
-               <input matInput [(ngModel)]="password" type="password" name="password" #pass="ngModel">
+               <input matInput [(ngModel)]="password" type="password" name="password" #pass="ngModel" autocomplete="current-password">
             </mat-form-field>
             <mat-card-actions fxLayoutAlign="center start">
                <button  type="submit" mat-raised-button color="primary" [disabled]="myForm.invalid">

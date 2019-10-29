@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import { Day } from '../../../../core/models';
 
@@ -7,19 +7,24 @@ import { Day } from '../../../../core/models';
   templateUrl: './quantity.component.html',
   styleUrls: ['./quantity.component.css'],
 })
-export class QuantityComponent implements OnInit {
+export class QuantityComponent implements OnInit, AfterViewInit {
   @Input() inputValue: number;
-  @Output() inputValueChange: EventEmitter<number> = new EventEmitter();
-
   @Input() day: Day;
+  @Output() inputValueChange: EventEmitter<number> = new EventEmitter();
+  @ViewChild('quantity') quantityElelment: ElementRef;
 
   dayState: Day;
 
-  constructor() {}
+  constructor() {
+    this.onMouseWheel = this.onMouseWheel.bind(this);
+  }
 
   ngOnInit(): void {
     this.dayState = {...this.day};
+  }
 
+  ngAfterViewInit(): void {
+    this.quantityElelment.nativeElement.addEventListener('wheel', this.onMouseWheel, {passive: false});
   }
 
   verifiedValue(newValue: number) {
@@ -39,6 +44,7 @@ export class QuantityComponent implements OnInit {
   }
 
   onMouseWheel(event: WheelEvent) {
+    event.preventDefault();
     if (event.deltaY < 0) {
       this.increaseValue();
     } else {
@@ -46,4 +52,5 @@ export class QuantityComponent implements OnInit {
     }
     return false;
   }
+
 }

@@ -27,11 +27,32 @@
 }
 
 .fc-row.fc-week.fc-widget-content {
-  height: 64px !important;
+  height: 53.2px !important;
+  min-height: unset !important;
 }
 
 .fc-scroller.fc-day-grid-container {
-  height: 384px !important;
+  height: 320px !important;
+}
+
+@media (min-height: 590px) {
+  .fc-row.fc-week.fc-widget-content {
+    height: 64px !important;
+  }
+
+  .fc-scroller.fc-day-grid-container {
+    height: 384px !important;
+  }
+}
+
+@media (min-height: 700px) {
+  .fc-row.fc-week.fc-widget-content {
+    height: 78px !important;
+  }
+
+  .fc-scroller.fc-day-grid-container {
+    height: 468px !important;
+  }
 }
 
 @media (min-height: 700px) {

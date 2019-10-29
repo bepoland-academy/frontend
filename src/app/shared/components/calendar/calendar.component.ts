@@ -16,6 +16,7 @@ import {
   MonthTimeEntryWithoutProjectInfo
 } from 'src/app/core/models';
 import { EventsModel, convertDataToCalendar } from './convertDataToCalendar';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 @Component({
   selector: 'app-calendar',
@@ -41,7 +42,8 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   constructor(
     public dialog: MatDialog,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private globalData: GlobalDataService
   ) {
   }
 
@@ -79,15 +81,6 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.listClick.emit();
   }
 
-  updateViewCalendar() {
-    if (this.fullcalendar) {
-      this.fullcalendar.calendar.gotoDate(this.currentDate);
-      this.fullcalendar.calendar.removeAllEvents();
-      this.eventsModel = convertDataToCalendar(this.currentUser.monthTimeSheet);
-      this.fullcalendar.calendar.el.style.marginBottom = '50px';
-    }
-  }
-
   eventClick(model) {
     const projects = model.event.extendedProps.projects;
     const { isTimeApproval } = this;
@@ -95,7 +88,6 @@ export class CalendarComponent implements OnInit, OnChanges {
       data: { projects, isTimeApproval},
     });
     dialog.afterClosed().subscribe((val: undefined | {comment: string}) => {
-      console.log(val);
       if (!val) {
         return;
       }
@@ -110,6 +102,7 @@ export class CalendarComponent implements OnInit, OnChanges {
 
   showAnotherMonth(event) {
     let link = this.cutCurrentLink();
+
     this.currentDate = event.data;
     // get current date from event
     const date = moment(event.data);
@@ -120,7 +113,6 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.updateViewCalendar();
     // update link with current month
     link = `${link}${date.year()}-${month}`;
-    console.log(link);
     this.fetchUserInfo(link);
   }
   approveAllHandler() {
@@ -132,7 +124,7 @@ export class CalendarComponent implements OnInit, OnChanges {
     this.httpService.fakeGet(link)
       .pipe(
         map((userTimeSheetResponse: MonthTimeEntryResponse) => {
-          const projects = this.httpService.getProjectsStream().value;
+          const projects = this.globalData.getProjectsValue;
           let _links: Links = {
             self: {
               href: link,
@@ -179,6 +171,14 @@ export class CalendarComponent implements OnInit, OnChanges {
         this.updateViewCalendar();
       });
 
+  }
+
+  updateViewCalendar() {
+    if (this.fullcalendar) {
+      this.fullcalendar.calendar.gotoDate(this.currentDate);
+      this.fullcalendar.calendar.removeAllEvents();
+      this.eventsModel = convertDataToCalendar(this.currentUser.monthTimeSheet);
+    }
   }
 
   nextApprovalHandler() {

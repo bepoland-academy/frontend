@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { forkJoin, of } from 'rxjs';
 
 import * as moment from 'moment';
 import { TimeEntryService } from './time-entry.service';
@@ -12,20 +13,11 @@ import {
   TimeEntry,
   TimeEntriesWithLinksAndProjects,
   Links,
-  User
+  User,
+  TimeEntryWithoutProjectInfo
 } from '../../core/models';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
-import { forkJoin, of } from 'rxjs';
-import { differenceWith, isEqual } from 'lodash';
-
-const getDifferenceBetweenEntries = (entriesFromApi: Array<TimeEntry>, currentEntries: Array<TimeEntry>) => {
-  const entriesFromApiWeek = entriesFromApi.map(el => el.weekDays);
-  console.log('TCL: getDifferenceBetweenEntries -> entriesFromApiWeek', entriesFromApiWeek);
-  const currentEntriesWeek = currentEntries.map(el => el.weekDays);
-  console.log('TCL: getDifferenceBetweenEntries -> currentEntriesWeek', currentEntriesWeek);
-  const a = differenceWith(entriesFromApi, currentEntries, isEqual);
-  console.log(a);
-};
+import { getDifferenceBetweenEntries, setStatusToTimeEntries } from './utils/helpers';
 
 @Component({
   selector: 'app-time-entry',
@@ -49,6 +41,7 @@ export class TimeEntryComponent implements OnInit {
   isError: boolean;
   _links: Links;
   doUsunieciaNapewno: boolean;
+  timeout: number;
 
   constructor(
     private timeEntryService: TimeEntryService,
@@ -56,38 +49,28 @@ export class TimeEntryComponent implements OnInit {
     private router: Router,
     private httpService: HttpService,
     private snackBar: MatSnackBar
-  ) {
-    // if there is no param defined we are defining it at constructor so we can on method ngOnInit get defined param
-    // because we could be redirected to time entry page from Historical Data component
-    if (activeRoute.snapshot.queryParamMap['params'].week) {
-      return;
-    }
-    const year = moment().year();
-    let currentWeek = moment().week().toString();
-    if (currentWeek.length === 1) {
-      currentWeek = `0${currentWeek}`;
-    }
-    router.navigate([], { queryParams: { week: `${year}-W${currentWeek}` } });
-
-  }
+  ) {}
 
   ngOnInit() {
-    const weekParam: string = this.activeRoute.snapshot.queryParamMap['params'].week;
-    this.displayedYear = +weekParam.substr(0, 4);
-    this.currentYear = moment().year();
-    this.currentWeek = moment().week();
-    this.displayedWeek = +weekParam.substr(6, 2);
+    // if there is no param defined we are defining it at constructor so we can on method ngOnInit get defined param
+    // because we could be redirected to time entry page from Historical Data component
+    if (!this.activeRoute.snapshot.queryParamMap.has('week')) {
+      const year = moment().year();
+      const currentWeek = moment().format('ww');
+      this.router.navigate([], { queryParams: { week: `${year}-W${currentWeek}` } });
+    }
 
-    // making subscribe to projects, because sometimes data from timeEntry endpoint is fetched faster than from projects
-    // endpoint
-    this.timeEntryService.getProjects().subscribe(
-      () => {
+    this.activeRoute.queryParamMap.subscribe((params: Params) => {
+      if (params.has('week')) {
+        const weekParam: string = params.get('week');
+        this.currentYear = moment().year();
+        this.currentWeek = moment().week();
+        this.displayedWeek = +weekParam.substr(6, 2);
+        this.displayedYear = +weekParam.substr(0, 4);
+        this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, this.displayedWeek);
         this.fetchDataChangeRouteAndGetWeekDates();
-      },
-      () => {
-        this.isError = true;
       }
-    );
+    });
   }
 
   isDayRejected(): boolean {
@@ -100,7 +83,13 @@ export class TimeEntryComponent implements OnInit {
       this.displayedYear -= 1;
       this.displayedWeek = 52;
     }
-    this.fetchDataChangeRouteAndGetWeekDates();
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, +this.displayedWeek);
+    this.dateCalendar = moment(this.week[0].date, ['YYYY-MM-DD']).toDate();
+    clearTimeout(this.timeout);
+    this.timeout = window.setTimeout(() => {
+      const param = `${this.displayedYear}-W${this.displayedWeek}`;
+      this.router.navigate([], { queryParams: { week: param } });
+    }, 300);
   }
 
   getNextWeek(): void {
@@ -109,7 +98,13 @@ export class TimeEntryComponent implements OnInit {
       this.displayedYear += 1;
       this.displayedWeek = 1;
     }
-    this.fetchDataChangeRouteAndGetWeekDates();
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, +this.displayedWeek);
+    this.dateCalendar = moment(this.week[0].date, ['YYYY-MM-DD']).toDate();
+    clearTimeout(this.timeout);
+    this.timeout = window.setTimeout(() => {
+      const param = `${this.displayedYear}-W${this.displayedWeek}`;
+      this.router.navigate([], { queryParams: { week: param } });
+    }, 300);
   }
 
   getWeekFromCalendar(val): void {
@@ -123,24 +118,30 @@ export class TimeEntryComponent implements OnInit {
     if (isDecember && selectedWeek === 1) {
       this.displayedYear = selectedYear + 1;
     }
-    this.fetchDataChangeRouteAndGetWeekDates();
+    this.dateCalendar = moment(this.week[0].date, ['YYYY-MM-DD']).toDate();
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, +this.displayedWeek);
+    const param = `${this.displayedYear}-W${this.displayedWeek}`;
+    this.router.navigate([], { queryParams: { week: param } });
   }
 
   setToCurrentDate(): void {
     this.displayedWeek = this.currentWeek;
     this.displayedYear = this.currentYear;
-    this.fetchDataChangeRouteAndGetWeekDates();
+    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, +this.displayedWeek);
+    const param = `${this.displayedYear}-W${this.displayedWeek}`;
+    this.router.navigate([], { queryParams: { week: param } });
   }
 
   removeProject(timeEntry: TimeEntry): void {
-    if (timeEntry._links.DELETE) {
+    if (timeEntry._links) {
       this.httpService.delete(timeEntry._links.DELETE.href).subscribe(() => {
+        this.snackBar.open(`Project ${timeEntry.projectInfo.name} was succesfully removed`, 'X', {duration: 2000});
         this.fetchDataChangeRouteAndGetWeekDates();
       });
       return;
     }
     this.timeEntries = this.timeEntries.filter((el: TimeEntry) => el.projectId !== timeEntry.projectId);
-    this.getDifferenceBetweenTimeEntriesAndProjects();
+    this.showAvaibleProjectsThatUserCanSelect();
   }
 
   fetchDataChangeRouteAndGetWeekDates() {
@@ -154,21 +155,14 @@ export class TimeEntryComponent implements OnInit {
     // setting param to call backend
     const param = `${this.displayedYear}-W${this.displayedWeek}`;
 
-    // formatting displayedWeek to number (we need it for moment library)
-    this.displayedWeek = +this.displayedWeek;
-
-    // getting full week with dates from service
-    this.week = this.timeEntryService.getFullWeekDaysWithDate(this.displayedYear, this.displayedWeek);
-
     // fetching data
     this.timeEntryService.fetchTracks(param).subscribe(
       (response: TimeEntriesWithLinksAndProjects) => {
         this.timeEntries = JSON.parse(JSON.stringify(response.timeEntries));
         this.timeEntriesFromApi = JSON.parse(JSON.stringify(response.timeEntries));
-
         this._links = response._links;
         this.clientList = response.projectList;
-        this.getDifferenceBetweenTimeEntriesAndProjects();
+        this.showAvaibleProjectsThatUserCanSelect();
         this.isLoading = false;
         this.isError = false;
       },
@@ -177,11 +171,8 @@ export class TimeEntryComponent implements OnInit {
         this.isLoading = false;
       }
     );
-    // setting navigation for better ux
-    this.router.navigate([], { queryParams: { week: param } });
 
-    // setting default date to calendar to show
-    this.dateCalendar = moment(this.week[0].date, ['YYYY-MM-DD']).toDate();
+    this.displayedWeek = +this.displayedWeek;
   }
 
   openDrawer(): void {
@@ -200,10 +191,11 @@ export class TimeEntryComponent implements OnInit {
       .createAttributesForNewEntry(project, { year: this.displayedYear, week: this.displayedWeek });
 
     this.timeEntries = [...this.timeEntries, newEntry];
-    this.getDifferenceBetweenTimeEntriesAndProjects();
+    this.showAvaibleProjectsThatUserCanSelect();
   }
 
-  getDifferenceBetweenTimeEntriesAndProjects() {
+  // filtering projects that user is assigned and he didn't have them in timesheet
+  showAvaibleProjectsThatUserCanSelect() {
     const difference: Array<Project> = this.clientList
       .filter((project: Project) => !this.timeEntries.some(o => o.projectId === project.projectId));
 
@@ -212,51 +204,37 @@ export class TimeEntryComponent implements OnInit {
 
   saveCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      this.timeEntries = this.timeEntries
-        .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
-        .map((project: TimeEntry) => (
-          {
-            ...project,
-            weekDays: project.weekDays.map((day: Day) => (
-              {
-                ...day,
-                status: day.status !== 'SAVED' ? 'SAVED' : day.status,
-                comment: '',
-              }
-            )),
-          })
+      let differenceBetweenEntries: Array<TimeEntryWithoutProjectInfo>;
+      if (!this.timeEntriesFromApi.length) {
+        differenceBetweenEntries = setStatusToTimeEntries(this.timeEntries, 'SAVED');
+      } else {
+        differenceBetweenEntries = getDifferenceBetweenEntries(
+          this.timeEntriesFromApi, this.timeEntries, 'SAVED'
         );
-
-      this.sendData();
+      }
+      this.sendData(differenceBetweenEntries);
     });
+
 
   }
 
   submitCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      // this.timeEntries = this.timeEntries
-      //   .filter((project: TimeEntry) => !project.weekDays.every((day: Day) => !day.hours))
-      //   .map((project: TimeEntry) => (
-      //     {
-      //       ...project,
-      //       weekDays: project.weekDays.map((day: Day) => (
-      //         {
-      //           ...day,
-      //           status: day.status !== 'SUBMITTED' ? 'SUBMITTED' : day.status,
-      //           comment: '',
-      //         })
-      //       ),
-      //     })
-      //   );
+      let differenceBetweenEntries: Array<TimeEntryWithoutProjectInfo>;
 
-      // this.sendData();
-      // const a = getDifferenceBetweenEntries(this.timeEntriesFromApi, this.timeEntries);
-      console.log('TCL: TimeEntryComponent -> submitCurrentEntries -> this.timeEntriesFromApi', this.timeEntriesFromApi);
+      if (!this.timeEntriesFromApi.length) {
+        differenceBetweenEntries = setStatusToTimeEntries(this.timeEntries, 'SUBMITTED');
+      } else {
+        differenceBetweenEntries = getDifferenceBetweenEntries(
+          this.timeEntriesFromApi, this.timeEntries, 'SUBMITTED'
+        );
+      }
+      this.sendData(differenceBetweenEntries);
     });
 
   }
 
-  sendData() {
+  sendData(data: Array<TimeEntryWithoutProjectInfo>) {
     if (!this.timeEntries.length) {
       this.snackBar.open('You need to add project to send it to the server', '', {
         duration: 3000,
@@ -267,7 +245,7 @@ export class TimeEntryComponent implements OnInit {
 
     this.isLoading = true;
     const param = `${this.displayedYear}-W${this.displayedWeek}`;
-    const dataToSend = { weekTimeEntryBodyList: this.timeEntries.map(({ projectInfo, ...rest }) => rest) };
+    const dataToSend = { weekTimeEntryBodyList: data };
 
     // if there are links update current week
     if (this._links.self && !this.doUsunieciaNapewno) {
@@ -281,6 +259,8 @@ export class TimeEntryComponent implements OnInit {
             });
           },
           () => {
+            this.isLoading = false;
+            this.isError = true;
             this.snackBar.open('Data has not been sent', 'X', { duration: 3000, horizontalPosition: 'left' });
           }
         );
@@ -305,6 +285,11 @@ export class TimeEntryComponent implements OnInit {
       );
   }
 
+  // this should be removed
+  // BE needs to update their code
+  // bug occurs when there are some time entries saved on BE and firstly we need to send DELETE request to remove all
+  // saved in database records and then we can send POST request with all defined time entries
+  // tldr; we need to remove all records for current week and then we have to send it again
   checkForNewEntries() {
     const isAnyNewProject = this.timeEntries.some(o => !o.weekDays[0].status);
     const isAnyAddedProject = this.timeEntries.some(o => !!o.weekDays[0].status);
@@ -319,6 +304,4 @@ export class TimeEntryComponent implements OnInit {
     }
     return of(null);
   }
-
-
 }

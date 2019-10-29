@@ -1,11 +1,11 @@
-import { Directive, Input, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Directive, Input, ElementRef, DoCheck } from '@angular/core';
 
-import { TimeEntry, Day } from '../../../core/models';
+import { TimeEntry, Day } from 'src/app/core/models';
 
 @Directive({
   selector: '[appFooter]',
 })
-export class FooterDirective {
+export class FooterDirective implements DoCheck {
   element: HTMLElement;
   sum: number;
   @Input() day: Day;

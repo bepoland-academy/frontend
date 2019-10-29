@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientManagementService } from './client-management.service';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateClientDialog } from './client-management-dialog/create-client/create-client-dialog';
-import { EditClientDialog } from './client-management-dialog/edit-client/edit-client-dialog';
+
+import { CreateClientDialogComponent } from './client-management-dialog/create-client/create-client-dialog';
+import { EditClientDialogComponent } from './client-management-dialog/edit-client/edit-client-dialog';
 import { Client, ClientsResponse } from '../../core/models';
+import { HttpService } from 'src/app/core/services/http.service';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 @Component({
@@ -14,27 +16,23 @@ import { Client, ClientsResponse } from '../../core/models';
 
 export class ClientManagementComponent implements OnInit {
   clients: Array<Client> = [];
-
+  error: boolean;
   constructor(
-    private clientManagementService: ClientManagementService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private globalData: GlobalDataService
     ) { }
 
   ngOnInit() {
-    this.clientManagementService.getReloadStatus().subscribe(() => {
-      this.clientManagementService.getClients().subscribe((data: ClientsResponse) => {
-        this.clients = data._embedded.clientBodyList;
-      });
-    });
+    this.clients = this.globalData.getClientsValue;
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(CreateClientDialog, {
+    const dialogRef = this.dialog.open(CreateClientDialogComponent, {
     });
   }
 
   openEditDialog(client: Client): void {
-    const dialogRef = this.dialog.open(EditClientDialog, {
+    const dialogRef = this.dialog.open(EditClientDialogComponent, {
       data: client,
     });
   }

@@ -21,7 +21,7 @@
   border-radius: 4px;
 }
 .main-wrapper {
-  height: calc(100vh - 57px);
+  height: calc(100vh - 49px);
   overflow: auto;
 }
 .mat-sidenav-content {

@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { AuthService } from '../core/services/auth.service';
+import { HttpService } from '../core/services/http.service';
+import { HttpResponse } from '@angular/common/http';
+import { User, UsersResponse } from '../core/models';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private ngZone: NgZone
-
+    private ngZone: NgZone,
+    private httpService: HttpService
   ) { }
 
   ngOnInit(): void {
@@ -37,9 +40,21 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     this.isLoading = true;
-    this.authService.login({ username: this.username, password: this.password })
+    this.httpService
+      .login({ username: this.username, password: this.password })
       .subscribe(
-        () => this.isLoading = false,
+        (response: HttpResponse<User>) => {
+          const token: string = response.headers.get('Authorization');
+          localStorage.setItem('token', JSON.stringify(token));
+
+          // getting one more time users information coz of UTF-8 is not working correctly with JWT
+          this.httpService.get(`users/${response.body.userId}`)
+            .subscribe((user: User) => {
+              localStorage.setItem('user', JSON.stringify(user));
+              this.isLoading = false;
+              this.authService.callServices(user.roles);
+            });
+        },
         (err) => {
           this.isLoading = false;
           if ((/^[4]\d/g).test(err.status)) {

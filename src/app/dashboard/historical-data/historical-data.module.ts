@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { HistoricalDataComponent } from './historical-data.component';
 import { HistoricalDataService } from './histrical-data.service';
-import { CalendarModule } from 'src/app/shared/calendar/calendar.module';
+import { sharedModules } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [HistoricalDataComponent],
   imports: [
     CommonModule,
-    CalendarModule,
+    ...sharedModules,
   ],
   providers: [
     HistoricalDataService,

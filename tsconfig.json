@@ -16,7 +16,11 @@
     "lib": [
       "es2018",
       "dom",
-      "esnext"
+      "esnext",
+      
     ]
-  }
+  },
+  "exclude": [
+    "src/app/**/*"
+  ]
 }

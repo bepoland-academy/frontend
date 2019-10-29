@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin, BehaviorSubject, of } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
+import { map, flatMap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+
 import { HttpService } from '../../core/services/http.service';
 import {
   User,
@@ -12,22 +15,16 @@ import {
   UserWithTimeSheetWithoutSubbmitedHours,
   UserWithTimeSheet
 } from '../../core/models';
-import { map, flatMap } from 'rxjs/operators';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 @Injectable()
 export class TimeApprovalService {
-  projects = new BehaviorSubject([]);
 
-  constructor(private httpService: HttpService) {
-    this.httpService.getProjectsStream().subscribe((projects: Array<Project>) => {
-      this.projects.next(projects);
-    });
-  }
-
-  getProjects(): Observable<Array<Project>> {
-    return this.projects.asObservable();
-  }
+  constructor(
+    private httpService: HttpService,
+    private globalData: GlobalDataService
+    ) { }
 
   // this method should call only if projects fetching is ended
   getUsersWithTimeEntries(month: string): Observable<Array<UserWithTimeSheet>> {
@@ -36,7 +33,7 @@ export class TimeApprovalService {
       .pipe(
         map((res: UsersResponse): Array<User> => res._embedded.userBodyList),
         flatMap((users: Array<User>): Observable<any> => {
-          const projects: Array<Project> = this.projects.getValue();
+          const projects: Array<Project> = this.globalData.getProjectsValue;
           // go through all array of users and get for every user his month timesheet and with forkJoin wait till all
           // http requests ends
           return forkJoin(
@@ -47,7 +44,7 @@ export class TimeApprovalService {
                   map((userTimeSheetResponse: MonthTimeEntryResponse): UserWithTimeSheetWithoutSubbmitedHours => {
                     let _links: Links = {
                       self: {
-                        href: `${this.httpService.url}managers/${loggedInUser.department}/
+                        href: `${window.location.origin}/${environment.url}/managers/${loggedInUser.department}/
                         consultants/${user.userId}/months/${month}`,
                       },
                     };

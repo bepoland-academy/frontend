@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { TimeApprovalComponent } from './time-approval.component';
 import { ConsultantsListComponent } from './consultants-list/consultants-list.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomMaterialModule } from 'src/app/shared/material/material.module';
 import { TimeApprovalService } from './time-approval.service';
-import { CalendarModule } from 'src/app/shared/calendar/calendar.module';
+import { CalendarModule } from 'src/app/shared/components/calendar/calendar.module';
+import { sharedModules } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,9 +15,7 @@ import { CalendarModule } from 'src/app/shared/calendar/calendar.module';
   ],
   imports: [
     CommonModule,
-    CalendarModule,
-    FlexLayoutModule,
-    CustomMaterialModule,
+    ...sharedModules,
   ],
   exports: [
     TimeApprovalComponent,

@@ -4,7 +4,13 @@ import { Client, ClientsResponse } from './client.model';
 import { Credentials } from './credentials.model';
 import { User, UsersResponse } from './user.model';
 import { Day } from './day.model';
-import { TimeEntry, TimeEntryResponse, TimeEntriesWithLinks, TimeEntriesWithLinksAndProjects } from './timeEntry.model';
+import {
+  TimeEntry,
+  TimeEntryResponse,
+  TimeEntriesWithLinks,
+  TimeEntriesWithLinksAndProjects,
+  TimeEntryWithoutProjectInfo
+} from './timeEntry.model';
 import { Links } from './links.model';
 import {
   MonthTimeEntry,
@@ -41,5 +47,7 @@ export {
   UserWithTimeSheet,
   MonthTimeEntryWithoutProjectInfo,
   UserWithTimeSheetWithoutSubbmitedHours,
-  ProjectWithoutClient
+  Rate,
+  ProjectWithoutClient,
+  TimeEntryWithoutProjectInfo,
 };

@@ -1,4 +1,11 @@
 import { Component, ViewChild, Input, Output, EventEmitter, Renderer2, OnChanges, OnInit } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 
 import { ProjectsByClient, Project } from '../../../core/models';
 
@@ -7,6 +14,22 @@ import { ProjectsByClient, Project } from '../../../core/models';
   selector: 'app-add-entry',
   templateUrl: './add-entry.component.html',
   styleUrls: ['./add-entry.component.css'],
+  animations: [
+    trigger('openClose', [
+      state('open', style({
+        transform: 'translateX(0)',
+      })),
+      state('close', style({
+        transform: 'translateX(100%)',
+      })),
+      transition('void => open', [
+        animate('300ms'),
+      ]),
+      transition('open => close', [
+        animate('300ms'),
+      ]),
+    ]),
+  ],
 })
 export class AddEntryComponent implements OnChanges, OnInit {
   @Input() clients: Array<ProjectsByClient> = [];
@@ -18,6 +41,7 @@ export class AddEntryComponent implements OnChanges, OnInit {
   chosenClient: ProjectsByClient;
   isProjectsShown = false;
   chosenProject: string;
+  animationState = 'open';
 
   constructor(
     private renderer: Renderer2
@@ -27,17 +51,19 @@ export class AddEntryComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    if (this.isOpen) {
+    if (this.animationState === 'open') {
       this.renderer.setStyle(document.body, 'overflow', 'hidden');
     }
   }
 
   closeDrawer() {
-    this.drawer.close();
+    this.animationState = 'close';
+    this.renderer.setStyle(document.body, 'overflow', 'auto');
     setTimeout(() => {
       this.isOpenChange.emit(false);
-      this.renderer.setStyle(document.body, 'overflow', 'auto');
-    }, 200);
+      this.drawer.close();
+    }, 300);
+
     this.chosenClient = null;
     this.isProjectsShown = false;
   }

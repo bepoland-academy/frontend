@@ -35,7 +35,7 @@ describe('PasswordComponent', () => {
       ],
       providers: [
         { provide: FormBuilder, useValue: formBuilder },
-        {provide: HttpService, useValue: {changePassword() {return of(); }}},
+        {provide: HttpService, useValue: {post() {return of(); }}},
       ],
     })
     .compileComponents();

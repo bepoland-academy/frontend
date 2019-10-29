@@ -4,6 +4,9 @@ export interface Client {
   _links?: {
     self: {
       href: string;
+    },
+    DELETE: {
+      href: string;
     }
   };
 }

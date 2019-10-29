@@ -1,24 +1,27 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 import { HttpService } from 'src/app/core/services/http.service';
-import { User, Links, MonthTimeEntry, MonthTimeEntryResponse, MonthTimeEntryWithoutProjectInfo, Project } from 'src/app/core/models';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  User,
+  Links,
+  MonthTimeEntry,
+  MonthTimeEntryResponse,
+  MonthTimeEntryWithoutProjectInfo,
+  Project
+} from 'src/app/core/models';
+import { environment } from 'src/environments/environment';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 @Injectable()
 export class HistoricalDataService {
-  projects: BehaviorSubject<any> = new BehaviorSubject([]);
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private globalData: GlobalDataService
   ) {
-    this.httpService.getProjectsStream().subscribe((projects: Array<Project>) => {
-      this.projects.next(projects);
-    });
+
   }
 
-  getProjects(): Observable<Array<Project>> {
-    return this.projects.asObservable();
-  }
 
   getConsultantTimeSheet(month: string) {
     const loggedInUser: User = JSON.parse(localStorage.getItem('user'));
@@ -26,10 +29,10 @@ export class HistoricalDataService {
       .get(`consultants/${loggedInUser.userId}/months/${month}`)
       .pipe(
         map((userTimeSheetResponse: MonthTimeEntryResponse) => {
-          const projects = this.httpService.getProjectsStream().value;
+          const projects = this.globalData.getProjectsValue;
           let _links: Links = {
             self: {
-              href: `${this.httpService.url}/consultants/${loggedInUser.department}/months/${month}`,
+              href: `${environment.url}/consultants/${loggedInUser.department}/months/${month}`,
             },
           };
           let monthTimeSheet: MonthTimeEntry[] = [];

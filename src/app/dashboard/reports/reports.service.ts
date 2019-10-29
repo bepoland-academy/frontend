@@ -20,6 +20,7 @@ import {
 } from 'src/app/core/models';
 import * as moment from 'moment';
 import { AssignedConsultant, Week, ConsultantWithTimesheet } from './models';
+import { GlobalDataService } from 'src/app/core/services/global-data.service';
 
 
 const getWeekFromDateAndHours = (day: Day): Week => {
@@ -50,7 +51,8 @@ export class ReportsService {
   roles: BehaviorSubject<Array<Role>> = new BehaviorSubject([]);
   weeksInMonth: Array<Week> = [];
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private globalData: GlobalDataService
   ) {
     this.getAllUsers().subscribe((response: UsersResponse) => {
       this.users.next(response._embedded.userBodyList);
@@ -70,12 +72,21 @@ export class ReportsService {
 
   getWeeksInMonth(yearWithMonth: string): Array<Week> {
     const date = moment(yearWithMonth, 'YYYY-MM');
-    const startOfMonth = date.startOf('month').week();
-    const endOfMonth = date.endOf('month').week();
+    const startOfMonth: number = date.clone().startOf('month').isoWeek();
+    let endOfMonth: number = date.clone().endOf('month').isoWeek();
+    if (startOfMonth > endOfMonth) {
+      endOfMonth = 52;
+    }
     let weekNumbers: Array<Week> = [];
     for (let i = startOfMonth; i <= endOfMonth; i ++) {
       weekNumbers = [...weekNumbers, {week: i, hours: 0}];
     }
+
+    const isEndOfMonthIsInNextYear: boolean = date.clone().endOf('month').isoWeek() !== endOfMonth;
+    if (isEndOfMonthIsInNextYear) {
+      weekNumbers = [...weekNumbers, {week: 1, hours: 0}];
+    }
+
     this.weeksInMonth = weekNumbers;
     return weekNumbers;
   }
@@ -117,7 +128,7 @@ export class ReportsService {
       .map(o => o.consultantId)
       .filter((el: string, i: number, self: Array<string>) => self.indexOf(el) === i);
 
-    const projects = this.httpService.projectsStream.getValue();
+    const projects = this.globalData.getProjectsValue;
     const roles = this.roles.getValue();
 
     return forkJoin(
@@ -184,7 +195,7 @@ export class ReportsService {
         );
       })
     ).pipe(
-      map((el: [Array<ConsultantWithTimesheet>, Array<ConsultantWithTimesheet>]) => el.flatMap(a => a))
+      map((el: [Array<ConsultantWithTimesheet>, Array<ConsultantWithTimesheet>]) => el.flat())
     );
   }
 
