@@ -54,7 +54,6 @@ export class TimeEntryService {
       .get(`consultants/${user.userId}/weeks/${week}`)
       .pipe(
         flatMap((timeEntriesResponse: TimeEntryResponse) => {
-          console.log(timeEntriesResponse);
           // if there is response from backend
           if (timeEntriesResponse._embedded) {
             return of({

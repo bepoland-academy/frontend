@@ -17,28 +17,7 @@ import {
   TimeEntryWithoutProjectInfo
 } from '../../core/models';
 import { groupProjectsByClient } from 'src/app/shared/utils/groupProjectsByClient';
-
-const getDifferenceBetweenEntries = (
-  entriesFromApi: Array<TimeEntry>,
-  currentEntries: Array<TimeEntry>,
-  status: string
-) => {
-  return entriesFromApi.map((project, index) => {
-    const {projectInfo, ...restProjectAttributes} = project;
-    return {
-      ...restProjectAttributes,
-      weekDays: project.weekDays.map((day: Day, i: number) => {
-        const dayFromCurrentEntries: Day = currentEntries[index].weekDays[i];
-        const areDaysHaveSameHours: boolean = dayFromCurrentEntries.hours === day.hours;
-        return {
-          ...day,
-          hours: areDaysHaveSameHours ? day.hours : dayFromCurrentEntries.hours,
-          status: areDaysHaveSameHours ? day.status : status,
-        };
-      }),
-    };
-  });
-};
+import { getDifferenceBetweenEntries, setStatusToTimeEntries } from './utils/helpers';
 
 @Component({
   selector: 'app-time-entry',
@@ -225,19 +204,31 @@ export class TimeEntryComponent implements OnInit {
 
   saveCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      const differenceBetweenEntries: Array<TimeEntryWithoutProjectInfo> = getDifferenceBetweenEntries(
+      let differenceBetweenEntries: Array<TimeEntryWithoutProjectInfo>;
+      if (!this.timeEntriesFromApi.length) {
+        differenceBetweenEntries = setStatusToTimeEntries(this.timeEntries, 'SAVED');
+      } else {
+        differenceBetweenEntries = getDifferenceBetweenEntries(
           this.timeEntriesFromApi, this.timeEntries, 'SAVED'
         );
+      }
       this.sendData(differenceBetweenEntries);
     });
+
 
   }
 
   submitCurrentEntries() {
     this.checkForNewEntries().subscribe(() => {
-      const differenceBetweenEntries: Array<TimeEntryWithoutProjectInfo> = getDifferenceBetweenEntries(
+      let differenceBetweenEntries: Array<TimeEntryWithoutProjectInfo>;
+
+      if (!this.timeEntriesFromApi.length) {
+        differenceBetweenEntries = setStatusToTimeEntries(this.timeEntries, 'SUBMITTED');
+      } else {
+        differenceBetweenEntries = getDifferenceBetweenEntries(
           this.timeEntriesFromApi, this.timeEntries, 'SUBMITTED'
         );
+      }
       this.sendData(differenceBetweenEntries);
     });
 
@@ -268,6 +259,8 @@ export class TimeEntryComponent implements OnInit {
             });
           },
           () => {
+            this.isLoading = false;
+            this.isError = true;
             this.snackBar.open('Data has not been sent', 'X', { duration: 3000, horizontalPosition: 'left' });
           }
         );
@@ -292,6 +285,11 @@ export class TimeEntryComponent implements OnInit {
       );
   }
 
+  // this should be removed
+  // BE needs to update their code
+  // bug occurs when there are some time entries saved on BE and firstly we need to send DELETE request to remove all
+  // saved in database records and then we can send POST request with all defined time entries
+  // tldr; we need to remove all records for current week and then we have to send it again
   checkForNewEntries() {
     const isAnyNewProject = this.timeEntries.some(o => !o.weekDays[0].status);
     const isAnyAddedProject = this.timeEntries.some(o => !!o.weekDays[0].status);

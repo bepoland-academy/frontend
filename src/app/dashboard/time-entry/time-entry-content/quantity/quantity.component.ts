@@ -44,7 +44,7 @@ export class QuantityComponent implements OnInit, AfterViewInit {
   }
 
   onMouseWheel(event: WheelEvent) {
-    event.preventDefault()
+    event.preventDefault();
     if (event.deltaY < 0) {
       this.increaseValue();
     } else {
