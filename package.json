@@ -27,7 +27,7 @@
     "@fullcalendar/interaction": "^4.0.1",
     "core-js": "~2.5.4",
     "lodash": "^4.17.11",
-    "moment": "~2.24.0",
+    "moment": "~2.29.2",
     "ng-fullcalendar": "^2.0.3",
     "rxjs": "^6.3.3",
     "zone.js": "~0.8.26"
